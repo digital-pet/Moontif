@@ -1,12 +1,9 @@
 # A Lua Binding for Motif
 
-based on luamotif
+based on luamotif,
+Copyright (C) Micro Systems Marc Balmer \<marc@msys.ch\>
 
-Copyright (C) Micro Systems Marc Balmer.
-
-You can reach the author at marc@msys.ch
-
-Additions by [digital-pet](https://github.com/digital-pet/)
+Additions by and (c) [digital-pet](https://github.com/digital-pet/)
 
 Makefile is for BSD systems
 
