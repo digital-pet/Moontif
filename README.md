@@ -19,7 +19,4 @@ Requires Lua 5.3
 
 ## TODO
 
-- Add known missing methods
-    - XmVaCreateMenubar
-    - XmCreateMenubar
-- Determine other missing methods and implement as needed
+- Implement missing convenience functions such as XmVaCreateMenubar, either here in native C or in Lua
