@@ -20,4 +20,4 @@ Requires Lua 5.3
 ## TODO
 
 - Add XmVaCreateMenubar
-- Determine other missing extension methods and implement as needed
+- Determine other missing methods and implement as needed
