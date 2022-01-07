@@ -95,7 +95,7 @@ struct str_constant motif_strings[] = {
 	{ "XmNrightAttachment",		XmNrightAttachment, CARDINAL },
 	{ "XmNrightPosition",		XmNrightPosition, CARDINAL },
 	{ "XmNrows",			XmNrows, DIMENSION },
-	( "XmNrowColumnType",		XmNrowColumnType, DIMENSION },
+	{ "XmNrowColumnType",		XmNrowColumnType, DIMENSION },
 	{ "XmNsashHeight",		XmNsashHeight, DIMENSION },
 	{ "XmNsashWidth",		XmNsashWidth, DIMENSION },
 	{ "XmNscrollingPolicy",		XmNscrollingPolicy, DIMENSION },
