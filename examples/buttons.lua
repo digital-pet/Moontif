@@ -1,8 +1,8 @@
-require "motif"
+local motif = require "motif"
 
-gui = Form {
+gui = motif.Form {
 	fractionBase = 3,
-	Frame {
+	motif.Frame {
 		topAttachment = ATTACH_FORM,
 		rightAttachment = ATTACH_FORM,
 		bottomAttachment = ATTACH_POSITION,
@@ -10,18 +10,18 @@ gui = Form {
 
 		bottomPosition = 1,
 
-		LabelGadget {
+		motif.LabelGadget {
 			labelString = "Motif Buttons in Lua",
 			childType = FRAME_TITLE_CHILD
 		},
-		RowColumn {
-			PushButton {
+		motif.RowColumn {
+			motif.PushButton {
 				labelString = "Button one",
 				activateCallback = function()
 					print("Button one was pressed")
 				end
 			},
-			PushButton {
+			motif.PushButton {
 				labelString = "Button two",
 				activateCallback = function()
 					print("Button two was pressed")
@@ -29,7 +29,7 @@ gui = Form {
 			},
 		}
 	},
-	TabStack {
+	motif.TabStack {
 		topAttachment = ATTACH_POSITION,
 		rightAttachment = ATTACH_FORM,
 		bottomAttachment = ATTACH_FORM,
@@ -44,16 +44,16 @@ gui = Form {
 		tabMarginHeight = 64,
 		tabMarginWidth = 64,
 
-		products = LabelGadget {
+		products = motif.LabelGadget {
 				labelString = "frame title",
 		},
-		groups = Frame {
-			LabelGadget {
+		groups = motif.Frame {
+			motif.LabelGadget {
 				labelString = "frame title",
 				childType = FRAME_TITLE_CHILD,
 			},
-			rc = RowColumn {
-				PushButton {
+			rc = motif.RowColumn {
+				motif.PushButton {
 					labelString = "pushme",
 					activateCallback = function (w)
 						print(tf:GetString())
@@ -61,7 +61,7 @@ gui = Form {
 						print(tfield:GetString())
 					end
 				},
-				t = TextField {
+				t = motif.TextField {
 					activateCallback = function (w)
 						print(w:GetString())
 					end,
@@ -81,9 +81,9 @@ gui = Form {
 
 tf = gui[2].groups.rc.t
 
-SetLanguageProc(nil, nil, nil)
-toplevel, app = Initialize("LuaMotif")
+motif.SetLanguageProc(nil, nil, nil)
+app, toplevel = motif.Initialize("LuaMotif")
 
-Realize(toplevel, gui)
+motif.Realize(toplevel, gui)
 
-MainLoop(app)
+app:MainLoop()
