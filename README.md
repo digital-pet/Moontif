@@ -6,7 +6,7 @@ Copyright (C) Micro Systems Marc Balmer.
 
 You can reach the author at marc@msys.ch
 
-Additions by [digital-pet@github](https://github.com/digital-pet/).
+Additions by [digital-pet](https://github.com/digital-pet/)
 
 Makefile is for BSD systems
 
