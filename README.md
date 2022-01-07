@@ -17,7 +17,7 @@ Requires Lua 5.3
     make
     make install
 
-# TODO
+## TODO
 
 - Add XmVaCreateMenubar
 - Determine other missing extension methods and implement as needed
