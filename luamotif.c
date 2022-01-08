@@ -1270,8 +1270,10 @@ lm_CreateWidgetHierarchy(lua_State *L, int parentObj, Widget parent,
 	for (n = 0; n < narg; n++)
 		free(args[n].name);
 	if (parentObj > 0) {
+		lua_pushstring(L, "__parent");
 		lua_pushvalue(L, parentObj);
-		lua_setfield(L, -2, "__parent");
+		lua_rawset(L, -3);
+		/* lua_setfield(L, -2, "__parent"); */ /*lua_setfield does not work here, it assigns the value __parent to the key parentObj for some reason */
 	}
 	if (widget)
 		XtManageChild(widget);
