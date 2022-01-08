@@ -55,37 +55,37 @@ extern size_t num_motif_ints(void);
 static struct str_constant *typestr;
 
 static Widget
-lm_GetWidget(lua_State *L, int t)
+lm_GetWidget(lua_State *L, int iLuaTableID)
 {
-	Widget w;
+	Widget wdgWidget;
 
-	if (!lua_istable(L, t))
-		luaL_argerror(L, t, "table expected");
+	if (!lua_istable(L, iLuaTableID))
+		luaL_argerror(L, iLuaTableID, "table expected");
 
 	lua_pushstring(L, "__widget");
-	lua_rawget(L, t);
-	w = (Widget)lua_topointer(L, -1);
+	lua_rawget(L, iLuaTableID);
+	wdgWidget = (Widget)lua_topointer(L, -1);
 	lua_pop(L, 1);
 
-	if (w == NULL)
-		luaL_argerror(L, t, "widget expected");
+	if (wdgWidget == NULL)
+		luaL_argerror(L, iLuaTableID, "widget expected");
 
-	return w;
+	return wdgWidget;
 }
 
 static int
 lm_CreateFileSelectionDialog(lua_State *L)
 {
-	Widget parent, dialog;
-	const char *name;
+	Widget wdgParent, wdgDialog;
+	const char *pszName;
 
-	parent = lm_GetWidget(L, 1);
+	wdgParent = lm_GetWidget(L, 1);
 
-	name = luaL_checkstring(L, 2);
-	dialog = XmCreateFileSelectionDialog(parent, (char *)name, NULL, 0);
-	XtManageChild(dialog);
+	pszName = luaL_checkstring(L, 2);
+	wdgDialog = XmCreateFileSelectionDialog(wdgParent, (char *)pszName, NULL, 0);
+	XtManageChild(wdgDialog);
 	lua_newtable(L);
-	lua_pushlightuserdata(L, dialog);
+	lua_pushlightuserdata(L, wdgDialog);
 	lua_setfield(L, -2, "__widget");
 	luaL_getmetatable(L, WIDGET_METATABLE);
 	lua_setmetatable(L, -2);
@@ -96,16 +96,16 @@ lm_CreateFileSelectionDialog(lua_State *L)
 static int
 lm_CreateFormDialog(lua_State *L)
 {
-	Widget parent, dialog;
-	const char *name;
+	Widget wdgParent, wdgDialog;
+	const char *pszName;
 
-	parent = lm_GetWidget(L, 1);
+	wdgParent = lm_GetWidget(L, 1);
 
-	name = luaL_checkstring(L, 2);
-	dialog = XmCreateFormDialog(parent, (char *)name, NULL, 0);
-	XtManageChild(dialog);
+	pszName = luaL_checkstring(L, 2);
+	wdgDialog = XmCreateFormDialog(wdgParent, (char *)pszName, NULL, 0);
+	XtManageChild(wdgDialog);
 	lua_newtable(L);
-	lua_pushlightuserdata(L, dialog);
+	lua_pushlightuserdata(L, wdgDialog);
 	lua_setfield(L, -2, "__widget");
 	luaL_getmetatable(L, WIDGET_METATABLE);
 	lua_setmetatable(L, -2);
@@ -116,16 +116,16 @@ lm_CreateFormDialog(lua_State *L)
 static int
 lm_CreateInformationDialog(lua_State *L)
 {
-	Widget parent, dialog;
-	const char *name;
+	Widget wdgParent, wdgDialog;
+	const char *pszName;
 
-	parent = lm_GetWidget(L, 1);
+	wdgParent = lm_GetWidget(L, 1);
 
-	name = luaL_checkstring(L, 2);
-	dialog = XmCreateInformationDialog(parent, (char *)name, NULL, 0);
-	XtManageChild(dialog);
+	pszName = luaL_checkstring(L, 2);
+	wdgDialog = XmCreateInformationDialog(wdgParent, (char *)pszName, NULL, 0);
+	XtManageChild(wdgDialog);
 	lua_newtable(L);
-	lua_pushlightuserdata(L, dialog);
+	lua_pushlightuserdata(L, wdgDialog);
 	lua_setfield(L, -2, "__widget");
 	luaL_getmetatable(L, WIDGET_METATABLE);
 	lua_setmetatable(L, -2);
@@ -136,33 +136,33 @@ lm_CreateInformationDialog(lua_State *L)
 static int
 lm_XmFileSelectionBoxGetChild(lua_State *L)
 {
-	Widget child, parent;
-	int which;
+	Widget wdgChild, wdgParent;
+	int iChildIndex;
 
 	if (!lua_islightuserdata(L, 1))
 		luaL_argerror(L, 1, "udata expected");
 
-	parent = lua_touserdata(L, 1);
-	which = luaL_checkinteger(L, 2);
-	child = XmFileSelectionBoxGetChild(parent, which);
-	lua_pushlightuserdata(L, child);
+	wdgParent = lua_touserdata(L, 1);
+	iChildIndex = luaL_checkinteger(L, 2);
+	wdgChild = XmFileSelectionBoxGetChild(wdgParent, iChildIndex);
+	lua_pushlightuserdata(L, wdgChild);
 	return 1;
 }
 
 static int
 lm_XmFileSelectionDoSearch(lua_State *L)
 {
-	Widget widget;
-	XmString str;
+	Widget wdgWidget;
+	XmString xmsString;
 
 	if (!lua_islightuserdata(L, 1))
 		luaL_argerror(L, 1, "udata expected");
 	if (!lua_islightuserdata(L, 2))
 		luaL_argerror(L, 2, "udata expected");
 
-	widget = lua_touserdata(L, 1);
-	str = lua_touserdata(L, 2);
-	XmFileSelectionDoSearch(widget, str);
+	wdgWidget = lua_touserdata(L, 1);
+	xmsString = lua_touserdata(L, 2);
+	XmFileSelectionDoSearch(wdgWidget, xmsString);
 	return 0;
 }
 
@@ -170,16 +170,16 @@ lm_XmFileSelectionDoSearch(lua_State *L)
 static int
 lm_XmMessageBoxGetChild(lua_State *L)
 {
-	Widget child, parent;
-	int which;
+	Widget wdgChild, wdgParent;
+	int iChildIndex;
 
 	if (!lua_islightuserdata(L, 1))
 		luaL_argerror(L, 1, "udata expected");
 
-	parent = lua_touserdata(L, 1);
-	which = luaL_checkinteger(L, 2);
-	child = XmMessageBoxGetChild(parent, which);
-	lua_pushlightuserdata(L, child);
+	wdgParent = lua_touserdata(L, 1);
+	iChildIndex = luaL_checkinteger(L, 2);
+	wdgChild = XmMessageBoxGetChild(wdgParent, iChildIndex);
+	lua_pushlightuserdata(L, wdgChild);
 	return 1;
 }
 
@@ -187,63 +187,63 @@ lm_XmMessageBoxGetChild(lua_State *L)
 static int
 lm_XmListAddItem(lua_State *L)
 {
-	Widget list;
-	char *text;
-	XmString item;
+	Widget wdgList;
+	char *pszItemString;
+	XmString xmsItemString;
 
-	list = lm_GetWidget(L, 1);
-	text = (char *)luaL_checkstring(L, 2);
-	item = XmStringCreateLocalized(text);
-	XmListAddItem(list, item, luaL_checkinteger(L, 3));
-	XmStringFree(item);
+	wdgList = lm_GetWidget(L, 1);
+	pszItemString = (char *)luaL_checkstring(L, 2);
+	xmsItemString = XmStringCreateLocalized(pszItemString);
+	XmListAddItem(wdgList, xmsItemString, luaL_checkinteger(L, 3));
+	XmStringFree(xmsItemString);
 	return 0;
 }
 
 static int
 lm_ProcessTraversal(lua_State *L)
 {
-	Widget widget;
-	int direction;
+	Widget wdgWidget;
+	int iDirection;
 
-	widget = lm_GetWidget(L, 1);
-	direction = luaL_checkinteger(L, 2);
-	XmProcessTraversal(widget, (XmTraversalDirection)direction);
+	wdgWidget = lm_GetWidget(L, 1);
+	iDirection = luaL_checkinteger(L, 2);
+	XmProcessTraversal(wdgWidget, (XmTraversalDirection)iDirection);
 	return 0;
 }
 
 static int
 lm_GetString(lua_State *L)
 {
-	Widget widget;
-	char *txt;
+	Widget wdgWidget;
+	char *pszString;
 
-	widget = lm_GetWidget(L, 1);
+	wdgWidget = lm_GetWidget(L, 1);
 
-	txt = XmTextGetString(widget);
-	if (txt == NULL)
+	pszString = XmTextGetString(wdgWidget);
+	if (pszString == NULL)
 		lua_pushnil(L);
 	else
-		lua_pushstring(L, txt);
+		lua_pushstring(L, pszString);
 	return 1;
 }
 
 static int
 lm_Remove(lua_State *L)
 {
-	Widget widget;
+	Widget wdgWidget;
 
-	widget = lm_GetWidget(L, 1);
-	XmTextRemove(widget);
+	wdgWidget = lm_GetWidget(L, 1);
+	XmTextRemove(wdgWidget);
 	return 0;
 }
 
 static int
 lm_Replace(lua_State *L)
 {
-	Widget widget;
+	Widget wdgWidget;
 
-	widget = lm_GetWidget(L, 1);
-	XmTextReplace(widget, luaL_checkinteger(L, 2), luaL_checkinteger(L, 3),
+	wdgWidget = lm_GetWidget(L, 1);
+	XmTextReplace(wdgWidget, luaL_checkinteger(L, 2), luaL_checkinteger(L, 3),
 	    (char *)luaL_checkstring(L, 4));
 	return 0;
 }
@@ -251,11 +251,11 @@ lm_Replace(lua_State *L)
 static int
 lm_Insert(lua_State *L)
 {
-	Widget widget;
+	Widget wdgWidget;
 
-	widget = lm_GetWidget(L, 1);
+	wdgWidget = lm_GetWidget(L, 1);
 
-	XmTextInsert(widget, luaL_checkinteger(L, 2),
+	XmTextInsert(wdgWidget, luaL_checkinteger(L, 2),
 	    (char *)luaL_checkstring(L, 3));
 	return 0;
 }
@@ -263,277 +263,276 @@ lm_Insert(lua_State *L)
 static int
 lm_GetInsertionPosition(lua_State *L)
 {
-	Widget widget;
+	Widget wdgWidget;
 
-	widget = lm_GetWidget(L, 1);
-	lua_pushinteger(L, XmTextGetInsertionPosition(widget));
+	wdgWidget = lm_GetWidget(L, 1);
+	lua_pushinteger(L, XmTextGetInsertionPosition(wdgWidget));
 	return 1;
 }
 
 static int
 lm_GetLastPosition(lua_State *L)
 {
-	Widget widget;
+	Widget wdgWidget;
 
-	widget = lm_GetWidget(L, 1);
-	lua_pushinteger(L, XmTextGetLastPosition(widget));
+	wdgWidget = lm_GetWidget(L, 1);
+	lua_pushinteger(L, XmTextGetLastPosition(wdgWidget));
 	return 1;
 }
 
 static int
 lm_SetInsertionPosition(lua_State *L)
 {
-	Widget widget;
+	Widget wdgWidget;
 
-	widget = lm_GetWidget(L, 1);
-	XmTextSetInsertionPosition(widget, luaL_checkinteger(L, 2));
+	wdgWidget = lm_GetWidget(L, 1);
+	XmTextSetInsertionPosition(wdgWidget, luaL_checkinteger(L, 2));
 	return 0;
 }
 
 static int
 lm_SetMaxLength(lua_State *L)
 {
-	Widget widget;
+	Widget wdgWidget;
 
-	widget = lm_GetWidget(L, 1);
-	XmTextSetMaxLength(widget, luaL_checkinteger(L, 2));
+	wdgWidget = lm_GetWidget(L, 1);
+	XmTextSetMaxLength(wdgWidget, luaL_checkinteger(L, 2));
 	return 0;
 }
 
 static int
 lm_SetSelection(lua_State *L)
 {
-	Widget widget;
+	Widget wdgWidget;
 
-	widget = lm_GetWidget(L, 1);
+	wdgWidget = lm_GetWidget(L, 1);
 
-	XmTextSetSelection(widget, luaL_checkinteger(L, 2),
+	XmTextSetSelection(wdgWidget, luaL_checkinteger(L, 2),
 	    luaL_checkinteger(L, 3),
-	    XtLastTimestampProcessed(XtDisplay(widget)));
+	    XtLastTimestampProcessed(XtDisplay(wdgWidget)));
 	return 0;
 }
 
 static int
 lm_SetString(lua_State *L)
 {
-	Widget widget;
+	Widget wdgWidget;
 
-	widget = lm_GetWidget(L, 1);
-	XmTextSetString(widget, (char *)luaL_checkstring(L, 2));
+	wdgWidget = lm_GetWidget(L, 1);
+	XmTextSetString(wdgWidget, (char *)luaL_checkstring(L, 2));
 	return 0;
 }
 
 static int
 lm_UpdateDisplay(lua_State *L)
 {
-	Widget widget;
+	Widget wdgWidget;
 
-	widget = lm_GetWidget(L, 1);
-	XmUpdateDisplay(widget);
+	wdgWidget = lm_GetWidget(L, 1);
+	XmUpdateDisplay(wdgWidget);
 	return 0;
 }
 
 static void
 lm_Callback(Widget widget, XtPointer client_data, XtPointer call_data)
 {
-	struct cb_data *cbd = (struct cb_data *)client_data;
-	int nargs = 0;
+	struct cb_data *cbdCallback = (struct cb_data *)client_data;
+	int iArgCount = 0;
 
-	lua_rawgeti(cbd->L, LUA_REGISTRYINDEX, cbd->ref);
-	if (cbd->obj != LUA_NOREF) {
-		lua_rawgeti(cbd->L, LUA_REGISTRYINDEX, cbd->obj);
-		nargs = 1;
+	lua_rawgeti(cbdCallback->L, LUA_REGISTRYINDEX, cbdCallback->ref);
+	if (cbdCallback->obj != LUA_NOREF) {
+		lua_rawgeti(cbdCallback->L, LUA_REGISTRYINDEX, cbdCallback->obj);
+		iArgCount = 1;
 	};
 
-	if (!strcmp(cbd->callback_name, XmNtabSelectedCallback)) {
+	if (!strcmp(cbdCallback->callback_name, XmNtabSelectedCallback)) {
 		XmTabStackCallbackStruct * ts_cbd =
 		    (XmTabStackCallbackStruct *)call_data;
 
-		lua_newtable(cbd->L);
-		lua_pushlightuserdata(cbd->L, ts_cbd->selected_child);
-		lua_setfield(cbd->L, -2, "__widget");
-		luaL_getmetatable(cbd->L, WIDGET_METATABLE);
-		lua_setmetatable(cbd->L, -2);
-		nargs++;
+		lua_newtable(cbdCallback->L);
+		lua_pushlightuserdata(cbdCallback->L, ts_cbd->selected_child);
+		lua_setfield(cbdCallback->L, -2, "__widget");
+		luaL_getmetatable(cbdCallback->L, WIDGET_METATABLE);
+		lua_setmetatable(cbdCallback->L, -2);
+		iArgCount++;
 	}
 
-	if (lua_pcall(cbd->L, nargs, 0, 0))
-		luaL_error(cbd->L, "error calling callback function:\n%s",
-		    lua_tostring(cbd->L, -1));
+	if (lua_pcall(cbdCallback->L, iArgCount, 0, 0))
+		luaL_error(cbdCallback->L, "error calling callback function:\n%s",
+		    lua_tostring(cbdCallback->L, -1));
 }
 
 static void
 lm_DestroyCallback(Widget widget, XtPointer client_data, XtPointer call_data)
 {
-	struct cb_data *cbd = (struct cb_data *)client_data;
+	struct cb_data *cbdCallback = (struct cb_data *)client_data;
 
-	luaL_unref(cbd->L, LUA_REGISTRYINDEX, cbd->ref);
-	luaL_unref(cbd->L, LUA_REGISTRYINDEX, cbd->obj);
-	free(cbd->callback_name);
-	free(cbd);
+	luaL_unref(cbdCallback->L, LUA_REGISTRYINDEX, cbdCallback->ref);
+	luaL_unref(cbdCallback->L, LUA_REGISTRYINDEX, cbdCallback->obj);
+	free(cbdCallback->callback_name);
+	free(cbdCallback);
 }
 
 static int
 lm_AddCallback(lua_State *L)
 {
-	Widget w;
-	const char *cb;
-	struct cb_data *cbd;
+	Widget wdgWidget;
+	const char *pszCallbackName;
+	struct cb_data *pcbdCallback;
 
-	w = lm_GetWidget(L, 1);
+	wdgWidget = lm_GetWidget(L, 1);
 	if (!lua_isstring(L, 2))
 		luaL_argerror(L, 2, "string expected");
 	if (!lua_isfunction(L, 3))
 		luaL_argerror(L, 3, "function expected");
 
 	/* XXX maybe leaks memory (e.g. when the widget is destroyed */
-	cbd = malloc(sizeof(struct cb_data));
-	if (cbd == NULL)
+	pcbdCallback = malloc(sizeof(struct cb_data));
+	if (pcbdCallback == NULL)
 		luaL_error(L, "memory error");
 
-	cbd->L = L;
+	pcbdCallback->L = L;
 
 	/* reference the function */
-	cbd->ref = luaL_ref(L, LUA_REGISTRYINDEX);
-	cb = lua_tostring(L, -1);
-	cbd->callback_name = strdup(cb);
-	XtAddCallback(w, (char *)cb, lm_Callback, cbd);
+	pcbdCallback->ref = luaL_ref(L, LUA_REGISTRYINDEX);
+	pszCallbackName = lua_tostring(L, -1);
+	pcbdCallback->callback_name = strdup(pszCallbackName);
+	XtAddCallback(wdgWidget, (char *)pszCallbackName, lm_Callback, pcbdCallback);
 	lua_pop(L, 1);
 	/* reference the widget */
-	cbd->obj = luaL_ref(L, LUA_REGISTRYINDEX);
-	XtAddCallback(w, XmNdestroyCallback, lm_DestroyCallback, cbd);
+	pcbdCallback->obj = luaL_ref(L, LUA_REGISTRYINDEX);
+	XtAddCallback(wdgWidget, XmNdestroyCallback, lm_DestroyCallback, pcbdCallback);
 	return 0;
 }
 
 static int
-lm_getArgs(lua_State *L, int start, Arg **args)
+lm_getArgs(lua_State *L, int iStartPosition, Arg **args)
 {
-	XmString string;
-	int narg, n;
-	const char *arg;
+	XmString xmsString;
+	int iCurrentArgument, iter;
+	const char *pszArgName;
 
 	*args = calloc(sizeof(Arg), lua_gettop(L));
 	if (*args == NULL)
 		luaL_error(L, "memory error");
 
-	for (narg = 0, n = start; n <= lua_gettop(L); n++) {
-		if (lua_type(L, n) != LUA_TSTRING)
+	for (iCurrentArgument = 0, iter = iStartPosition; iter <= lua_gettop(L); iter++) {
+		if (lua_type(L, iter) != LUA_TSTRING)
 			continue;
-		arg = lua_tostring(L, n);
-		n++;
-		switch (lua_type(L, n)) {
+		pszArgName = lua_tostring(L, iter);
+		iter++;
+		switch (lua_type(L, iter)) {
 		case LUA_TNUMBER:
-			XtSetArg((*args)[narg], (String)arg, (XtArgVal)
-			    (int)lua_tonumber(L, n));
-			narg++;
+			XtSetArg((*args)[iCurrentArgument], (String)pszArgName, (XtArgVal)
+			    (int)lua_tonumber(L, iter));
+			iCurrentArgument++;
 			break;
 		case LUA_TSTRING:
 			/* XXX leaks memory */
-			string = XmStringCreateLocalized(
-			    (char *)lua_tostring(L, n));
-			XtSetArg((*args)[narg], (String)arg, (XtArgVal)string);
-			narg++;
+			xmsString = XmStringCreateLocalized(
+			    (char *)lua_tostring(L, iter));
+			XtSetArg((*args)[iCurrentArgument], (String)pszArgName, (XtArgVal)xmsString);
+			iCurrentArgument++;
 			break;
 		case LUA_TFUNCTION:
 			break;
 		case LUA_TNIL:
 			break;
 		case LUA_TBOOLEAN:
-			XtSetArg((*args)[narg], (String)arg, (XtArgVal)
-			    (int)lua_toboolean(L, n));
-			narg++;
+			XtSetArg((*args)[iCurrentArgument], (String)pszArgName, (XtArgVal)
+			    (int)lua_toboolean(L, iter));
+			iCurrentArgument++;
 			break;
 		case LUA_TTABLE:
 			break;
 		case LUA_TUSERDATA:
-			XtSetArg((*args)[narg], (String)arg,
-			    (XtArgVal)lua_topointer(L, n));
-			narg++;
+			XtSetArg((*args)[iCurrentArgument], (String)pszArgName,
+			    (XtArgVal)lua_topointer(L, iter));
+			iCurrentArgument++;
 			break;
 		case LUA_TTHREAD:
 			break;
 		case LUA_TLIGHTUSERDATA:
-			XtSetArg((*args)[narg], (String)arg,
-			    (XtArgVal)lua_topointer(L, n));
-			narg++;
+			XtSetArg((*args)[iCurrentArgument], (String)pszArgName,
+			    (XtArgVal)lua_topointer(L, iter));
+			iCurrentArgument++;
 			break;
 		default:
 			break;
 		}
 	}
-	return narg;
+	return iCurrentArgument;
 }
 
 static int
 lm_GetValues(lua_State *L)
 {
 	Arg args[1];
-	Widget widget;
-	int narg, n, nn, type;
-	const char *arg;
-	char *value;
-	Boolean boolean;
+	Widget wdgWidget;
+	int iCurrentArgument, iter, iterMax, iArgType;
+	const char *pszArgName;
+	char *pszArgValue;
+	Boolean bArgBool;
 	unsigned char uchar;
 	Cardinal cardinal;
 	Dimension dimension;
 	Position position;
-	int v;
-	XmString text;
+	XmString xmsString;
 
-	widget = lm_GetWidget(L, 1);
+	wdgWidget = lm_GetWidget(L, 1);
 
-	nn = lua_gettop(L);
-	for (narg = 0, n = 2; n <= nn; n++) {
-		if (lua_type(L, n) != LUA_TSTRING)
+	iterMax = lua_gettop(L);
+	for (iCurrentArgument = 0, iter = 2; iter <= iterMax; iter++) {
+		if (lua_type(L, iter) != LUA_TSTRING)
 			continue;
 
-		arg = lua_tostring(L, n);
-		type = get_type(arg);
-		switch (type) {
+		pszArgName = lua_tostring(L, iter);
+		iArgType = get_type(pszArgName);
+		switch (iArgType) {
 		case BOOLEAN:
-			XtSetArg(args[0], (String)arg, &boolean);
-			XtGetValues(widget, args, 1);
-			lua_pushboolean(L, boolean);
-			narg++;
+			XtSetArg(args[0], (String)pszArgName, &bArgBool);
+			XtGetValues(wdgWidget, args, 1);
+			lua_pushboolean(L, bArgBool);
+			iCurrentArgument++;
 			break;
 		case UCHAR:
-			XtSetArg(args[0], (String)arg, &uchar);
-			XtGetValues(widget, args, 1);
+			XtSetArg(args[0], (String)pszArgName, &uchar);
+			XtGetValues(wdgWidget, args, 1);
 			lua_pushinteger(L, uchar);
-			narg++;
+			iCurrentArgument++;
 			break;
 		case CARDINAL:
-			XtSetArg(args[0], (String)arg, &cardinal);
-			XtGetValues(widget, args, 1);
+			XtSetArg(args[0], (String)pszArgName, &cardinal);
+			XtGetValues(wdgWidget, args, 1);
 			lua_pushinteger(L, cardinal);
-			narg++;
+			iCurrentArgument++;
 			break;
 		case DIMENSION:
-			XtSetArg(args[0], (String)arg, &dimension);
-			XtGetValues(widget, args, 1);
+			XtSetArg(args[0], (String)pszArgName, &dimension);
+			XtGetValues(wdgWidget, args, 1);
 			lua_pushinteger(L, dimension);
-			narg++;
+			iCurrentArgument++;
 			break;
 		case POSITION:
-			XtSetArg(args[0], (String)arg, &position);
-			XtGetValues(widget, args, 1);
+			XtSetArg(args[0], (String)pszArgName, &position);
+			XtGetValues(wdgWidget, args, 1);
 			lua_pushinteger(L, position);
-			narg++;
+			iCurrentArgument++;
 			break;
 
 		case STRING:
-			XtSetArg(args[0], (String)arg, &text);
-			XtGetValues(widget, args, 1);
-			XmStringGetLtoR(text, XmFONTLIST_DEFAULT_TAG, &value);
-			lua_pushstring(L, value);
-			XmStringFree(text);
-			narg++;
+			XtSetArg(args[0], (String)pszArgName, &xmsString);
+			XtGetValues(wdgWidget, args, 1);
+			XmStringGetLtoR(xmsString, XmFONTLIST_DEFAULT_TAG, &pszArgValue);
+			lua_pushstring(L, pszArgValue);
+			XmStringFree(xmsString);
+			iCurrentArgument++;
 			break;
 		default:
 			break;
 		}
 	}
-	return narg;
+	return iCurrentArgument;
 }
 
 static int
@@ -1019,69 +1018,69 @@ lm_index(lua_State *L)
 static int
 lm_newindex(lua_State *L)
 {
-	Arg args[1];
-	Widget widget;
-	lm_callbackdata *cbd;
-	XmString s;
-	int narg, n;
-	const char *nam;
-	char *nm;
+	Arg aArgs[1];
+	Widget wdgWidget;
+	lm_callbackdata *pcbdCallback;
+	XmString xmsStr;
+	int iCurrentArg, iter;
+	const char *pszLuaName;
+	char *pszName;
 
-	nam = lua_tostring(L, -2);
+	pszLuaName = lua_tostring(L, -2);
 
 	lua_pushstring(L, "__widget");
 	lua_rawget(L, 1);
-	widget = (Widget)lua_topointer(L, -1);
+	wdgWidget = (Widget)lua_topointer(L, -1);
 	lua_pop(L, 1);
 
 	if (lua_type(L, -1) == LUA_TTABLE) {
 		lua_pushvalue(L, -1);
-		lua_pushstring(L, nam);
+		lua_pushstring(L, pszLuaName);
 		lua_rawset(L, 1);
 	}
 
-	if (widget != NULL) {
-		narg = 0;
+	if (wdgWidget != NULL) {
+		iCurrentArg = 0;
 		switch (lua_type(L, -1)) {
 		case LUA_TSTRING:
-			nm = strdup(nam);
-			s = XmStringCreateLocalized(
+			pszName = strdup(pszLuaName);
+			xmsStr = XmStringCreateLocalized(
 			    (String)lua_tostring(L, -1));
-			XtSetArg(args[narg], nm, (XtArgVal)s);
-			narg++;
+			XtSetArg(aArgs[iCurrentArg], pszName, (XtArgVal)xmsStr);
+			iCurrentArg++;
 			break;
 		case LUA_TNUMBER:
-			nm = strdup(nam);
-			XtSetArg(args[narg], nm, (XtArgVal)
+			pszName = strdup(pszLuaName);
+			XtSetArg(aArgs[iCurrentArg], pszName, (XtArgVal)
 			    lua_tointeger(L, -1));
-			narg++;
+			iCurrentArg++;
 			break;
 		case LUA_TBOOLEAN:
-			nm = strdup(nam);
-			XtSetArg(args[narg], nm, (XtArgVal)
+			pszName = strdup(pszLuaName);
+			XtSetArg(aArgs[iCurrentArg], pszName, (XtArgVal)
 			    (int)lua_toboolean(L, -1));
-			narg++;
+			iCurrentArg++;
 			break;
 		case LUA_TFUNCTION:
 			/* XXX maybe leaks memory */
-			cbd = malloc(sizeof(struct cb_data));
-			if (cbd == NULL)
+			pcbdCallback = malloc(sizeof(struct cb_data));
+			if (pcbdCallback == NULL)
 				luaL_error(L, "memory error");
-			cbd->L = L;
+			pcbdCallback->L = L;
 			lua_pushvalue(L, -1);
-			cbd->ref = luaL_ref(L, LUA_REGISTRYINDEX);
+			pcbdCallback->ref = luaL_ref(L, LUA_REGISTRYINDEX);
 			lua_pushvalue(L, -3);
-			cbd->obj = luaL_ref(L, LUA_REGISTRYINDEX);
-			cbd->callback_name = strdup(nam);
-			XtAddCallback(widget, nam, lm_Callback, cbd);
-			XtAddCallback(widget, XmNdestroyCallback,
-			    lm_DestroyCallback, cbd);
+			pcbdCallback->obj = luaL_ref(L, LUA_REGISTRYINDEX);
+			pcbdCallback->callback_name = strdup(pszLuaName);
+			XtAddCallback(wdgWidget, pszLuaName, lm_Callback, pcbdCallback);
+			XtAddCallback(wdgWidget, XmNdestroyCallback,
+			    lm_DestroyCallback, pcbdCallback);
 			break;
 		}
-		if (narg > 0) {
-			XtSetValues(widget, args, narg);
-			for (n = 0; n < narg; n++)
-				free(args[n].name);
+		if (iCurrentArg > 0) {
+			XtSetValues(wdgWidget, aArgs, iCurrentArg);
+			for (iter = 0; iter < iCurrentArg; iter++)
+				free(aArgs[iter].name);
 		}
 	}
 	return 0;
@@ -1090,38 +1089,38 @@ lm_newindex(lua_State *L)
 #define MAXARGS 64
 
 static Widget
-GetTopShell(Widget w)
+GetTopShell(Widget wdgWidget)
 {
-	while (w && !XtIsWMShell(w))
-		w = XtParent(w);
-	return w;
+	while (wdgWidget && !XtIsWMShell(wdgWidget))
+		wdgWidget = XtParent(wdgWidget);
+	return wdgWidget;
 }
 
 static Widget
-lm_CreateWidgetHierarchy(lua_State *L, int parentObj, Widget parent,
-    const char *name)
+lm_CreateWidgetHierarchy(lua_State *L, int parentObj, Widget wdgParent,
+    const char *pszArgumentName)
 {
-	Arg args[MAXARGS];
+	Arg aArgs[MAXARGS];
 	WidgetClass class;
-	Widget widget;
-	XmString s;
+	Widget wdgWidget;
+	XmString xmsStr;
 #if 0
 	iconv_t cd;
 #endif
-	struct cb_data *cbd;
+	struct cb_data *cbdCallback;
 #if 0
 	int data = -1;
 	size_t len, inbytesleft, outbytesleft;
 #endif
-	char nam[64], *nm;
-	int n, narg, t;
-	char *utf8_s;
+	char szName[64], *pszName;
+	int iter, iCurrentArg, iLuaTableID;
+	char *pszUtf8Str;
 #if 0
 	char *utf8_s, *iso_s;
 	char *inbuf, *outbuf;
 #endif
-	widget = NULL;
-	narg = 0;
+	wdgWidget = NULL;
+	iCurrentArg = 0;
 
 	lua_pushstring(L, "__widgetClass");
 	lua_rawget(L, -2);
@@ -1129,31 +1128,31 @@ lm_CreateWidgetHierarchy(lua_State *L, int parentObj, Widget parent,
 	lua_pop(L, 1);
 
 	if (class != NULL) {
-		t = lua_gettop(L);
+		iLuaTableID = lua_gettop(L);
 		lua_pushnil(L);
-		while (lua_next(L, t) != 0) {
+		while (lua_next(L, iLuaTableID) != 0) {
 			switch (lua_type(L, -2)) {
 			case LUA_TSTRING:
-				strlcpy(nam, lua_tostring(L, -2), sizeof nam);
+				strlcpy(szName, lua_tostring(L, -2), sizeof szName);
 				break;
 			case LUA_TNUMBER:
-				snprintf(nam, sizeof nam, "%.f",
+				snprintf(szName, sizeof szName, "%.f",
 				    lua_tonumber(L, -2));
 				break;
 			default:
-				strlcpy(nam, name, sizeof nam);
+				strlcpy(szName, pszArgumentName, sizeof szName);
 			}
 
 			/* Processed after widget creation */
-			if (!strcmp(nam, "background") ||
-			    !strcmp(nam, "foreground")) {
+			if (!strcmp(szName, "background") ||
+			    !strcmp(szName, "foreground")) {
 				lua_pop(L, 1);
 				continue;
 			}
 
 			switch (lua_type(L, -1)) {
 			case LUA_TSTRING:
-				utf8_s = (char *)lua_tostring(L, -1);
+				pszUtf8Str = (char *)lua_tostring(L, -1);
 #if 0
 				len = strlen(iso_s) * 2 + 1;
 				utf8_s = malloc(len);
@@ -1168,32 +1167,32 @@ lm_CreateWidgetHierarchy(lua_State *L, int parentObj, Widget parent,
 				    &outbuf, &outbytesleft);
 				iconv_close(cd);
 #endif
-				nm = strdup(nam);
+				pszName = strdup(szName);
 				/* XXX ugly, ugliest... */
-				if (strcmp(nam, "value") &&
-				    strcmp(nam, "title")) {
-					s = XmStringCreateLocalized(utf8_s);
-					XtSetArg(args[narg], nm, (XtArgVal)s);
+				if (strcmp(szName, "value") &&
+				    strcmp(szName, "title")) {
+					xmsStr = XmStringCreateLocalized(pszUtf8Str);
+					XtSetArg(aArgs[iCurrentArg], pszName, (XtArgVal)xmsStr);
 				} else
-					XtSetArg(args[narg], nm, utf8_s);
-				narg++;
+					XtSetArg(aArgs[iCurrentArg], pszName, pszUtf8Str);
+				iCurrentArg++;
 				break;
 			case LUA_TNUMBER:
-				nm = strdup(nam);
+				pszName = strdup(szName);
 #if LUA_VERSION_NUM >= 503
-				XtSetArg(args[narg], nm, (XtArgVal)
+				XtSetArg(aArgs[iCurrentArg], pszName, (XtArgVal)
 				    lua_tointeger(L, -1));
 #else
 				XtSetArg(args[narg], nm, (XtArgVal)
 				    (int)lua_tonumber(L, -1));
 #endif
-				narg++;
+				iCurrentArg++;
 				break;
 			case LUA_TBOOLEAN:
-				nm = strdup(nam);
-				XtSetArg(args[narg], nm, (XtArgVal)
+				pszName = strdup(szName);
+				XtSetArg(aArgs[iCurrentArg], pszName, (XtArgVal)
 				    (int)lua_toboolean(L, -1));
-				narg++;
+				iCurrentArg++;
 				break;
 			}
 			lua_pop(L, 1);
@@ -1201,111 +1200,111 @@ lm_CreateWidgetHierarchy(lua_State *L, int parentObj, Widget parent,
 	}
 
 	if (class == xmDialogShellWidgetClass)
-		widget = XtCreatePopupShell(name, class, GetTopShell(parent),
-		    args, narg);
+		wdgWidget = XtCreatePopupShell(pszArgumentName, class, GetTopShell(wdgParent),
+		    aArgs, iCurrentArg);
 	else if (class == xmBulletinBoardWidgetClass)
-		widget = XmCreateBulletinBoard(parent, (String)name, args, narg);
+		wdgWidget = XmCreateBulletinBoard(wdgParent, (String)pszArgumentName, aArgs, iCurrentArg);
 	else if (class != NULL)
-		widget = XtCreateWidget(name, class, parent, args, narg);
-	if (widget != NULL) {
-		lua_pushlightuserdata(L, widget);
+		wdgWidget = XtCreateWidget(pszArgumentName, class, wdgParent, aArgs, iCurrentArg);
+	if (wdgWidget != NULL) {
+		lua_pushlightuserdata(L, wdgWidget);
 		lua_setfield(L, -2, "__widget");
 		luaL_getmetatable(L, WIDGET_METATABLE);
 		lua_setmetatable(L, -2);
 	}
 
-	t = lua_gettop(L);
+	iLuaTableID = lua_gettop(L);
 	lua_pushnil(L);
-	while (lua_next(L, t) != 0) {
+	while (lua_next(L, iLuaTableID) != 0) {
 		switch (lua_type(L, -2)) {
 		case LUA_TSTRING:
-			strlcpy(nam, lua_tostring(L, -2), sizeof nam);
+			strlcpy(szName, lua_tostring(L, -2), sizeof szName);
 			break;
 		case LUA_TNUMBER:
-			snprintf(nam, sizeof n, "%.f", lua_tonumber(L, -2));
+			snprintf(szName, sizeof iter, "%.f", lua_tonumber(L, -2));
 			break;
 		default:
-			strlcpy(nam, name, sizeof nam);
+			strlcpy(szName, pszArgumentName, sizeof szName);
 		}
 
 		switch (lua_type(L, -1)) {
 		case LUA_TSTRING:
-			if (widget && (!strcmp(nam, "background") ||
-			    !strcmp(nam, "foreground"))) {
+			if (wdgWidget && (!strcmp(szName, "background") ||
+			    !strcmp(szName, "foreground"))) {
 				size_t len;
-				const char *color;
+				const char *pszColor;
 
-				color = luaL_checklstring(L, -1, &len);
-				XtVaSetValues(widget, XtVaTypedArg, nam,
-					XmRString, color, len + 1, NULL);
+				pszColor = luaL_checklstring(L, -1, &len);
+				XtVaSetValues(wdgWidget, XtVaTypedArg, szName,
+					XmRString, pszColor, len + 1, NULL);
 			}
 			break;
 		case LUA_TTABLE:
-			if (widget == NULL)
-				lm_CreateWidgetHierarchy(L, t, parent, nam);
+			if (wdgWidget == NULL)
+				lm_CreateWidgetHierarchy(L, iLuaTableID, wdgParent, szName);
 			else
-				lm_CreateWidgetHierarchy(L, t, widget, nam);
+				lm_CreateWidgetHierarchy(L, iLuaTableID, wdgWidget, szName);
 			break;
 		case LUA_TFUNCTION:
-			if (widget == NULL)
+			if (wdgWidget == NULL)
 				break;
 
 			/* XXX maybe leaks memory */
-			cbd = malloc(sizeof(struct cb_data));
-			if (cbd == NULL)
+			cbdCallback = malloc(sizeof(struct cb_data));
+			if (cbdCallback == NULL)
 				luaL_error(L, "memory error");
-			cbd->L = L;
+			cbdCallback->L = L;
 			lua_pushvalue(L, -1);
-			cbd->ref = luaL_ref(L, LUA_REGISTRYINDEX);
-			lua_pushvalue(L, t);
-			cbd->obj = luaL_ref(L, LUA_REGISTRYINDEX);
-			cbd->callback_name = strdup(nam);
-			XtAddCallback(widget, nam, lm_Callback, cbd);
-			XtAddCallback(widget, XmNdestroyCallback,
-			    lm_DestroyCallback, cbd);
+			cbdCallback->ref = luaL_ref(L, LUA_REGISTRYINDEX);
+			lua_pushvalue(L, iLuaTableID);
+			cbdCallback->obj = luaL_ref(L, LUA_REGISTRYINDEX);
+			cbdCallback->callback_name = strdup(szName);
+			XtAddCallback(wdgWidget, szName, lm_Callback, cbdCallback);
+			XtAddCallback(wdgWidget, XmNdestroyCallback,
+			    lm_DestroyCallback, cbdCallback);
 			break;
 		}
 		lua_pop(L, 1);
 	}
-	for (n = 0; n < narg; n++)
-		free(args[n].name);
+	for (iter = 0; iter < iCurrentArg; iter++)
+		free(aArgs[iter].name);
 	if (parentObj > 0) {
 		lua_pushstring(L, "__parent");
 		lua_pushvalue(L, parentObj);
 		lua_rawset(L, -3);
 		/* lua_setfield(L, -2, "__parent"); */ /*lua_setfield does not work here, it assigns the value __parent to the key parentObj for some reason */
 	}
-	if (widget)
-		XtManageChild(widget);
-	return widget;
+	if (wdgWidget)
+		XtManageChild(wdgWidget);
+	return wdgWidget;
 }
 
 static int
 lm_DestroyWidgetHierarchy(lua_State *L)
 {
-	Widget widget;
-	int t;
+	Widget wdgWidget;
+	int iLuaTableID;
 
-	widget = NULL;
+	wdgWidget = NULL;
 
 	lua_getfield(L, -1, "__widget");
-	widget = (Widget)lua_topointer(L, -1);
+	wdgWidget = (Widget)lua_topointer(L, -1);
 	lua_pop(L, 1);
 
 	if (lua_type(L, -1) == LUA_TTABLE) {
 		lua_pushnil(L);
 		lua_setfield(L, -2, "__parent");
 
-		t = lua_gettop(L);
+		iLuaTableID = lua_gettop(L);
 		lua_pushnil(L);
-		while (lua_next(L, t) != 0) {
+		while (lua_next(L, iLuaTableID) != 0) {
 			if (lua_type(L, -1) == LUA_TTABLE)
 				lm_DestroyWidgetHierarchy(L);
 			lua_pop(L, 1);
 		}
 	}
-	if (widget != NULL) {
-		XtDestroyWidget(widget);
+	if (wdgWidget != NULL) {
+		XtDestroyWidget(wdgWidget);
 		lua_pushnil(L);
 		lua_setfield(L, -2, "__widget");
 	}
@@ -1315,40 +1314,40 @@ lm_DestroyWidgetHierarchy(lua_State *L)
 static int
 lm_Realize(lua_State *L)
 {
-	Widget toplevel;
-	char nam[64];
-	void *table;
-	int t;
+	Widget wdgToplevel;
+	char szName[64];
+	void *pTable;
+	int iLuaTableID;
 
-	toplevel = lm_GetWidget(L, 1);
+	wdgToplevel = lm_GetWidget(L, 1);
 	if (!lua_istable(L, 2))
 		luaL_argerror(L, 2, "table expected");
 
 	if (lua_gettop(L) == 3) {
 		if (!lua_isstring(L, 3))
 			luaL_argerror(L, 3, "string expected");
-		strlcpy(nam, lua_tostring(L, 3), sizeof nam);
+		strlcpy(szName, lua_tostring(L, 3), sizeof szName);
 		lua_pop(L, 1);
 	} else {
-		table = (void *)lua_topointer(L, 2);
-		strlcpy(nam, "toplevel", sizeof nam);
+		pTable = (void *)lua_topointer(L, 2);
+		strlcpy(szName, "toplevel", sizeof szName);
 
 #if LUA_VERSION_NUM >= 502
 		lua_pushglobaltable(L);
-		t = lua_gettop(L);
+		iLuaTableID = lua_gettop(L);
 #else
 		t = LUA_GLOBALSINDEX;
 #endif
 		lua_pushnil(L);
-		while (lua_next(L, t) != 0) {
-			if (lua_topointer(L, -1) == table) {
+		while (lua_next(L, iLuaTableID) != 0) {
+			if (lua_topointer(L, -1) == pTable) {
 				switch (lua_type(L, -2)) {
 				case LUA_TSTRING:
-					strlcpy(nam, lua_tostring(L, -2),
-					    sizeof nam);
+					strlcpy(szName, lua_tostring(L, -2),
+					    sizeof szName);
 					break;
 				case LUA_TNUMBER:
-					snprintf(nam, sizeof nam, "%.f",
+					snprintf(szName, sizeof szName, "%.f",
 					    lua_tonumber(L, -2));
 					break;
 				}
@@ -1359,18 +1358,18 @@ lm_Realize(lua_State *L)
 		lua_pop(L, 1);
 #endif
 	}
-	lm_CreateWidgetHierarchy(L, 0, toplevel, nam);
-	XtRealizeWidget(toplevel);
+	lm_CreateWidgetHierarchy(L, 0, wdgToplevel, szName);
+	XtRealizeWidget(wdgToplevel);
 	return 0;
 }
 
 static int
 lm_Unrealize(lua_State *L)
 {
-	Widget w;
+	Widget wdgWidget;
 
-	w = lm_GetWidget(L, 1);
-	XtUnrealizeWidget(w);
+	wdgWidget = lm_GetWidget(L, 1);
+	XtUnrealizeWidget(wdgWidget);
 
 	return 0;
 }
@@ -1378,20 +1377,20 @@ lm_Unrealize(lua_State *L)
 static int
 lm_GetPixmap(lua_State *L)
 {
-	Widget w, toplevel;
+	Widget wdgWidget, wdgToplevel;
 	Pixmap pixmap;
 
-	w = lm_GetWidget(L, 1);
-	toplevel = lm_GetWidget(L, 2);
+	wdgWidget = lm_GetWidget(L, 1);
+	wdgToplevel = lm_GetWidget(L, 2);
 
-	XtVaGetValues(w, XmNlabelPixmap, &pixmap, NULL);
+	XtVaGetValues(wdgWidget, XmNlabelPixmap, &pixmap, NULL);
 	if (pixmap != XmUNSPECIFIED_PIXMAP)
-		XmDestroyPixmap(XtScreen(toplevel), pixmap);
+		XmDestroyPixmap(XtScreen(wdgToplevel), pixmap);
 
-	pixmap = XmGetPixmap(XtScreen(toplevel), (char *)luaL_checkstring(L, 3),
+	pixmap = XmGetPixmap(XtScreen(wdgToplevel), (char *)luaL_checkstring(L, 3),
 	    XmUNSPECIFIED_PIXEL, XmUNSPECIFIED_PIXEL);
 
-	XtVaSetValues(w, XmNlabelPixmap, pixmap, NULL);
+	XtVaSetValues(wdgWidget, XmNlabelPixmap, pixmap, NULL);
 
 	return 0;
 }
@@ -1399,20 +1398,22 @@ lm_GetPixmap(lua_State *L)
 static int
 lm_DestroyPixmap(lua_State *L)
 {
-	Widget w, toplevel;
+	Widget wdgWidget, wdgToplevel;
 	Pixmap pixmap;
 
-	w = lm_GetWidget(L, 1);
-	toplevel = lm_GetWidget(L, 2);
+	wdgWidget = lm_GetWidget(L, 1);
+	wdgToplevel = lm_GetWidget(L, 2);
 
-	XtVaGetValues(w, XmNlabelPixmap, &pixmap, NULL);
+	XtVaGetValues(wdgWidget, XmNlabelPixmap, &pixmap, NULL);
 	if (pixmap != XmUNSPECIFIED_PIXMAP) {
-		XmDestroyPixmap(XtScreen(toplevel), pixmap);
-		XtVaSetValues(w, XmNlabelPixmap, XmUNSPECIFIED_PIXMAP, NULL);
+		XmDestroyPixmap(XtScreen(wdgToplevel), pixmap);
+		XtVaSetValues(wdgWidget, XmNlabelPixmap, XmUNSPECIFIED_PIXMAP, NULL);
 	}
 
 	return 0;
 }
+
+/* register functions with the interpereter */
 
 int
 luaopen_motif(lua_State *L)
