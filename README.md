@@ -20,3 +20,7 @@ Requires Lua 5.3
 ## TODO
 
 - Wrap XmMainWindowSetAreas
+
+## Examples
+
+![A hello world application](https://i.imgur.com/MGuxgT0.png)
