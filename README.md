@@ -19,4 +19,4 @@ Requires Lua 5.3
 
 ## TODO
 
-- Implement missing convenience functions such as XmVaCreateMenubar, either here in native C or in Lua
+- Wrap XmMainWindowSetAreas
