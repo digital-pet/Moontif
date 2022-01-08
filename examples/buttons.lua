@@ -3,16 +3,16 @@ local motif = require "motif"
 gui = motif.Form {
 	fractionBase = 3,
 	motif.Frame {
-		topAttachment = ATTACH_FORM,
-		rightAttachment = ATTACH_FORM,
-		bottomAttachment = ATTACH_POSITION,
-		leftAttachment = ATTACH_FORM,
+		topAttachment = motif.ATTACH_FORM,
+		rightAttachment = motif.ATTACH_FORM,
+		bottomAttachment = motif.ATTACH_POSITION,
+		leftAttachment = motif.ATTACH_FORM,
 
 		bottomPosition = 1,
 
 		motif.LabelGadget {
 			labelString = "Motif Buttons in Lua",
-			childType = FRAME_TITLE_CHILD
+			childType = motif.FRAME_TITLE_CHILD
 		},
 		motif.RowColumn {
 			motif.PushButton {
@@ -30,19 +30,19 @@ gui = motif.Form {
 		}
 	},
 	motif.TabStack {
-		topAttachment = ATTACH_POSITION,
-		rightAttachment = ATTACH_FORM,
-		bottomAttachment = ATTACH_FORM,
-		leftAttachment = ATTACH_FORM,
+		topAttachment = motif.ATTACH_POSITION,
+		rightAttachment = motif.ATTACH_FORM,
+		bottomAttachment = motif.ATTACH_FORM,
+		leftAttachment = motif.ATTACH_FORM,
 
 		topPosition = 2,
 
-		tabSide = TABS_ON_BOTTOM,
-		tabStyle = TABS_ROUNDED,
+		tabSide = motif.TABS_ON_BOTTOM,
+		tabStyle = motif.TABS_ROUNDED,
 
 		tabCornerPercent = 100,
-		tabMarginHeight = 64,
-		tabMarginWidth = 64,
+		tabMarginHeight = 10,
+		tabMarginWidth = 10,
 
 		products = motif.LabelGadget {
 				labelString = "frame title",
@@ -50,7 +50,7 @@ gui = motif.Form {
 		groups = motif.Frame {
 			motif.LabelGadget {
 				labelString = "frame title",
-				childType = FRAME_TITLE_CHILD,
+				childType = motif.FRAME_TITLE_CHILD,
 			},
 			rc = motif.RowColumn {
 				motif.PushButton {
