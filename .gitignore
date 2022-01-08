@@ -3,3 +3,5 @@ obj
 *.o
 *.so
 *.user
+*.vcxproj
+*.sln
