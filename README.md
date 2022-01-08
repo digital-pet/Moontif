@@ -23,5 +23,5 @@ Requires Lua 5.3
 
 ## Examples
 
-• Hello.lua
-![A hello world application displaying its own source code](https://i.imgur.com/Pt2GRbr.png)
+
+![A hello world application displaying its own source code](https://i.imgur.com/Pt2GRbr.png)<br>Hello.lua
