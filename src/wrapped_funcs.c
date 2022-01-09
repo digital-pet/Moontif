@@ -1,6 +1,6 @@
 /*
  * This file is part of the luamotif-core distribution (https://github.com/digital-pet/luamotif-core).
- * Portions Copyright (c) 2022 digital-pet.
+ * Copyright (c) 2022 digital-pet.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright (c) 2009 - 2018, Micro Systems Marc Balmer, CH-5073 Gipf-Oberfrick
+ * Portions copyright (c) 2009 - 2018, Micro Systems Marc Balmer, CH-5073 Gipf-Oberfrick
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -494,35 +494,6 @@ int lm_ManageChild(lua_State* L)
 
 	widget = lm_GetWidget(L, 1);
 	XtManageChild(widget);
-	return 0;
-}
-
-int lm_MainLoop(lua_State* L)
-{
-	XtAppContext* app;
-
-	app = luaL_checkudata(L, 1, CONTEXT_METATABLE);
-	XtAppMainLoop(*app);
-	return 0;
-}
-
-int lm_SetExitFlag(lua_State* L)
-{
-	XtAppContext* app;
-
-	app = luaL_checkudata(L, 1, CONTEXT_METATABLE);
-	XtAppSetExitFlag(*app);
-	return 0;
-}
-
-int lm_ProcessEvent(lua_State* l)
-{
-	XEvent event;
-	XtAppContext* app;
-
-	app = luaL_checkudata(l, 1, CONTEXT_METATABLE);
-	XtAppNextEvent(*app, &event);
-	XtDispatchEvent(&event);
 	return 0;
 }
 

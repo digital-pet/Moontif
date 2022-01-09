@@ -42,72 +42,20 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-int lm_XmFileSelectionBoxGetChild(lua_State* L);
+void lm_Input(XtPointer client_data, int* source, XtInputId* id);
 
-int lm_XmFileSelectionDoSearch(lua_State* L);
+int lm_AddInput(lua_State* L);
 
-int lm_XmMessageBoxGetChild(lua_State* L);
+int lm_RemoveInput(lua_State* L);
 
-int lm_XmListAddItem(lua_State* L);
+void lm_Interval(XtPointer client_data, XtIntervalId* ignored);
 
-int lm_ProcessTraversal(lua_State* L);
+int lm_AddTimeOut(lua_State* L);
 
-int lm_GetString(lua_State* L);
+int lm_RemoveTimeOut(lua_State* L);
 
-int lm_Remove(lua_State* L);
+int lm_MainLoop(lua_State* L);
 
-int lm_Replace(lua_State* L);
+int lm_SetExitFlag(lua_State* L);
 
-int lm_Insert(lua_State* L);
-
-int lm_GetInsertionPosition(lua_State* L);
-
-int lm_GetLastPosition(lua_State* L);
-
-int lm_SetInsertionPosition(lua_State* L);
-
-int lm_SetMaxLength(lua_State* L);
-
-int lm_SetSelection(lua_State* L);
-
-int lm_SetString(lua_State* L);
-
-int lm_UpdateDisplay(lua_State* L);
-
-int lm_GetValues(lua_State* L);
-
-int lm_SetValues(lua_State* L);
-
-int lm_SetStringValue(lua_State* L);
-
-int lm_SetKeyboardFocus(lua_State* L);
-
-int lm_SetWorkWindow(lua_State* L);
-
-int lm_ScrollVisible(lua_State* L);
-
-int lm_XtParent(lua_State* L);
-
-int lm_ManageChild(lua_State* L);
-
-int lm_UnmanageChild(lua_State* L);
-
-int lm_SetSensitive(lua_State* L);
-
-int lm_XtSetLanguageProc(lua_State* L);
-
-int lm_Window(lua_State* L);
-
-int lm_Screen(lua_State* L);
-
-int lm_Popup(lua_State* L);
-
-int lm_Popdown(lua_State* L);
-
-int lm_Unrealize(lua_State* L);
-
-int lm_GetPixmap(lua_State* L);
-
-int lm_DestroyPixmap(lua_State* L);
-
-int lm_Realize(lua_State* L);
+int lm_ProcessEvent(lua_State* l);

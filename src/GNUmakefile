@@ -1,4 +1,4 @@
-SRCS=		luamotif.c widgets.c constants.c dialog.c wrapped_funcs.c callbacks.c
+SRCS=		luamotif.c widgets.c constants.c dialog.c wrapped_funcs.c callbacks.c application.c
 LIB=		motif
 
 LUA=		$(shell lua${SUFFIX} -v 2>&1 | cut -d ' ' -f 1)

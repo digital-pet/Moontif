@@ -11,8 +11,6 @@ end
 
 resources = { '*title: Hello World!' }
 
-text = readAll("hello.lua")
-
 main = motif.MainWindow {
 	motif.RowColumn{
 		motif.Text {
@@ -20,7 +18,7 @@ main = motif.MainWindow {
 			editable = true,
 			rows = 26,
 			columns = 80,
-			value = text
+			value = readAll("hello.lua")
 		}
 	}
 }

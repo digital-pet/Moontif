@@ -1,6 +1,6 @@
 /*
  * This file is part of the luamotif-core distribution (https://github.com/digital-pet/luamotif-core).
- * Portions Copyright (c) 2022 digital-pet.
+ * Copyright (c) 2022 digital-pet.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
- * Copyright (c) 2009 - 2018, Micro Systems Marc Balmer, CH-5073 Gipf-Oberfrick
+ * Portions copyright (c) 2009 - 2018, Micro Systems Marc Balmer, CH-5073 Gipf-Oberfrick
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,8 +40,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/* Lua binding for Motif */
-
 #include <stdlib.h>
 #ifdef __linux__
 #include <bsd/string.h>
@@ -58,6 +56,9 @@
 #include "include/dialog.h"
 #include "include/callbacks.h"
 #include "include/wrapped_funcs.h"
+#include "include/application.h"
+
+#define MAXARGS 64
 
 extern struct luaL_Reg lm_gadgetConstructors[];
 extern struct luaL_Reg lm_widgetConstructors[];
@@ -255,82 +256,6 @@ static int lm_Initialize(lua_State *L)
 	return 2;
 }
 
-
-
-static void lm_Input(XtPointer client_data, int *source, XtInputId *id)
-{
-	lm_callbackdata *cbd = (lm_callbackdata *)client_data;
-
-	lua_rawgeti(cbd->L, LUA_REGISTRYINDEX, cbd->ref);
-	if (lua_pcall(cbd->L, 0, 0, 0))
-		luaL_error(cbd->L, "error calling input function:\n%s",
-		    lua_tostring(cbd->L, -1));
-	/*luaL_unref(cbd->L, LUA_REGISTRYINDEX, cbd->ref);
-	free(cbd);*/
-}
-
-static int lm_AddInput(lua_State *L)
-{
-	XtAppContext *app;
-	XtIntervalId id;
-	lm_callbackdata *cbd;
-	int fd;
-
-	app = luaL_checkudata(L, 1, CONTEXT_METATABLE);
-
-	cbd = malloc(sizeof(lm_callbackdata));
-	cbd->L = L;
-	cbd->ref = luaL_ref(L, LUA_REGISTRYINDEX);
-	fd = luaL_checkinteger(L, -1);
-	lua_pop(L, 1);
-	id = XtAppAddInput(*app, fd, (XtPointer)XtInputReadMask, lm_Input, cbd);
-	lua_pushinteger(L, id);
-	return 1;
-}
-
-static int lm_RemoveInput(lua_State *L)
-{
-	XtRemoveInput(lua_tointeger(L, 1));
-	return 0;
-}
-
-static void lm_Interval(XtPointer client_data, XtIntervalId *ignored)
-{
-	lm_callbackdata *cbd = (lm_callbackdata *)client_data;
-
-	lua_rawgeti(cbd->L, LUA_REGISTRYINDEX, cbd->ref);
-	if (lua_pcall(cbd->L, 0, 0, 0))
-		luaL_error(cbd->L, "error calling timeout function:\n%s",
-		    lua_tostring(cbd->L, -1));
-	luaL_unref(cbd->L, LUA_REGISTRYINDEX, cbd->ref);
-	free(cbd);
-}
-
-static int lm_AddTimeOut(lua_State *L)
-{
-	XtAppContext *app;
-	XtIntervalId id;
-	lm_callbackdata *cbd;
-	unsigned long interval;
-
-	app = luaL_checkudata(L, 1, CONTEXT_METATABLE);
-
-	cbd = malloc(sizeof(lm_callbackdata));
-	cbd->L = L;
-	cbd->ref = luaL_ref(L, LUA_REGISTRYINDEX);
-	interval = luaL_checkinteger(L, -1);
-	lua_pop(L, 1);
-	id = XtAppAddTimeOut(*app, interval, lm_Interval, cbd);
-	lua_pushinteger(L, id);
-	return 1;
-}
-
-static int lm_RemoveTimeOut(lua_State *L)
-{
-	XtRemoveTimeOut(luaL_checkinteger(L, 1));
-	return 0;
-}
-
 static int
 type_compare(const void *r1, const void *r2)
 {
@@ -468,8 +393,6 @@ static int lm_newindex(lua_State *L)
 	}
 	return 0;
 }
-
-#define MAXARGS 64
 
 static Widget
 GetTopShell(Widget wdgWidget)
