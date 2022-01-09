@@ -1,6 +1,21 @@
 #pragma once
 
 /*
+ * This file is part of the luamotif-core distribution (https://github.com/digital-pet/luamotif-core).
+ * Portions Copyright (c) 2022 digital-pet.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  * Copyright (c) 2009 - 2018, Micro Systems Marc Balmer, CH-5073 Gipf-Oberfrick
  * All rights reserved.
  *
@@ -27,49 +42,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/* Lua binding for Motif */
+int lm_CreateFileSelectionDialog(lua_State* L);
 
-#define WIDGET_METATABLE "Motif widget functions"
-#define CONTEXT_METATABLE "Xt application context"
+int lm_CreateFormDialog(lua_State* L);
 
-typedef enum {
-	NONE = 0,
-	FUNCTION,
-	UCHAR,
-	BOOLEAN,
-	DIMENSION,
-	CARDINAL,
-	POSITION,
-	XTARGVAL,
-	STRING
-} x11_types;
-
-#define X11_DIMENSION	0
-#define X11_CARDINAL	1
-#define X11_POSITION	2
-
-typedef struct cb_data {
-	lua_State *L;
-	int ref;	/* The function to be called */
-	int obj;	/* The Lua object to pass, usually the widget */
-	char *callback_name;
-} lm_callbackdata;
-
-struct str_constant {
-	const char *name;
-	const char *value;
-	int type;
-};
-
-struct int_constant {
-	char *name;
-	long value;
-};
-
-Widget lm_GetWidget(lua_State* L, int iLuaTableID);
-
-int lm_getArgs(lua_State* L, int iStartPosition, Arg** args);
-
-int get_type(const char*);
-
-Widget lm_CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char* pszArgumentName);
+int lm_CreateInformationDialog(lua_State* L);

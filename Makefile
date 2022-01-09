@@ -1,4 +1,4 @@
-SRCS=		luamotif.c widgets.c constants.c
+SRCS=		luamotif.c widgets.c constants.c wrapped_funcs.c callbacks.c dialog.c
 LIB=		motif
 
 OS!=		uname
