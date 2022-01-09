@@ -37,7 +37,7 @@
 #include <lua.h>
 #include <lauxlib.h>
 
-#include "luamotif.h"
+#include "include/luamotif.h"
 
 struct str_constant motif_strings[] = {
 #ifdef OPENGL

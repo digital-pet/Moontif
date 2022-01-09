@@ -52,7 +52,7 @@
 #include <lua.h>
 #include <lauxlib.h>
 
-#include "luamotif.h"
+#include "include/luamotif.h"
 
 int lm_CreateFileSelectionDialog(lua_State* L)
 {

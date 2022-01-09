@@ -54,10 +54,10 @@
 #include <lua.h>
 #include <lauxlib.h>
 
-#include "luamotif.h"
-#include "dialog.h"
-#include "callbacks.h"
-#include "wrapped_funcs.h"
+#include "include/luamotif.h"
+#include "include/dialog.h"
+#include "include/callbacks.h"
+#include "include/wrapped_funcs.h"
 
 extern struct luaL_Reg lm_gadgetConstructors[];
 extern struct luaL_Reg lm_widgetConstructors[];

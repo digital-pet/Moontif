@@ -44,7 +44,7 @@
 #include <lua.h>
 #include <lauxlib.h>
 
-#include "luamotif.h"
+#include "include/luamotif.h"
 
 #define GadgetConstructor(W) \
 static int \
