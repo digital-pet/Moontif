@@ -72,7 +72,8 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 	Arg aArgs[MAXARGS];
 	WidgetClass class;
 	Widget wdgWidget;
-	XmString xmsStr;
+	XmString *axmsVal;
+	int iXmStringCount;
 
 
 	struct cb_data* cbdCallback;
@@ -83,7 +84,7 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 
 	wdgWidget = NULL;
 	iCurrentArg = 0;
-
+	iXmStringCount = 0;
 
 	lua_pushstring(L, "__widgetClass");
 	lua_rawget(L, -2);
@@ -98,6 +99,8 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 
 		iLuaTableID = lua_gettop(L);
 		lua_pushnil(L);
+
+		axmsVal = ((XmString *) XtMalloc(MAXARGS * sizeof(XmString)));
 
 		while (lua_next(L, iLuaTableID) != 0) {
 			switch (lua_type(L, -2)) {
@@ -127,8 +130,9 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 
 					/* If the attribute is not value or title, use XmStringCreateLocalized */
 					if (strcmp(szKey, "value") && strcmp(szKey, "title")) {
-						xmsStr = XmStringCreateLocalized(pszUtf8Str);
-						XtSetArg(aArgs[iCurrentArg], pszAttributeName, (XtArgVal)xmsStr);
+						axmsVal[iXmStringCount] = XmStringCreateLocalized(pszUtf8Str);
+						XtSetArg(aArgs[iCurrentArg], pszAttributeName, axmsVal[iXmStringCount]);
+						iXmStringCount++;
 					}
 					else {
 						XtSetArg(aArgs[iCurrentArg], pszAttributeName, pszUtf8Str);
@@ -166,12 +170,15 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 	}
 	else if (class != NULL) {
 		wdgWidget = XtCreateWidget(pszArgumentName, class, wdgParent, aArgs, iCurrentArg);
-	
-	/*
-	 *
-	 * TODO: Memory leak. XmStrings from the first pass aren't freed here, and they should be.
-	 *
-	 */
+	}
+
+	/* Deallocate the XmStrings we allocated earlier. */
+	if (iXmStringCount > 0) {
+		while (--iXmStringCount >= 0) {
+			XmStringFree(axmsVal[iXmStringCount]);
+		}
+		XtFree((char*) axmsVal); /* cast the pointer to silence the "incompatible pointer type" warning */
+	}
 
 	if (wdgWidget != NULL) {
 		lua_pushlightuserdata(L, wdgWidget);
