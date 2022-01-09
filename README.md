@@ -13,7 +13,7 @@ GNUmakefile is for Linux systems
 
 Requires Lua 5.3
 
-    apt install libbsd-dev libx11-dev libmotif-dev liblua5.3-dev
+    apt install libbsd-dev libx11-dev libmotif-dev liblua5.3-dev libgc-dev
     make
     make install
 

@@ -16,7 +16,7 @@ endif
 
 CFLAGS+=	-Wall -O3 -fPIC -I/usr/include -I${PKGDIR}/include \
 		-I/usr/include/lua${SUFFIX}${LUAINCVER}
-LDADD+=		-L${XDIR}/lib -L${PKGDIR}/lib -lXm -lXt -lX11 -lbsd
+LDADD+=		-L${XDIR}/lib -L${PKGDIR}/lib -lXm -lXt -lX11 -lbsd -lgc
 
 PKGDIR=		/usr
 LIBDIR=		${PKGDIR}/lib
