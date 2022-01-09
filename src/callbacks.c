@@ -48,7 +48,8 @@
 #include <X11/Xdefs.h>
 #include <Xm/XmAll.h>
 
-#include <iconv.h>
+#include <gc.h>
+
 #include <lua.h>
 #include <lauxlib.h>
 
@@ -89,8 +90,8 @@ void lm_DestroyCallback(Widget widget, XtPointer client_data, XtPointer call_dat
 
 	luaL_unref(cbdCallback->L, LUA_REGISTRYINDEX, cbdCallback->ref);
 	luaL_unref(cbdCallback->L, LUA_REGISTRYINDEX, cbdCallback->obj);
-	free(cbdCallback->callback_name);
-	free(cbdCallback);
+	GC_free(cbdCallback->callback_name);
+	GC_free(cbdCallback);
 }
 
 int lm_AddCallback(lua_State* L)
@@ -105,8 +106,7 @@ int lm_AddCallback(lua_State* L)
 	if (!lua_isfunction(L, 3))
 		luaL_argerror(L, 3, "function expected");
 
-	/* XXX maybe leaks memory (e.g. when the widget is destroyed */
-	pcbdCallback = malloc(sizeof(struct cb_data));
+	pcbdCallback = GC_malloc(sizeof(struct cb_data));
 	if (pcbdCallback == NULL)
 		luaL_error(L, "memory error");
 

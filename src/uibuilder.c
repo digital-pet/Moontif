@@ -48,8 +48,11 @@
 #include <X11/Xdefs.h>
 #include <Xm/XmAll.h>
 
+#include <gc.h>
+
 #include <lua.h>
 #include <lauxlib.h>
+
 
 #include "include/luamotif.h"
 #include "include/callbacks.h"
@@ -100,7 +103,7 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 		iLuaTableID = lua_gettop(L);
 		lua_pushnil(L);
 
-		axmsVal = ((XmString *) XtMalloc(MAXARGS * sizeof(XmString)));
+		axmsVal = ((XmString *)GC_malloc(MAXARGS * sizeof(XmString)));
 
 		while (lua_next(L, iLuaTableID) != 0) {
 			switch (lua_type(L, -2)) {
@@ -177,7 +180,6 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 		while (--iXmStringCount >= 0) {
 			XmStringFree(axmsVal[iXmStringCount]);
 		}
-		XtFree((char*) axmsVal); /* cast the pointer to silence the "incompatible pointer type" warning */
 	}
 
 	if (wdgWidget != NULL) {
@@ -233,7 +235,7 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 				}
 
 				/* XXX maybe leaks memory */
-				cbdCallback = malloc(sizeof(struct cb_data));
+				cbdCallback = GC_malloc(sizeof(struct cb_data));
 				if (cbdCallback == NULL) {
 					luaL_error(L, "out of memory");
 				}

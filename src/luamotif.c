@@ -48,6 +48,7 @@
 #include <X11/Xdefs.h>
 #include <Xm/XmAll.h>
 
+#include <gc.h>
 #include <iconv.h>
 #include <lua.h>
 #include <lauxlib.h>
@@ -241,7 +242,7 @@ static int lm_Initialize(lua_State *L)
 	}
 	if (argv == NULL) {
 		argc = 0;
-		argv = malloc(sizeof(String));
+		argv = GC_malloc(sizeof(String));
 		argv[0] = NULL;
 	}
 	app = lua_newuserdata(L, sizeof(XtAppContext *));
@@ -343,7 +344,7 @@ static int lm_newindex(lua_State *L)
 			break;
 		case LUA_TFUNCTION:
 			/* XXX maybe leaks memory */
-			pcbdCallback = malloc(sizeof(struct cb_data));
+			pcbdCallback = GC_malloc(sizeof(struct cb_data));
 			if (pcbdCallback == NULL)
 				luaL_error(L, "memory error");
 			pcbdCallback->L = L;
