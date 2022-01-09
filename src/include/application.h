@@ -42,13 +42,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-void lm_Input(XtPointer client_data, int* source, XtInputId* id);
-
 int lm_AddInput(lua_State* L);
 
 int lm_RemoveInput(lua_State* L);
-
-void lm_Interval(XtPointer client_data, XtIntervalId* ignored);
 
 int lm_AddTimeOut(lua_State* L);
 

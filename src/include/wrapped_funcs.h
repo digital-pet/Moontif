@@ -104,10 +104,6 @@ int lm_Popup(lua_State* L);
 
 int lm_Popdown(lua_State* L);
 
-int lm_Unrealize(lua_State* L);
-
 int lm_GetPixmap(lua_State* L);
 
 int lm_DestroyPixmap(lua_State* L);
-
-int lm_Realize(lua_State* L);

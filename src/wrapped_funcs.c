@@ -54,6 +54,43 @@
 
 #include "include/luamotif.h"
 
+extern struct str_constant motif_strings[];
+extern struct int_constant motif_ints[];
+extern size_t num_motif_strings(void);
+extern size_t num_motif_ints(void);
+
+static struct str_constant* typestr;
+
+static int type_compare(const void* r1, const void* r2)
+{
+	struct str_constant* s1, * s2;
+
+	s1 = (struct str_constant*)r1;
+	s2 = (struct str_constant*)r2;
+
+	return strcmp(s1->value, s2->value);
+}
+
+static int get_type(const char* string)
+{
+	struct str_constant* constant, key;
+	int type = LUA_TNIL;
+
+	if (typestr == NULL) {
+		typestr = motif_strings;
+		qsort(&motif_strings[0],
+			num_motif_strings(),
+			sizeof(motif_strings[0]), type_compare);
+	}
+	key.value = string;
+	constant = bsearch(&key, &motif_strings[0],
+		num_motif_strings(),
+		sizeof(motif_strings[0]), type_compare);
+	if (constant)
+		type = constant->type;
+	return type;
+}
+
 int
 lm_XmFileSelectionBoxGetChild(lua_State* L)
 {
@@ -497,16 +534,6 @@ int lm_ManageChild(lua_State* L)
 	return 0;
 }
 
-int lm_Unrealize(lua_State* L)
-{
-	Widget wdgWidget;
-
-	wdgWidget = lm_GetWidget(L, 1);
-	XtUnrealizeWidget(wdgWidget);
-
-	return 0;
-}
-
 int lm_GetPixmap(lua_State* L)
 {
 	Widget wdgWidget, wdgToplevel;
@@ -541,57 +568,5 @@ int lm_DestroyPixmap(lua_State* L)
 		XtVaSetValues(wdgWidget, XmNlabelPixmap, XmUNSPECIFIED_PIXMAP, NULL);
 	}
 
-	return 0;
-}
-
-int lm_Realize(lua_State* L)
-{
-	Widget wdgToplevel;
-	char szName[64];
-	void* pTable;
-	int iLuaTableID;
-
-	wdgToplevel = lm_GetWidget(L, 1);
-	if (!lua_istable(L, 2))
-		luaL_argerror(L, 2, "table expected");
-
-	if (lua_gettop(L) == 3) {
-		if (!lua_isstring(L, 3))
-			luaL_argerror(L, 3, "string expected");
-		strlcpy(szName, lua_tostring(L, 3), sizeof szName);
-		lua_pop(L, 1);
-	}
-	else {
-		pTable = (void*)lua_topointer(L, 2);
-		strlcpy(szName, "toplevel", sizeof szName);
-
-#if LUA_VERSION_NUM >= 502
-		lua_pushglobaltable(L);
-		iLuaTableID = lua_gettop(L);
-#else
-		t = LUA_GLOBALSINDEX;
-#endif
-		lua_pushnil(L);
-		while (lua_next(L, iLuaTableID) != 0) {
-			if (lua_topointer(L, -1) == pTable) {
-				switch (lua_type(L, -2)) {
-				case LUA_TSTRING:
-					strlcpy(szName, lua_tostring(L, -2),
-						sizeof szName);
-					break;
-				case LUA_TNUMBER:
-					snprintf(szName, sizeof szName, "%.f",
-						lua_tonumber(L, -2));
-					break;
-				}
-			}
-			lua_pop(L, 1);
-		}
-#if LUA_VERSION_NUM >= 502
-		lua_pop(L, 1);
-#endif
-	}
-	lm_CreateWidgetHierarchy(L, 0, wdgToplevel, szName);
-	XtRealizeWidget(wdgToplevel);
 	return 0;
 }

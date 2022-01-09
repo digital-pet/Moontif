@@ -1,7 +1,22 @@
 #pragma once
 
 /*
- * Copyright (c) 2009 - 2018, Micro Systems Marc Balmer, CH-5073 Gipf-Oberfrick
+ * This file is part of the luamotif-core distribution (https://github.com/digital-pet/luamotif-core).
+ * Copyright (c) 2022 digital-pet.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Portions copyright (c) 2009 - 2018, Micro Systems Marc Balmer, CH-5073 Gipf-Oberfrick
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,6 +46,8 @@
 
 #define WIDGET_METATABLE "Motif widget functions"
 #define CONTEXT_METATABLE "Xt application context"
+
+#define MAXARGS 64
 
 typedef enum {
 	NONE = 0,
@@ -69,7 +86,5 @@ struct int_constant {
 Widget lm_GetWidget(lua_State* L, int iLuaTableID);
 
 int lm_getArgs(lua_State* L, int iStartPosition, Arg** args);
-
-int get_type(const char*);
 
 Widget lm_CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char* pszArgumentName);

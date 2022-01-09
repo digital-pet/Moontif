@@ -54,7 +54,7 @@
 
 #include "include/luamotif.h"
 
-void lm_Input(XtPointer client_data, int* source, XtInputId* id)
+static void lm_Input(XtPointer client_data, int* source, XtInputId* id)
 {
 	lm_callbackdata* cbd = (lm_callbackdata*)client_data;
 
@@ -91,7 +91,7 @@ int lm_RemoveInput(lua_State* L)
 	return 0;
 }
 
-void lm_Interval(XtPointer client_data, XtIntervalId* ignored)
+static void lm_Interval(XtPointer client_data, XtIntervalId* ignored)
 {
 	lm_callbackdata* cbd = (lm_callbackdata*)client_data;
 
