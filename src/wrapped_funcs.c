@@ -375,7 +375,7 @@ int lm_SetValues(lua_State* L)
 	widget = lm_GetWidget(L, 1);
 	narg = lm_getArgs(L, 2, &args);
 	XtSetValues(widget, args, narg);
-	free(args);
+	free(args); /* still leaks memory because XmStrings aren't freed */
 	return 0;
 }
 

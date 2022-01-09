@@ -85,6 +85,12 @@ Widget lm_GetWidget(lua_State *L, int iLuaTableID)
 	return wdgWidget;
 }
 
+
+/*
+ *
+ * THIS FUNCTION LEAKS MEMORY
+ *
+ */
 int lm_getArgs(lua_State *L, int iStartPosition, Arg **args)
 {
 	XmString xmsString;
