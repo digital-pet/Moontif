@@ -74,9 +74,10 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 	Widget wdgWidget;
 	XmString xmsStr;
 
+
 	struct cb_data* cbdCallback;
 
-	char szKey[64], * pszName;
+	char szKey[64], *pszAttributeName;
 	int iter, iCurrentArg, iLuaTableID;
 	char* pszUtf8Str;
 
@@ -122,29 +123,29 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 			switch (lua_type(L, -1)) {
 				case LUA_TSTRING:
 					pszUtf8Str = (char*)lua_tostring(L, -1);
-					pszName = strdup(szKey);
+					pszAttributeName = strdup(szKey);
 
 					/* If the attribute is not value or title, use XmStringCreateLocalized */
 					if (strcmp(szKey, "value") && strcmp(szKey, "title")) {
 						xmsStr = XmStringCreateLocalized(pszUtf8Str);
-						XtSetArg(aArgs[iCurrentArg], pszName, (XtArgVal)xmsStr);
+						XtSetArg(aArgs[iCurrentArg], pszAttributeName, (XtArgVal)xmsStr);
 					}
 					else {
-						XtSetArg(aArgs[iCurrentArg], pszName, pszUtf8Str);
+						XtSetArg(aArgs[iCurrentArg], pszAttributeName, pszUtf8Str);
 					}
 
 					iCurrentArg++;
 					break;
 
 				case LUA_TNUMBER:
-					pszName = strdup(szKey);
-					XtSetArg(aArgs[iCurrentArg], pszName, (XtArgVal)lua_tointeger(L, -1));
+					pszAttributeName = strdup(szKey);
+					XtSetArg(aArgs[iCurrentArg], pszAttributeName, (XtArgVal)lua_tointeger(L, -1));
 					iCurrentArg++;
 					break;
 
 				case LUA_TBOOLEAN:
-					pszName = strdup(szKey);
-					XtSetArg(aArgs[iCurrentArg], pszName, (XtArgVal)(int)lua_toboolean(L, -1));
+					pszAttributeName = strdup(szKey);
+					XtSetArg(aArgs[iCurrentArg], pszAttributeName, (XtArgVal)(int)lua_toboolean(L, -1));
 					iCurrentArg++;
 					break;
 			}
@@ -165,7 +166,12 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 	}
 	else if (class != NULL) {
 		wdgWidget = XtCreateWidget(pszArgumentName, class, wdgParent, aArgs, iCurrentArg);
-	}
+	
+	/*
+	 *
+	 * TODO: Memory leak. XmStrings from the first pass aren't freed here, and they should be.
+	 *
+	 */
 
 	if (wdgWidget != NULL) {
 		lua_pushlightuserdata(L, wdgWidget);
@@ -175,7 +181,7 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 	}
 
 	/*
-	 *	Second pass, set the attributes we didn't set before creating the widget, such ats callbacks and foreground/background colors and recurse!
+	 *	Second pass, set the attributes we didn't set before creating the widget, such as callbacks and foreground/background colors and recurse!
 	 */
 	iLuaTableID = lua_gettop(L);
 	lua_pushnil(L);
