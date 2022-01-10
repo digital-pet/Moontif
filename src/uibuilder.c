@@ -70,7 +70,7 @@ GetTopShell(Widget wdgWidget)
 
 // Called by lm_Realize
 static Widget
-CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char* pszArgumentName)
+CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName)
 {
 	Arg aArgs[MAXARGS];
 	WidgetClass class;
@@ -116,7 +116,7 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 					break;
 
 				default:
-					strlcpy(szKey, pszArgumentName, sizeof szKey);
+					strlcpy(szKey, pszWidgetName, sizeof szKey);
 
 			}
 
@@ -166,13 +166,13 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 	 */
 
 	if (class == xmDialogShellWidgetClass) {
-		wdgWidget = XtCreatePopupShell(pszArgumentName, class, GetTopShell(wdgParent), aArgs, iCurrentArg);
+		wdgWidget = XtCreatePopupShell(pszWidgetName, class, GetTopShell(wdgParent), aArgs, iCurrentArg);
 	}
 	else if (class == xmBulletinBoardWidgetClass) {
-		wdgWidget = XmCreateBulletinBoard(wdgParent, (String)pszArgumentName, aArgs, iCurrentArg);
+		wdgWidget = XmCreateBulletinBoard(wdgParent, (String)pszWidgetName, aArgs, iCurrentArg);
 	}
 	else if (class != NULL) {
-		wdgWidget = XtCreateWidget(pszArgumentName, class, wdgParent, aArgs, iCurrentArg);
+		wdgWidget = XtCreateWidget(pszWidgetName, class, wdgParent, aArgs, iCurrentArg);
 	}
 
 	/* Deallocate the XmStrings we allocated earlier. */
@@ -206,7 +206,7 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 				break;
 
 			default:
-				strlcpy(szKey, pszArgumentName, sizeof szKey);
+				strlcpy(szKey, pszWidgetName, sizeof szKey);
 		}
 
 		switch (lua_type(L, -1)) {
@@ -276,7 +276,7 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 int lm_Realize(lua_State* L)
 {
 	Widget wdgToplevel;
-	char szClassName[64];
+	char szWidgetName[64];
 	void* pTable;
 	int iLuaTableID;
 
@@ -291,11 +291,11 @@ int lm_Realize(lua_State* L)
 		if (!lua_isstring(L, 3)) {
 			luaL_argerror(L, 3, "string expected");
 		}
-		strlcpy(szClassName, lua_tostring(L, 3), sizeof szClassName);
+		strlcpy(szWidgetName, lua_tostring(L, 3), sizeof szWidgetName);
 		lua_pop(L, 1);
 	} 
 	else {
-		strlcpy(szClassName, "toplevel", sizeof szClassName);
+		strlcpy(szWidgetName, "toplevel", sizeof szWidgetName);
 
 
 		/* 
@@ -311,10 +311,10 @@ int lm_Realize(lua_State* L)
 			if (lua_topointer(L, -1) == pTable) {
 				switch (lua_type(L, -2)) {
 				case LUA_TSTRING:
-					strlcpy(szClassName, lua_tostring(L, -2), sizeof szClassName);
+					strlcpy(szWidgetName, lua_tostring(L, -2), sizeof szWidgetName);
 					break;
 				case LUA_TNUMBER:
-					snprintf(szClassName, sizeof szClassName, "%.f", lua_tonumber(L, -2));
+					snprintf(szWidgetName, sizeof szWidgetName, "%.f", lua_tonumber(L, -2));
 					break;
 				}
 			}
@@ -324,7 +324,7 @@ int lm_Realize(lua_State* L)
 		lua_pop(L, 1);
 	}
 
-	CreateWidgetHierarchy(L, 0, wdgToplevel, szClassName);
+	CreateWidgetHierarchy(L, 0, wdgToplevel, szWidgetName);
 	/* TODO: Realizing widgets should be separate from populating and managing widgets due to operations that may need to occur between the two */
 	XtRealizeWidget(wdgToplevel);
 	return 0;
