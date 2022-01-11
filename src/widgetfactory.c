@@ -93,6 +93,27 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	return 0;
 }
 
+int lm_ParseAll(lua_State* L) {
+	Widget wdgToplevel;
+	char szWidgetName[64];
+
+	wdgToplevel = lm_GetWidget(L, 1);
+	lua_remove(L, 1);
+
+	if (!lua_istable(L, 1)) {
+		luaL_argerror(L, 1, "table expected");
+	}
+
+	if (!lua_isstring(L, 2)) {
+		luaL_argerror(L, 2, "string expected");
+	}
+
+	strlcpy(szWidgetName, lua_tostring(L,2), sizeof szWidgetName);
+	lua_remove(L, 2);
+
+	CreateManagedWidgetTree(L, 0, wdgToplevel, szWidgetName);
+}
+
 int lm_NewRealize(lua_State* L) {
 	Widget wdgToplevel;
 	char szWidgetName[64];
@@ -100,22 +121,6 @@ int lm_NewRealize(lua_State* L) {
 
 	wdgToplevel = lm_GetWidget(L, 1);
 
-	if (!lua_istable(L, 2)) {
-		luaL_argerror(L, 2, "table expected");
-	}
-
-	if (lua_gettop(L) == 3) {
-		if (!lua_isstring(L, 3)) {
-			luaL_argerror(L, 3, "string expected");
-		}
-		strlcpy(szWidgetName, lua_tostring(L, 3), sizeof szWidgetName);
-		lua_pop(L, 1);
-	}
-	else {
-		strlcpy(szWidgetName, "toplevel", sizeof szWidgetName);
-	}
-
-	CreateManagedWidgetTree(L, 0, wdgToplevel, szWidgetName);
 	XtRealizeWidget(wdgToplevel);
 	return 0;
 }
