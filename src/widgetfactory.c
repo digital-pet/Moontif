@@ -43,7 +43,7 @@ static char* gc_strdup(const char* s) {
 }
 
 int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char* pszWidgetName) {
-	
+
 	WidgetFactory WidgetFunc;
 	Widget wdgWidget;
 	int iLuaTableID, iUnnamedWidgets = 0;
@@ -52,6 +52,8 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	bool startManaged = true;
 
 	wdgWidget = NULL;
+
+	// TODO: If table already has widget, abort
 
 	/*
 	 *
@@ -64,7 +66,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	lua_pop(L,1);
 	wdgWidget = (*WidgetFunc)(L, parentObj, wdgParent, pszWidgetName);
 
-	// If widget == null abort
+	// TODO: If widget == null abort
 
 
 	iLuaTableID = lua_gettop(L);
@@ -81,7 +83,9 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 				iUnnamedWidgets++;
 			}
 			
-			CreateManagedWidgetTree(L, iLuaTableID, wdgWidget, pszKey);
+			if (strcmp(pszKey, "__parent")) {
+				CreateManagedWidgetTree(L, iLuaTableID, wdgWidget, pszKey);
+			}
 
 		
 		}
@@ -188,13 +192,13 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 			break;
 
 		case LUA_TNUMBER:
-			// if this starts failing it's because lua_tointeger doesn't guarantee it won't be garbage collected once it's off the stack.
+			// TODO: this will fail because lua_tointeger doesn't guarantee it won't be garbage collected once it's off the stack.
 			XtSetArg(aCreationArgs[iArgCount], pszKey, lua_tointeger(L, -1));
 			iArgCount++;
 			break;
 
 		case LUA_TBOOLEAN:
-			// if this starts failing it's because lua_toboolean doesn't guarantee it won't be garbage collected once it's off the stack.
+			// TODO: this will fail because lua_toboolean doesn't guarantee it won't be garbage collected once it's off the stack.
 			XtSetArg(aCreationArgs[iArgCount], pszKey, lua_toboolean(L, -1));
 			iArgCount++;
 			break;
@@ -268,4 +272,8 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 
 	_lua_stackguard_exit(L);
 	return wdgWidget;
+}
+
+Widget ConstructSimpleMenuBar(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName, WidgetFac1 WidgetFunc) {
+	// TODO: Everything
 }
