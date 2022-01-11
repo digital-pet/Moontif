@@ -274,6 +274,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 	return wdgWidget;
 }
 
-Widget ConstructSimpleMenuBar(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName, WidgetFac1 WidgetFunc) {
+Widget ConstructSimpleMenuBar(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName) {
 	// TODO: Everything
+	return;
 }

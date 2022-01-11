@@ -32,29 +32,8 @@
 #include <lauxlib.h>
 
 #include "include/common.h"
-
+#include "include/widgets.h"
 #include "include/widgetfactory.h"
-
-#define WIDGET_CONSTRUCTOR(W) \
-  Widget Construct##W (lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName) { \
-	_lua_stackguard_entry(L); \
-	Widget wdgWidget; \
-	wdgWidget = ConstructGenericWidget(L, parentObj, wdgParent, pszWidgetName, XmCreate##W ); \
-	_lua_stackguard_exit(L); \
-	return wdgWidget; \
-}
-
-#define WIDGET_DEFERRED(W) \
-static int lm_Defer##W (lua_State *L)\
-{ \
-	_lua_stackguard_entry(L); \
-	lua_pushlightuserdata(L, Construct##W ); \
-	lua_setfield(L, -2, "__widgetConstructor"); \
-	lua_pushstring(L, #W); \
-	lua_setfield(L, -2, "__widgetKind");\
-	_lua_stackguard_exit(L); \
-	return 1; \
-}
 
 /*
  *
@@ -62,23 +41,19 @@ static int lm_Defer##W (lua_State *L)\
  *
  */
 
-WIDGET_CONSTRUCTOR(ArrowButtonGadget)
-WIDGET_DEFERRED(ArrowButtonGadget)
 
-WIDGET_CONSTRUCTOR(LabelGadget)
-WIDGET_DEFERRED(LabelGadget)
 
-WIDGET_CONSTRUCTOR(PushButtonGadget)
-WIDGET_DEFERRED(PushButtonGadget)
+GENERIC_WIDGET(ArrowButtonGadget)
 
-WIDGET_CONSTRUCTOR(SeparatorGadget)
-WIDGET_DEFERRED(SeparatorGadget)
+GENERIC_WIDGET(LabelGadget)
 
-WIDGET_CONSTRUCTOR(ToggleButtonGadget)
-WIDGET_DEFERRED(ToggleButtonGadget)
+GENERIC_WIDGET(PushButtonGadget)
 
-WIDGET_CONSTRUCTOR(ArrowButton)
-WIDGET_DEFERRED(ArrowButton)
+GENERIC_WIDGET(SeparatorGadget)
+
+GENERIC_WIDGET(ToggleButtonGadget)
+
+GENERIC_WIDGET(ArrowButton)
 
 /*
  *
@@ -86,201 +61,138 @@ WIDGET_DEFERRED(ArrowButton)
  *
  */
 
-WIDGET_CONSTRUCTOR(BulletinBoard)
-WIDGET_DEFERRED(BulletinBoard)
-
-WIDGET_CONSTRUCTOR(ButtonBox)
-WIDGET_DEFERRED(ButtonBox)
-
-WIDGET_CONSTRUCTOR(CascadeButton)
-WIDGET_DEFERRED(CascadeButton)
-
-WIDGET_CONSTRUCTOR(Column)
-WIDGET_DEFERRED(Column)
-
-WIDGET_CONSTRUCTOR(ComboBox)
-WIDGET_DEFERRED(ComboBox)
-
-WIDGET_CONSTRUCTOR(Command)
-WIDGET_DEFERRED(Command)
-
-WIDGET_CONSTRUCTOR(Container)
-WIDGET_DEFERRED(Container)
-
-WIDGET_CONSTRUCTOR(DataField)
-WIDGET_DEFERRED(DataField)
-
-WIDGET_CONSTRUCTOR(DialogShell)
-WIDGET_DEFERRED(DialogShell)
-
-WIDGET_CONSTRUCTOR(DrawingArea)
-WIDGET_DEFERRED(DrawingArea)
-
-WIDGET_CONSTRUCTOR(DrawnButton)
-WIDGET_DEFERRED(DrawnButton)
-
-WIDGET_CONSTRUCTOR(FileSelectionBox)
-WIDGET_DEFERRED(FileSelectionBox)
-
-WIDGET_CONSTRUCTOR(FontSelector)
-WIDGET_DEFERRED(FontSelector)
-
-WIDGET_CONSTRUCTOR(Form)
-WIDGET_DEFERRED(Form)
-
-WIDGET_CONSTRUCTOR(Frame)
-WIDGET_DEFERRED(Frame)
-
-//WIDGET_CONSTRUCTOR(Hierarchy)
-//WIDGET_DEFERRED(Hierarchy)
-
-WIDGET_CONSTRUCTOR(IconBox)
-WIDGET_DEFERRED(IconBox)
-
-WIDGET_CONSTRUCTOR(Label)
-WIDGET_DEFERRED(Label)
-
-WIDGET_CONSTRUCTOR(List)
-WIDGET_DEFERRED(List)
-
-WIDGET_CONSTRUCTOR(MainWindow)
-WIDGET_DEFERRED(MainWindow)
-
-WIDGET_CONSTRUCTOR(MessageBox)
-WIDGET_DEFERRED(MessageBox)
-
-WIDGET_CONSTRUCTOR(Notebook)
-WIDGET_DEFERRED(Notebook)
-
-WIDGET_CONSTRUCTOR(Outline)
-WIDGET_DEFERRED(Outline)
-
-WIDGET_CONSTRUCTOR(PanedWindow)
-WIDGET_DEFERRED(PanedWindow)
-
-WIDGET_CONSTRUCTOR(PushButton)
-WIDGET_DEFERRED(PushButton)
-
-WIDGET_CONSTRUCTOR(RowColumn)
-WIDGET_DEFERRED(RowColumn)
-
-WIDGET_CONSTRUCTOR(Scale)
-WIDGET_DEFERRED(Scale)
-
-WIDGET_CONSTRUCTOR(ScrollBar)
-WIDGET_DEFERRED(ScrollBar)
-
-WIDGET_CONSTRUCTOR(ScrolledWindow)
-WIDGET_DEFERRED(ScrolledWindow)
-
-WIDGET_CONSTRUCTOR(SelectionBox)
-WIDGET_DEFERRED(SelectionBox)
-
-WIDGET_CONSTRUCTOR(Separator)
-WIDGET_DEFERRED(Separator)
-
-WIDGET_CONSTRUCTOR(SpinBox)
-WIDGET_DEFERRED(SpinBox)
-
-WIDGET_CONSTRUCTOR(TabBox)
-WIDGET_DEFERRED(TabBox)
-
-WIDGET_CONSTRUCTOR(TabStack)
-WIDGET_DEFERRED(TabStack)
-
-WIDGET_CONSTRUCTOR(Text)
-WIDGET_DEFERRED(Text)
-
-WIDGET_CONSTRUCTOR(TextField)
-WIDGET_DEFERRED(TextField)
-
-WIDGET_CONSTRUCTOR(ToggleButton)
-WIDGET_DEFERRED(ToggleButton)
-
-WIDGET_CONSTRUCTOR(Tree)
-WIDGET_DEFERRED(Tree)
-
+GENERIC_WIDGET(BulletinBoard)
+ 
+GENERIC_WIDGET(ButtonBox)
+ 
+GENERIC_WIDGET(CascadeButton)
+ 
+GENERIC_WIDGET(Column)
+ 
+GENERIC_WIDGET(ComboBox)
+ 
+GENERIC_WIDGET(Command)
+ 
+GENERIC_WIDGET(Container)
+ 
+GENERIC_WIDGET(DataField)
+ 
+GENERIC_WIDGET(DialogShell)
+ 
+GENERIC_WIDGET(DrawingArea)
+ 
+GENERIC_WIDGET(DrawnButton)
+ 
+GENERIC_WIDGET(FileSelectionBox)
+ 
+GENERIC_WIDGET(FontSelector)
+ 
+GENERIC_WIDGET(Form)
+ 
+GENERIC_WIDGET(Frame)
+ 
+//GENERIC_WIDGET(Hierarchy)
+// 
+GENERIC_WIDGET(IconBox)
+ 
+GENERIC_WIDGET(Label)
+ 
+GENERIC_WIDGET(List)
+ 
+GENERIC_WIDGET(MainWindow)
+ 
+GENERIC_WIDGET(MessageBox)
+ 
+GENERIC_WIDGET(Notebook)
+ 
+GENERIC_WIDGET(Outline)
+ 
+GENERIC_WIDGET(PanedWindow)
+ 
+GENERIC_WIDGET(PushButton)
+ 
+GENERIC_WIDGET(RowColumn)
+ 
+GENERIC_WIDGET(Scale)
+ 
+GENERIC_WIDGET(ScrollBar)
+ 
+GENERIC_WIDGET(ScrolledWindow)
+ 
+GENERIC_WIDGET(SelectionBox)
+ 
+GENERIC_WIDGET(Separator)
+ 
+GENERIC_WIDGET(SpinBox)
+ 
+GENERIC_WIDGET(TabBox)
+ 
+GENERIC_WIDGET(TabStack)
+ 
+GENERIC_WIDGET(Text)
+ 
+GENERIC_WIDGET(TextField)
+ 
+GENERIC_WIDGET(ToggleButton)
+ 
+GENERIC_WIDGET(Tree)
+ 
 /*
  *
  *  META WIDGETS
  *
  */
 
-WIDGET_CONSTRUCTOR(BulletinBoardDialog)
-WIDGET_DEFERRED(BulletinBoardDialog)
+GENERIC_WIDGET(BulletinBoardDialog)
+ 
+GENERIC_WIDGET(ErrorDialog)
+ 
+GENERIC_WIDGET(FileSelectionDialog)
+ 
+GENERIC_WIDGET(FormDialog)
+ 
+GENERIC_WIDGET(InformationDialog)
+ 
+GENERIC_WIDGET(MenuBar)
+ 
+GENERIC_WIDGET(MessageDialog)
+ 
+GENERIC_WIDGET(OptionMenu)
+ 
+GENERIC_WIDGET(PopupMenu)
+ 
+GENERIC_WIDGET(PromptDialog)
+ 
+GENERIC_WIDGET(PulldownMenu)
+ 
+GENERIC_WIDGET(QuestionDialog)
+ 
+GENERIC_WIDGET(RadioBox)
+ 
+GENERIC_WIDGET(ScrolledList)
+ 
+GENERIC_WIDGET(ScrolledText)
+ 
+GENERIC_WIDGET(SelectionDialog)
+ 
+GENERIC_WIDGET(SimpleCheckBox)
 
-WIDGET_CONSTRUCTOR(ErrorDialog)
-WIDGET_DEFERRED(ErrorDialog)
-
-WIDGET_CONSTRUCTOR(FileSelectionDialog)
-WIDGET_DEFERRED(FileSelectionDialog)
-
-WIDGET_CONSTRUCTOR(FormDialog)
-WIDGET_DEFERRED(FormDialog)
-
-WIDGET_CONSTRUCTOR(InformationDialog)
-WIDGET_DEFERRED(InformationDialog)
-
-WIDGET_CONSTRUCTOR(MenuBar)
-WIDGET_DEFERRED(MenuBar)
-
-WIDGET_CONSTRUCTOR(MessageDialog)
-WIDGET_DEFERRED(MessageDialog)
-
-WIDGET_CONSTRUCTOR(OptionMenu)
-WIDGET_DEFERRED(OptionMenu)
-
-WIDGET_CONSTRUCTOR(PopupMenu)
-WIDGET_DEFERRED(PopupMenu)
-
-WIDGET_CONSTRUCTOR(PromptDialog)
-WIDGET_DEFERRED(PromptDialog)
-
-WIDGET_CONSTRUCTOR(PulldownMenu)
-WIDGET_DEFERRED(PulldownMenu)
-
-WIDGET_CONSTRUCTOR(QuestionDialog)
-WIDGET_DEFERRED(QuestionDialog)
-
-WIDGET_CONSTRUCTOR(RadioBox)
-WIDGET_DEFERRED(RadioBox)
-
-WIDGET_CONSTRUCTOR(ScrolledList)
-WIDGET_DEFERRED(ScrolledList)
-
-WIDGET_CONSTRUCTOR(ScrolledText)
-WIDGET_DEFERRED(ScrolledText)
-
-WIDGET_CONSTRUCTOR(SelectionDialog)
-WIDGET_DEFERRED(SelectionDialog)
-
-WIDGET_CONSTRUCTOR(SimpleCheckBox)
-WIDGET_DEFERRED(SimpleCheckBox)
-
-WIDGET_CONSTRUCTOR(SimpleMenuBar)
-WIDGET_DEFERRED(SimpleMenuBar)
-
-WIDGET_CONSTRUCTOR(SimpleOptionMenu)
-WIDGET_DEFERRED(SimpleOptionMenu)
-
-WIDGET_CONSTRUCTOR(SimplePopupMenu)
-WIDGET_DEFERRED(SimplePopupMenu)
-
-WIDGET_CONSTRUCTOR(SimplePulldownMenu)
-WIDGET_DEFERRED(SimplePulldownMenu)
-
-WIDGET_CONSTRUCTOR(SimpleRadioBox)
-WIDGET_DEFERRED(SimpleRadioBox)
-
-WIDGET_CONSTRUCTOR(WarningDialog)
-WIDGET_DEFERRED(WarningDialog)
-
-WIDGET_CONSTRUCTOR(WorkArea)
-WIDGET_DEFERRED(WorkArea)
-
-WIDGET_CONSTRUCTOR(WorkingDialog)
-WIDGET_DEFERRED(WorkingDialog)
-
+COMPLEX_WIDGET(SimpleMenuBar)
+ 
+GENERIC_WIDGET(SimpleOptionMenu)
+ 
+GENERIC_WIDGET(SimplePopupMenu)
+ 
+GENERIC_WIDGET(SimplePulldownMenu)
+ 
+GENERIC_WIDGET(SimpleRadioBox)
+ 
+GENERIC_WIDGET(WarningDialog)
+ 
+GENERIC_WIDGET(WorkArea)
+ 
+GENERIC_WIDGET(WorkingDialog)
+ 
 struct luaL_Reg lm_widgetConstructors[] = {
 	{ "ArrowButtonGadget", lm_DeferArrowButtonGadget },
 	{ "LabelGadget", lm_DeferLabelGadget },
