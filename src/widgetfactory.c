@@ -34,7 +34,7 @@
 #include "include/widgetfactory.h"
 
 static char* gc_strdup(const char* s) {
-	int size = strlen(s);
+	int size = strlen(s) + 1;
 	char* p = GC_MALLOC(size);
 	if (p) {
 		memcpy(p, s, size);
