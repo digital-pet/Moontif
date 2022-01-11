@@ -17,4 +17,4 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 
-int lm_NewRealize(lua_State* L);
+char* gc_strdup(const char* s);

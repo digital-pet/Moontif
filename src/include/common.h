@@ -45,6 +45,16 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <lua.h>
+#include <lauxlib.h>
+#include <gc.h>
+
+#ifdef __linux__
+#include <bsd/string.h>
+#endif
+
+#include <X11/Xdefs.h>
+#include <Xm/XmAll.h>
 
 
 #define _lua_stackguard_entry(L) int __lua_stackguard_entry=lua_gettop(L);

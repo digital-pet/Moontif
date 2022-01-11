@@ -16,24 +16,17 @@
  *
  */
 
-#include <stdlib.h>
-
-#include <X11/Xdefs.h>
-#include <Xm/XmAll.h>
 #include <Xm/ButtonBox.h>
 #include <Xm/FontS.h>
 #include <Xm/Tree.h>
 #include <Xm/Outline.h>
 #include <Xm/IconBox.h>
 
-#include <gc.h>
-
-#include <lua.h>
-#include <lauxlib.h>
-
 #include "include/common.h"
 #include "include/widgets.h"
-#include "include/widgetfactory.h"
+
+#include "WidgetClasses/GenericWidget.h"
+#include "WidgetClasses/SimpleMenuBar.h"
 
 //	This file (ab)uses preprocessor macros (see widgets.h) to create a pseudoclass of sorts.
 // 
