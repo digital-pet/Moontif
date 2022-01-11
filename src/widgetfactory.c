@@ -31,6 +31,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 
 	wdgWidget = NULL;
 
+	// If table already has widget, abort
 	lua_pushstring(L, "__widget");
 	lua_rawget(L, -2);
 	if (lua_type(L, -1) == LUA_TLIGHTUSERDATA) {
@@ -39,21 +40,16 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	}
 	lua_pop(L, 1);
 
-	// TODO: If table already has widget, abort
-
-	/*
-	 *
-	 *  First: Call widget constructor.
-	 *
-	 */
 	lua_pushstring(L, "__widgetConstructor");
 	lua_rawget(L, -2);
 	CallbackFunction = lua_topointer(L,-1);
 	lua_pop(L,1);
 	wdgWidget = (*CallbackFunction)(L, parentObj, wdgParent, pszWidgetName);
 
-	// TODO: If widget == null abort
-
+	// If widget == null abort
+	if (wdgWidget == NULL) {
+		return 2;
+	}
 
 	iLuaTableID = lua_gettop(L);
 	lua_pushnil(L);
@@ -64,8 +60,9 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 				pszKey = gc_strdup(lua_tostring(L, -2));
 			}
 			else {
-				snprintf(szKeyGenBuf, 50, "UnnamedWidget_%i",iUnnamedWidgets);
+				snprintf(szKeyGenBuf, 50, "UnnamedWidget_%i_%i",iLuaTableID,iUnnamedWidgets);
 				pszKey = gc_strdup(szKeyGenBuf);
+				printf("%s\n", pszKey);
 				iUnnamedWidgets++;
 			}
 			
