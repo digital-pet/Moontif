@@ -44,7 +44,7 @@ static char* gc_strdup(const char* s) {
 
 int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char* pszWidgetName) {
 
-	WidgetFactory WidgetFunc;
+	WidgetCallback WidgetFunc;
 	Widget wdgWidget;
 	int iLuaTableID, iUnnamedWidgets = 0;
 	char* pszKey;
@@ -137,7 +137,7 @@ int lm_NewRealize(lua_State* L) {
 	return 0;
 }
 
-Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName, WidgetFac1 WidgetFunc) {
+Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName, MotifWidget WidgetFunc) {
 	_lua_stackguard_entry(L);
 
 	Arg aCreationArgs[MAXARGS];
