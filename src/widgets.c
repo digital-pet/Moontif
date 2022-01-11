@@ -35,7 +35,7 @@
 #include "include/widgets.h"
 #include "include/widgetfactory.h"
 
-//	This file (ab)uses preprocessor macros to create a pseudoclass of sorts.
+//	This file (ab)uses preprocessor macros (see widgets.h) to create a pseudoclass of sorts.
 // 
 //	GENERIC_WIDGET(<WidgetType>) expands out into two functions:
 //		* int lm_Defer<WidgetType>(lua_State *L)
