@@ -81,9 +81,8 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 				iUnnamedWidgets++;
 			}
 			
-			if (!strcmp(pszKey, "__parent")) {
-				CreateManagedWidgetTree(L, iLuaTableID, wdgWidget, pszKey);
-			}
+			CreateManagedWidgetTree(L, iLuaTableID, wdgWidget, pszKey);
+
 		
 		}
 		else if (lua_type(L, -2) == LUA_TSTRING && lua_type(L,-1) == LUA_TBOOLEAN) {
@@ -92,6 +91,12 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 			}
 		}
 		lua_pop(L, 1);
+	}
+
+	if (parentObj > 0) {
+		lua_pushstring(L, "__parent");
+		lua_pushvalue(L, parentObj);
+		lua_rawset(L, -3);
 	}
 
 	if (startManaged == true) {
@@ -228,12 +233,6 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 	luaL_getmetatable(L, WIDGET_METATABLE);
 	lua_setmetatable(L, -2);
 
-
-	if (parentObj > 0) {
-		lua_pushstring(L, "__parent");
-		lua_pushvalue(L, parentObj);
-		lua_rawset(L, -3);
-	}
 	// Apply post-creation arguments
 	iLuaTableID = lua_gettop(L);
 	lua_pushnil(L);
