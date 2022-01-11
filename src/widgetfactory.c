@@ -32,6 +32,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	wdgWidget = NULL;
 
 	// If table already has widget, abort
+	dumpstack(L);
 	lua_pushstring(L, "__widget");
 	lua_rawget(L, -2);
 	if (lua_type(L, -1) == LUA_TLIGHTUSERDATA) {
@@ -62,7 +63,6 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 			else {
 				snprintf(szKeyGenBuf, 50, "UnnamedWidget_%i_%i",iLuaTableID,iUnnamedWidgets);
 				pszKey = gc_strdup(szKeyGenBuf);
-				printf("%s\n", pszKey);
 				iUnnamedWidgets++;
 			}
 			

@@ -18,3 +18,5 @@
  */
 
 char* gc_strdup(const char* s);
+
+void dumpstack(lua_State* L);
