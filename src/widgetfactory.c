@@ -94,7 +94,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 		lua_pop(L, 1);
 	}
 
-	if (parentObj > 0 && startManaged == true) {
+	if (startManaged == true) {
 		XtManageChild(wdgWidget);
 	}
 
