@@ -61,6 +61,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	lua_pushstring(L, "__widgetConstructor");
 	lua_rawget(L, -2);
 	WidgetFunc = lua_topointer(L,-1);
+	lua_pop(L,1);
 	wdgWidget = (*WidgetFunc)(L, parentObj, wdgParent, pszWidgetName);
 
 	// If widget == null abort
@@ -79,8 +80,10 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 				pszKey = gc_strdup(szKeyGenBuf);
 				iUnnamedWidgets++;
 			}
-
-			CreateManagedWidgetTree(L, iLuaTableID, wdgWidget, pszKey);
+			
+			if (!strcmp(pszKey, "__parent")) {
+				CreateManagedWidgetTree(L, iLuaTableID, wdgWidget, pszKey);
+			}
 		
 		}
 		else if (lua_type(L, -2) == LUA_TSTRING && lua_type(L,-1) == LUA_TBOOLEAN) {
@@ -90,7 +93,6 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 		}
 		lua_pop(L, 1);
 	}
-	lua_pop(L, 1);
 
 	if (parentObj > 0 && startManaged == true) {
 		XtManageChild(wdgWidget);
@@ -204,7 +206,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 		}
 		lua_pop(L, 1);
 	}
-	lua_pop(L, 1);
+
 	// Create widget using function pointer with creation arguments
 
 	wdgWidget = (*WidgetFunc)(wdgParent, (String)pszWidgetName, aCreationArgs, iArgCount);
@@ -260,7 +262,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 
 			cbdCallback->ref = luaL_ref(L, LUA_REGISTRYINDEX);
 			lua_pushvalue(L, iLuaTableID);
-
+			cd
 			cbdCallback->obj = luaL_ref(L, LUA_REGISTRYINDEX);
 			cbdCallback->callback_name = gc_strdup(pszKey);
 
@@ -271,7 +273,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 		lua_pop(L, 1);
 
 	}
-	lua_pop(L, 1);
+
 
 	// Return widget
 
