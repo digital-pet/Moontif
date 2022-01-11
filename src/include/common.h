@@ -42,8 +42,10 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
+
 
 #define _lua_stackguard_entry(L) int __lua_stackguard_entry=lua_gettop(L);
 #define _lua_stackguard_exit(L) assert(__lua_stackguard_entry == lua_gettop(L));
