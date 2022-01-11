@@ -35,8 +35,9 @@
 #include "include/widgets.h"
 #include "include/widgetfactory.h"
 
-// This file (ab)uses preprocessor macros to create a pseudoclass of sorts.
-// GENERIC_WIDGET(<WidgetType>) expands out into two functions:
+//	This file (ab)uses preprocessor macros to create a pseudoclass of sorts.
+// 
+//	GENERIC_WIDGET(<WidgetType>) expands out into two functions:
 //		* int lm_Defer<WidgetType>(lua_State *L)
 //			- creates a private field in the table it's passed which is 
 //				a function pointer to the constructor callback which will
@@ -44,16 +45,15 @@
 // 
 //		* Widget _Construct<WidgetType>(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName)
 //			- The corresponding callback method, which itself will call ConstructGenericWidget
-//				with a reference to the actual widget's constructor - XmCreate<WidgetType>
+//				with a pointer to the actual widget's constructor - XmCreate<WidgetType>
 //
-// COMPLEX_WIDGET(<WidgetType>) also expands out into two functions:
+//	COMPLEX_WIDGET(<WidgetType>) also expands out into two functions:
 //		* int lm_Defer<WidgetType>(lua_State *L)
 //			- Identical to its counterpart above
 //
 //		* Widget _Construct<WidgetType>(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName)
 //			- This will call out to a function Construct<WidgetType> which must take
 //				the exact same parameters as are passed to _Construct<WidgetType>
-//
 //
 
 /*
@@ -109,8 +109,6 @@ GENERIC_WIDGET(FontSelector)
 GENERIC_WIDGET(Form)
  
 GENERIC_WIDGET(Frame)
- 
-//GENERIC_WIDGET(Hierarchy)
  
 GENERIC_WIDGET(IconBox)
  
@@ -235,13 +233,13 @@ struct luaL_Reg lm_widgetConstructors[] = {
 	{ "FontSelector", lm_DeferFontSelector },
 	{ "Form", lm_DeferForm },
 	{ "Frame", lm_DeferFrame },
-//	{ "Hierarchy", lm_DeferHierarchy },
 	{ "IconBox", lm_DeferIconBox },
 	{ "Label", lm_DeferLabel },
 	{ "List", lm_DeferList },
 	{ "MainWindow", lm_DeferMainWindow },
 	{ "MessageBox", lm_DeferMessageBox },
-	{ "Notebook", lm_DeferNotebook },	{ "Outline", lm_DeferOutline },
+	{ "Notebook", lm_DeferNotebook },
+	{ "Outline", lm_DeferOutline },
 	{ "PanedWindow", lm_DeferPanedWindow },
 	{ "PushButton", lm_DeferPushButton },
 	{ "RowColumn", lm_DeferRowColumn },

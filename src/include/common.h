@@ -53,6 +53,10 @@
 
 #define MAXARGS 64
 
+typedef Widget(*WidgetFac1)(Widget, String, ArgList, Cardinal);
+
+typedef Widget(*WidgetFactory)(lua_State*, int, Widget, char*);
+
 typedef enum {
 	NONE = 0,
 	FUNCTION,
