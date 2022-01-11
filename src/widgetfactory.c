@@ -112,12 +112,12 @@ int lm_ParseAll(lua_State* L) {
 	lua_remove(L, 2);
 
 	CreateManagedWidgetTree(L, 0, wdgToplevel, szWidgetName);
+
+	return 0;
 }
 
 int lm_NewRealize(lua_State* L) {
 	Widget wdgToplevel;
-	char szWidgetName[64];
-
 
 	wdgToplevel = lm_GetWidget(L, 1);
 
