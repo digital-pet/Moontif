@@ -20,6 +20,11 @@
 
 #include <X11/Xdefs.h>
 #include <Xm/XmAll.h>
+#include <Xm/ButtonBox.h>
+#include <Xm/FontS.h>
+#include <Xm/Tree.h>
+#include <Xm/Outline.h>
+#include <Xm/IconBox.h>
 
 #include <gc.h>
 
@@ -84,8 +89,8 @@ WIDGET_DEFERRED(ArrowButton)
 WIDGET_CONSTRUCTOR(BulletinBoard)
 WIDGET_DEFERRED(BulletinBoard)
 
-//WIDGET_CONSTRUCTOR(ButtonBox)
-//WIDGET_DEFERRED(ButtonBox)
+WIDGET_CONSTRUCTOR(ButtonBox)
+WIDGET_DEFERRED(ButtonBox)
 
 WIDGET_CONSTRUCTOR(CascadeButton)
 WIDGET_DEFERRED(CascadeButton)
@@ -117,8 +122,8 @@ WIDGET_DEFERRED(DrawnButton)
 WIDGET_CONSTRUCTOR(FileSelectionBox)
 WIDGET_DEFERRED(FileSelectionBox)
 
-//WIDGET_CONSTRUCTOR(FontSelector)
-//WIDGET_DEFERRED(FontSelector)
+WIDGET_CONSTRUCTOR(FontSelector)
+WIDGET_DEFERRED(FontSelector)
 
 WIDGET_CONSTRUCTOR(Form)
 WIDGET_DEFERRED(Form)
@@ -129,8 +134,8 @@ WIDGET_DEFERRED(Frame)
 //WIDGET_CONSTRUCTOR(Hierarchy)
 //WIDGET_DEFERRED(Hierarchy)
 
-//WIDGET_CONSTRUCTOR(IconBox)
-//WIDGET_DEFERRED(IconBox)
+WIDGET_CONSTRUCTOR(IconBox)
+WIDGET_DEFERRED(IconBox)
 
 WIDGET_CONSTRUCTOR(Label)
 WIDGET_DEFERRED(Label)
@@ -147,8 +152,8 @@ WIDGET_DEFERRED(MessageBox)
 WIDGET_CONSTRUCTOR(Notebook)
 WIDGET_DEFERRED(Notebook)
 
-//WIDGET_CONSTRUCTOR(Outline)
-//WIDGET_DEFERRED(Outline)
+WIDGET_CONSTRUCTOR(Outline)
+WIDGET_DEFERRED(Outline)
 
 WIDGET_CONSTRUCTOR(PanedWindow)
 WIDGET_DEFERRED(PanedWindow)
@@ -192,8 +197,8 @@ WIDGET_DEFERRED(TextField)
 WIDGET_CONSTRUCTOR(ToggleButton)
 WIDGET_DEFERRED(ToggleButton)
 
-//WIDGET_CONSTRUCTOR(Tree)
-//WIDGET_DEFERRED(Tree)
+WIDGET_CONSTRUCTOR(Tree)
+WIDGET_DEFERRED(Tree)
 
 /*
  *
@@ -285,7 +290,7 @@ struct luaL_Reg lm_widgetConstructors[] = {
 
 	{ "ArrowButton", lm_DeferArrowButton },
 	{ "BulletinBoard", lm_DeferBulletinBoard },
-//	{ "ButtonBox", lm_DeferButtonBox },
+	{ "ButtonBox", lm_DeferButtonBox },
 	{ "CascadeButton", lm_DeferCascadeButton },
 	{ "Column", lm_DeferColumn },
 	{ "ComboBox", lm_DeferComboBox },
@@ -296,17 +301,16 @@ struct luaL_Reg lm_widgetConstructors[] = {
 	{ "DrawingArea", lm_DeferDrawingArea },
 	{ "DrawnButton", lm_DeferDrawnButton },
 	{ "FileSelectionBox", lm_DeferFileSelectionBox },
-//	{ "FontSelector", lm_DeferFontSelector },
+	{ "FontSelector", lm_DeferFontSelector },
 	{ "Form", lm_DeferForm },
 	{ "Frame", lm_DeferFrame },
 //	{ "Hierarchy", lm_DeferHierarchy },
-//	{ "IconBox", lm_DeferIconBox },
+	{ "IconBox", lm_DeferIconBox },
 	{ "Label", lm_DeferLabel },
 	{ "List", lm_DeferList },
 	{ "MainWindow", lm_DeferMainWindow },
 	{ "MessageBox", lm_DeferMessageBox },
-	{ "Notebook", lm_DeferNotebook },
-//	{ "Outline", lm_DeferOutline },
+	{ "Notebook", lm_DeferNotebook },	{ "Outline", lm_DeferOutline },
 	{ "PanedWindow", lm_DeferPanedWindow },
 	{ "PushButton", lm_DeferPushButton },
 	{ "RowColumn", lm_DeferRowColumn },
@@ -321,7 +325,7 @@ struct luaL_Reg lm_widgetConstructors[] = {
 	{ "Text", lm_DeferText },
 	{ "TextField", lm_DeferTextField },
 	{ "ToggleButton", lm_DeferToggleButton },
-//	{ "Tree", lm_DeferTree },
+	{ "Tree", lm_DeferTree },
 
 	{ "BulletinBoardDialog", lm_DeferBulletinBoardDialog },
 	{ "ErrorDialog", lm_DeferErrorDialog },
