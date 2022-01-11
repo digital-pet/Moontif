@@ -12,14 +12,12 @@ end
 resources = { '*title: Hello World!' }
 
 main = motif.MainWindow {
-	motif.RowColumn{
-		motif.ScrolledText {
-			editMode = motif.MULTI_LINE_EDIT,
-			editable = true,
-			rows = 26,
-			columns = 80,
-			value = readAll("hello.lua")
-		}
+	motif.ScrolledText {
+		editMode = motif.MULTI_LINE_EDIT,
+		editable = true,
+		rows = 26,
+		columns = 80,
+		value = readAll("hello.lua")
 	}
 }
 
