@@ -52,7 +52,7 @@
 #include <lua.h>
 #include <lauxlib.h>
 
-#include "include/luamotif.h"
+#include "include/common.h"
 
 static void lm_Input(XtPointer client_data, int* source, XtInputId* id)
 {

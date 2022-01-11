@@ -53,6 +53,8 @@
 #include <lua.h>
 #include <lauxlib.h>
 
+#include "include/common.h"
+
 #include "include/luamotif.h"
 #include "include/dialog.h"
 #include "include/callbacks.h"

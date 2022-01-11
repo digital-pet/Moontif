@@ -42,11 +42,46 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/* Lua binding for Motif */
+#include <stdbool.h>
 
+#define _lua_stackguard_entry(L) int __lua_stackguard_entry=lua_gettop(L);
+#define _lua_stackguard_exit(L) assert(__lua_stackguard_entry == lua_gettop(L));
 
-Widget lm_GetWidget(lua_State* L, int iLuaTableID);
+#define WIDGET_METATABLE "Motif widget functions"
+#define CONTEXT_METATABLE "Xt application context"
 
-int lm_getArgs(lua_State* L, int iStartPosition, Arg** args);
+#define MAXARGS 64
 
-Widget lm_CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char* pszArgumentName);
+typedef enum {
+	NONE = 0,
+	FUNCTION,
+	UCHAR,
+	BOOLEAN,
+	DIMENSION,
+	CARDINAL,
+	POSITION,
+	XTARGVAL,
+	STRING
+} x11_types;
+
+#define X11_DIMENSION	0
+#define X11_CARDINAL	1
+#define X11_POSITION	2
+
+typedef struct cb_data {
+	lua_State* L;
+	int ref;	/* The function to be called */
+	int obj;	/* The Lua object to pass, usually the widget */
+	char* callback_name;
+} lm_callbackdata;
+
+struct str_constant {
+	const char* name;
+	const char* value;
+	int type;
+};
+
+struct int_constant {
+	char* name;
+	long value;
+};

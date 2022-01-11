@@ -129,7 +129,7 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 			switch (lua_type(L, -1)) {
 				case LUA_TSTRING:
 					pszUtf8Str = (char*)lua_tostring(L, -1);
-					pszAttributeName = strdup(szKey);
+					pszAttributeName = strdup(szKey); //LEAKS MEMORY
 
 					/* If the attribute is not value or title, use XmStringCreateLocalized */
 					if (strcmp(szKey, "value") && strcmp(szKey, "title")) {
@@ -145,13 +145,13 @@ CreateWidgetHierarchy(lua_State* L, int parentObj, Widget wdgParent, const char*
 					break;
 
 				case LUA_TNUMBER:
-					pszAttributeName = strdup(szKey);
+					pszAttributeName = strdup(szKey); //LEAKS MEMORY
 					XtSetArg(aArgs[iCurrentArg], pszAttributeName, (XtArgVal)lua_tointeger(L, -1));
 					iCurrentArg++;
 					break;
 
 				case LUA_TBOOLEAN:
-					pszAttributeName = strdup(szKey);
+					pszAttributeName = strdup(szKey); //LEAKS MEMORY
 					XtSetArg(aArgs[iCurrentArg], pszAttributeName, (XtArgVal)(int)lua_toboolean(L, -1));
 					iCurrentArg++;
 					break;

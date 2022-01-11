@@ -26,23 +26,28 @@
 #include <lua.h>
 #include <lauxlib.h>
 
-#include "include/luamotif.h"
+#include "include/common.h"
+
 #include "include/widgetfactory.h"
 
-#define CreateWidget(W) \
-Widget Construct##W##(Widget wdgParent,String szClassName, ArgList args, Cardinal nArgs) { \
+#define WIDGET_CONSTRUCTOR(W) \
+  Widget Construct##W##(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName) { \
+	_lua_stackguard_entry(L); \
 	Widget wdgWidget; \
-	wdgWidget = XmCreate##W##(wdgParent, szClassName, args, nArgs); \
+	wdgWidget = ConstructGenericWidget(L, parentObj, wdgParent, pszWidgetName, XmCreate##W##); \
+	_lua_stackguard_exit(L); \
 	return wdgWidget; \
 }
 
-#define Defer(W) \
+#define WIDGET_DEFERRED(W) \
 static int lm_Defer##W##(lua_State *L)\
 { \
+	_lua_stackguard_entry(L); \
 	lua_pushlightuserdata(L, Construct##W##); \
 	lua_setfield(L, -2, "__widgetConstructor"); \
 	lua_pushstring(L, #W); \
 	lua_setfield(L, -2, "__widgetKind");\
+	_lua_stackguard_exit(L); \
 	return 1; \
 }
 
@@ -52,23 +57,23 @@ static int lm_Defer##W##(lua_State *L)\
  *
  */
 
-CreateWidget(ArrowButtonGadget)
-Defer(ArrowButtonGadget)
+WIDGET_CONSTRUCTOR(ArrowButtonGadget)
+WIDGET_DEFERRED(ArrowButtonGadget)
 
-CreateWidget(LabelGadget)
-Defer(LabelGadget)
+WIDGET_CONSTRUCTOR(LabelGadget)
+WIDGET_DEFERRED(LabelGadget)
 
-CreateWidget(PushButtonGadget)
-Defer(PushButtonGadget)
+WIDGET_CONSTRUCTOR(PushButtonGadget)
+WIDGET_DEFERRED(PushButtonGadget)
 
-CreateWidget(SeparatorGadget)
-Defer(SeparatorGadget)
+WIDGET_CONSTRUCTOR(SeparatorGadget)
+WIDGET_DEFERRED(SeparatorGadget)
 
-CreateWidget(ToggleButtonGadget)
-Defer(ToggleButtonGadget)
+WIDGET_CONSTRUCTOR(ToggleButtonGadget)
+WIDGET_DEFERRED(ToggleButtonGadget)
 
-CreateWidget(ArrowButton)
-Defer(ArrowButton)
+WIDGET_CONSTRUCTOR(ArrowButton)
+WIDGET_DEFERRED(ArrowButton)
 
 /*
  *
@@ -76,119 +81,119 @@ Defer(ArrowButton)
  *
  */
 
-CreateWidget(BulletinBoard)
-Defer(BulletinBoard)
+WIDGET_CONSTRUCTOR(BulletinBoard)
+WIDGET_DEFERRED(BulletinBoard)
 
-CreateWidget(ButtonBox)
-Defer(ButtonBox)
+//WIDGET_CONSTRUCTOR(ButtonBox)
+//WIDGET_DEFERRED(ButtonBox)
 
-CreateWidget(CascadeButton)
-Defer(CascadeButton)
+WIDGET_CONSTRUCTOR(CascadeButton)
+WIDGET_DEFERRED(CascadeButton)
 
-CreateWidget(Column)
-Defer(Column)
+WIDGET_CONSTRUCTOR(Column)
+WIDGET_DEFERRED(Column)
 
-CreateWidget(ComboBox)
-Defer(ComboBox)
+WIDGET_CONSTRUCTOR(ComboBox)
+WIDGET_DEFERRED(ComboBox)
 
-CreateWidget(Command)
-Defer(Command)
+WIDGET_CONSTRUCTOR(Command)
+WIDGET_DEFERRED(Command)
 
-CreateWidget(Container)
-Defer(Container)
+WIDGET_CONSTRUCTOR(Container)
+WIDGET_DEFERRED(Container)
 
-CreateWidget(DataField)
-Defer(DataField)
+WIDGET_CONSTRUCTOR(DataField)
+WIDGET_DEFERRED(DataField)
 
-CreateWidget(DialogShell)
-Defer(DialogShell)
+WIDGET_CONSTRUCTOR(DialogShell)
+WIDGET_DEFERRED(DialogShell)
 
-CreateWidget(DrawingArea)
-Defer(DrawingArea)
+WIDGET_CONSTRUCTOR(DrawingArea)
+WIDGET_DEFERRED(DrawingArea)
 
-CreateWidget(DrawnButton)
-Defer(DrawnButton)
+WIDGET_CONSTRUCTOR(DrawnButton)
+WIDGET_DEFERRED(DrawnButton)
 
-CreateWidget(FileSelectionBox)
-Defer(FileSelectionBox)
+WIDGET_CONSTRUCTOR(FileSelectionBox)
+WIDGET_DEFERRED(FileSelectionBox)
 
-CreateWidget(FontSelector)
-Defer(FontSelector)
+//WIDGET_CONSTRUCTOR(FontSelector)
+//WIDGET_DEFERRED(FontSelector)
 
-CreateWidget(Form)
-Defer(Form)
+WIDGET_CONSTRUCTOR(Form)
+WIDGET_DEFERRED(Form)
 
-CreateWidget(Frame)
-Defer(Frame)
+WIDGET_CONSTRUCTOR(Frame)
+WIDGET_DEFERRED(Frame)
 
-CreateWidget(Hierarchy)
-Defer(Hierarchy)
+//WIDGET_CONSTRUCTOR(Hierarchy)
+//WIDGET_DEFERRED(Hierarchy)
 
-CreateWidget(IconBox)
-Defer(IconBox)
+//WIDGET_CONSTRUCTOR(IconBox)
+//WIDGET_DEFERRED(IconBox)
 
-CreateWidget(Label)
-Defer(Label)
+WIDGET_CONSTRUCTOR(Label)
+WIDGET_DEFERRED(Label)
 
-CreateWidget(List)
-Defer(List)
+WIDGET_CONSTRUCTOR(List)
+WIDGET_DEFERRED(List)
 
-CreateWidget(MainWindow)
-Defer(MainWindow)
+WIDGET_CONSTRUCTOR(MainWindow)
+WIDGET_DEFERRED(MainWindow)
 
-CreateWidget(MessageBox)
-Defer(MessageBox)
+WIDGET_CONSTRUCTOR(MessageBox)
+WIDGET_DEFERRED(MessageBox)
 
-CreateWidget(Notebook)
-Defer(Notebook)
+WIDGET_CONSTRUCTOR(Notebook)
+WIDGET_DEFERRED(Notebook)
 
-CreateWidget(Outline)
-Defer(Outline)
+//WIDGET_CONSTRUCTOR(Outline)
+//WIDGET_DEFERRED(Outline)
 
-CreateWidget(PanedWindow)
-Defer(PanedWindow)
+WIDGET_CONSTRUCTOR(PanedWindow)
+WIDGET_DEFERRED(PanedWindow)
 
-CreateWidget(PushButton)
-Defer(PushButton)
+WIDGET_CONSTRUCTOR(PushButton)
+WIDGET_DEFERRED(PushButton)
 
-CreateWidget(RowColumn)
-Defer(RowColumn)
+WIDGET_CONSTRUCTOR(RowColumn)
+WIDGET_DEFERRED(RowColumn)
 
-CreateWidget(Scale)
-Defer(Scale)
+WIDGET_CONSTRUCTOR(Scale)
+WIDGET_DEFERRED(Scale)
 
-CreateWidget(ScrollBar)
-Defer(ScrollBar)
+WIDGET_CONSTRUCTOR(ScrollBar)
+WIDGET_DEFERRED(ScrollBar)
 
-CreateWidget(ScrolledWindow)
-Defer(ScrolledWindow)
+WIDGET_CONSTRUCTOR(ScrolledWindow)
+WIDGET_DEFERRED(ScrolledWindow)
 
-CreateWidget(SelectionBox)
-Defer(SelectionBox)
+WIDGET_CONSTRUCTOR(SelectionBox)
+WIDGET_DEFERRED(SelectionBox)
 
-CreateWidget(Separator)
-Defer(Separator)
+WIDGET_CONSTRUCTOR(Separator)
+WIDGET_DEFERRED(Separator)
 
-CreateWidget(SpinBox)
-Defer(SpinBox)
+WIDGET_CONSTRUCTOR(SpinBox)
+WIDGET_DEFERRED(SpinBox)
 
-CreateWidget(TabBox)
-Defer(TabBox)
+WIDGET_CONSTRUCTOR(TabBox)
+WIDGET_DEFERRED(TabBox)
 
-CreateWidget(TabStack)
-Defer(TabStack)
+WIDGET_CONSTRUCTOR(TabStack)
+WIDGET_DEFERRED(TabStack)
 
-CreateWidget(Text)
-Defer(Text)
+WIDGET_CONSTRUCTOR(Text)
+WIDGET_DEFERRED(Text)
 
-CreateWidget(TextField)
-Defer(TextField)
+WIDGET_CONSTRUCTOR(TextField)
+WIDGET_DEFERRED(TextField)
 
-CreateWidget(ToggleButton)
-Defer(ToggleButton)
+WIDGET_CONSTRUCTOR(ToggleButton)
+WIDGET_DEFERRED(ToggleButton)
 
-CreateWidget(Tree)
-Defer(Tree)
+//WIDGET_CONSTRUCTOR(Tree)
+//WIDGET_DEFERRED(Tree)
 
 /*
  *
@@ -196,80 +201,80 @@ Defer(Tree)
  *
  */
 
-CreateWidget(BulletinBoardDialog)
-Defer(BulletinBoardDialog)
+WIDGET_CONSTRUCTOR(BulletinBoardDialog)
+WIDGET_DEFERRED(BulletinBoardDialog)
 
-CreateWidget(ErrorDialog)
-Defer(ErrorDialog)
+WIDGET_CONSTRUCTOR(ErrorDialog)
+WIDGET_DEFERRED(ErrorDialog)
 
-CreateWidget(FileSelectionDialog)
-Defer(FileSelectionDialog)
+WIDGET_CONSTRUCTOR(FileSelectionDialog)
+WIDGET_DEFERRED(FileSelectionDialog)
 
-CreateWidget(FormDialog)
-Defer(FormDialog)
+WIDGET_CONSTRUCTOR(FormDialog)
+WIDGET_DEFERRED(FormDialog)
 
-CreateWidget(InformationDialog)
-Defer(InformationDialog)
+WIDGET_CONSTRUCTOR(InformationDialog)
+WIDGET_DEFERRED(InformationDialog)
 
-CreateWidget(MenuBar)
-Defer(MenuBar)
+WIDGET_CONSTRUCTOR(MenuBar)
+WIDGET_DEFERRED(MenuBar)
 
-CreateWidget(MessageDialog)
-Defer(MessageDialog)
+WIDGET_CONSTRUCTOR(MessageDialog)
+WIDGET_DEFERRED(MessageDialog)
 
-CreateWidget(OptionMenu)
-Defer(OptionMenu)
+WIDGET_CONSTRUCTOR(OptionMenu)
+WIDGET_DEFERRED(OptionMenu)
 
-CreateWidget(PopupMenu)
-Defer(PopupMenu)
+WIDGET_CONSTRUCTOR(PopupMenu)
+WIDGET_DEFERRED(PopupMenu)
 
-CreateWidget(PromptDialog)
-Defer(PromptDialog)
+WIDGET_CONSTRUCTOR(PromptDialog)
+WIDGET_DEFERRED(PromptDialog)
 
-CreateWidget(PulldownMenu)
-Defer(PulldownMenu)
+WIDGET_CONSTRUCTOR(PulldownMenu)
+WIDGET_DEFERRED(PulldownMenu)
 
-CreateWidget(QuestionDialog)
-Defer(QuestionDialog)
+WIDGET_CONSTRUCTOR(QuestionDialog)
+WIDGET_DEFERRED(QuestionDialog)
 
-CreateWidget(RadioBox)
-Defer(RadioBox)
+WIDGET_CONSTRUCTOR(RadioBox)
+WIDGET_DEFERRED(RadioBox)
 
-CreateWidget(ScrolledList)
-Defer(ScrolledList)
+WIDGET_CONSTRUCTOR(ScrolledList)
+WIDGET_DEFERRED(ScrolledList)
 
-CreateWidget(ScrolledText)
-Defer(ScrolledText)
+WIDGET_CONSTRUCTOR(ScrolledText)
+WIDGET_DEFERRED(ScrolledText)
 
-CreateWidget(SelectionDialog)
-Defer(SelectionDialog)
+WIDGET_CONSTRUCTOR(SelectionDialog)
+WIDGET_DEFERRED(SelectionDialog)
 
-CreateWidget(SimpleCheckBox)
-Defer(SimpleCheckBox)
+WIDGET_CONSTRUCTOR(SimpleCheckBox)
+WIDGET_DEFERRED(SimpleCheckBox)
 
-CreateWidget(SimpleMenuBar)
-Defer(SimpleMenuBar)
+WIDGET_CONSTRUCTOR(SimpleMenuBar)
+WIDGET_DEFERRED(SimpleMenuBar)
 
-CreateWidget(SimpleOptionMenu)
-Defer(SimpleOptionMenu)
+WIDGET_CONSTRUCTOR(SimpleOptionMenu)
+WIDGET_DEFERRED(SimpleOptionMenu)
 
-CreateWidget(SimplePopupMenu)
-Defer(SimplePopupMenu)
+WIDGET_CONSTRUCTOR(SimplePopupMenu)
+WIDGET_DEFERRED(SimplePopupMenu)
 
-CreateWidget(SimplePulldownMenu)
-Defer(SimplePulldownMenu)
+WIDGET_CONSTRUCTOR(SimplePulldownMenu)
+WIDGET_DEFERRED(SimplePulldownMenu)
 
-CreateWidget(SimpleRadioBox)
-Defer(SimpleRadioBox)
+WIDGET_CONSTRUCTOR(SimpleRadioBox)
+WIDGET_DEFERRED(SimpleRadioBox)
 
-CreateWidget(WarningDialog)
-Defer(WarningDialog)
+WIDGET_CONSTRUCTOR(WarningDialog)
+WIDGET_DEFERRED(WarningDialog)
 
-CreateWidget(WorkArea)
-Defer(WorkArea)
+WIDGET_CONSTRUCTOR(WorkArea)
+WIDGET_DEFERRED(WorkArea)
 
-CreateWidget(WorkingDialog)
-Defer(WorkingDialog)
+WIDGET_CONSTRUCTOR(WorkingDialog)
+WIDGET_DEFERRED(WorkingDialog)
 
 struct luaL_Reg lm_widgetConstructors[] = {
 	{ "ArrowButtonGadget", lm_DeferArrowButtonGadget },
@@ -280,7 +285,7 @@ struct luaL_Reg lm_widgetConstructors[] = {
 
 	{ "ArrowButton", lm_DeferArrowButton },
 	{ "BulletinBoard", lm_DeferBulletinBoard },
-	{ "ButtonBox", lm_DeferButtonBox },
+//	{ "ButtonBox", lm_DeferButtonBox },
 	{ "CascadeButton", lm_DeferCascadeButton },
 	{ "Column", lm_DeferColumn },
 	{ "ComboBox", lm_DeferComboBox },
@@ -291,17 +296,17 @@ struct luaL_Reg lm_widgetConstructors[] = {
 	{ "DrawingArea", lm_DeferDrawingArea },
 	{ "DrawnButton", lm_DeferDrawnButton },
 	{ "FileSelectionBox", lm_DeferFileSelectionBox },
-	{ "FontSelector", lm_DeferFontSelector },
+//	{ "FontSelector", lm_DeferFontSelector },
 	{ "Form", lm_DeferForm },
 	{ "Frame", lm_DeferFrame },
-	{ "Hierarchy", lm_DeferHierarchy },
-	{ "IconBox", lm_DeferIconBox },
+//	{ "Hierarchy", lm_DeferHierarchy },
+//	{ "IconBox", lm_DeferIconBox },
 	{ "Label", lm_DeferLabel },
 	{ "List", lm_DeferList },
 	{ "MainWindow", lm_DeferMainWindow },
 	{ "MessageBox", lm_DeferMessageBox },
 	{ "Notebook", lm_DeferNotebook },
-	{ "Outline", lm_DeferOutline },
+//	{ "Outline", lm_DeferOutline },
 	{ "PanedWindow", lm_DeferPanedWindow },
 	{ "PushButton", lm_DeferPushButton },
 	{ "RowColumn", lm_DeferRowColumn },
@@ -316,7 +321,7 @@ struct luaL_Reg lm_widgetConstructors[] = {
 	{ "Text", lm_DeferText },
 	{ "TextField", lm_DeferTextField },
 	{ "ToggleButton", lm_DeferToggleButton },
-	{ "Tree", lm_DeferTree },
+//	{ "Tree", lm_DeferTree },
 
 	{ "BulletinBoardDialog", lm_DeferBulletinBoardDialog },
 	{ "ErrorDialog", lm_DeferErrorDialog },
