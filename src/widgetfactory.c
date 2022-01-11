@@ -33,10 +33,23 @@
 #include "include/callbacks.h"
 #include "include/widgetfactory.h"
 
+static char* gc_strdup(const char* s) {
+	int size = strlen(s);
+	char* p = GC_MALLOC(size);
+	if (p) {
+		memcpy(p, s, size);
+	}
+	return p;
+}
+
 Widget CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char* pszWidgetName) {
 	
 	WidgetFactory WidgetFunc;
 	Widget wdgWidget;
+	int iLuaTableID, iUnnamedWidgets;
+	char* pszKey;
+	char szKeyGenBuf[50];
+	bool startManaged = true;
 
 	wdgWidget = NULL;
 
@@ -52,24 +65,38 @@ Widget CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, ch
 
 	// If widget == null abort
 
-	// Recurse
 
-	// If field "startManaged" = false, don't manage. if root, don't manage, else do manage.
+	iLuaTableID = lua_gettop(L);
+	lua_pushnil(L);
+	while (lua_next(L, iLuaTableID) != 0) {
+		if (lua_type(L, -1) == LUA_TTABLE) {
 
-	if (parentObj > 0) {
+			if (lua_type(L, -2) == LUA_TSTRING) {
+				pszKey = gc_strdup(lua_tostring(L, -2));
+			}
+			else {
+				snprintf(szKeyGenBuf, 50, "UnnamedWidget_%i",iUnnamedWidgets);
+				pszKey = gc_strdup(szKeyGenBuf);
+				iUnnamedWidgets++;
+			}
+
+			CreateManagedWidgetTree(L, iLuaTableID, wdgWidget, pszKey);
+		
+		}
+		else if (lua_type(L, -2) == LUA_TSTRING && lua_type(L,-1) == LUA_TBOOLEAN) {
+			if (!strcmp(lua_tostring(L, -2), "startManaged")) {
+				startManaged = lua_toboolean(L, -1);
+			}
+		}
+		lua_pop(L, 1);
+	}
+	lua_pop(L, 1);
+
+	if (parentObj > 0 && startManaged == true) {
 		XtManageChild(wdgWidget);
 	}
 
 	return wdgWidget;
-}
-
-static char* gc_strdup(const char* s) {
-	int size = strlen(s);
-	char* p = GC_MALLOC(size);
-	if (p) {
-		memcpy(p, s, size);
-	}
-	return p;
 }
 
 Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName, WidgetFac1 WidgetFunc) {
@@ -167,6 +194,17 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 		// TODO: pass some sort of error up the chain
 	}
 
+	lua_pushlightuserdata(L, wdgWidget);
+	lua_setfield(L, -2, "__widget");
+	luaL_getmetatable(L, WIDGET_METATABLE);
+	lua_setmetatable(L, -2);
+
+
+	if (parentObj > 0) {
+		lua_pushstring(L, "__parent");
+		lua_pushvalue(L, parentObj);
+		lua_rawset(L, -3);
+	}
 	// Apply post-creation arguments
 	iLuaTableID = lua_gettop(L);
 	lua_pushnil(L);
