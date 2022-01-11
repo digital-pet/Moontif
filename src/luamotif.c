@@ -61,8 +61,9 @@
 #include "include/wrapped_funcs.h"
 #include "include/application.h"
 #include "include/uibuilder.h"
+#include "include/widgetfactory.h"
 
-extern struct luaL_Reg lm_gadgetConstructors[];
+//extern struct luaL_Reg lm_gadgetConstructors[];
 extern struct luaL_Reg lm_widgetConstructors[];
 
 extern struct str_constant motif_strings[];
@@ -380,7 +381,7 @@ luaopen_motif(lua_State *L)
 
 	struct luaL_Reg luamotif[] = {
 		{ "AddInput",			lm_AddInput },
-		{ "Realize",			lm_Realize },
+		{ "Realize",			lm_NewRealize },
 		{ "Unrealize",			lm_Unrealize },
 		{ "Initialize",			lm_Initialize },
 		{ "RemoveInput",		lm_RemoveInput },
@@ -453,7 +454,7 @@ luaopen_motif(lua_State *L)
 	luaL_newlib(L, luamotif);
 	lm_set_info(L);
 	lm_register(L, lm_widgetConstructors);
-	lm_register(L, lm_gadgetConstructors);
+	//lm_register(L, lm_gadgetConstructors);
 
 	for (n = 0; n < num_motif_strings(); n++) {
 		lua_pushstring(L, motif_strings[n].value);

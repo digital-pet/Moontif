@@ -29,7 +29,7 @@
 #include <lauxlib.h>
 
 #include "include/common.h"
-
+#include "include/luamotif.h"
 #include "include/callbacks.h"
 #include "include/widgetfactory.h"
 
@@ -42,7 +42,7 @@ static char* gc_strdup(const char* s) {
 	return p;
 }
 
-Widget CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char* pszWidgetName) {
+int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char* pszWidgetName) {
 	
 	WidgetFactory WidgetFunc;
 	Widget wdgWidget;
@@ -96,7 +96,34 @@ Widget CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, ch
 		XtManageChild(wdgWidget);
 	}
 
-	return wdgWidget;
+	return 0;
+}
+
+int lm_NewRealize(lua_State* L) {
+	Widget wdgToplevel;
+	char szWidgetName[64];
+
+
+	wdgToplevel = lm_GetWidget(L, 1);
+
+	if (!lua_istable(L, 2)) {
+		luaL_argerror(L, 2, "table expected");
+	}
+
+	if (lua_gettop(L) == 3) {
+		if (!lua_isstring(L, 3)) {
+			luaL_argerror(L, 3, "string expected");
+		}
+		strlcpy(szWidgetName, lua_tostring(L, 3), sizeof szWidgetName);
+		lua_pop(L, 1);
+	}
+	else {
+		strlcpy(szWidgetName, "toplevel", sizeof szWidgetName);
+	}
+
+	CreateManagedWidgetTree(L, 0, wdgToplevel, szWidgetName);
+	XtRealizeWidget(wdgToplevel);
+	return 0;
 }
 
 Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName, WidgetFac1 WidgetFunc) {
@@ -218,7 +245,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 			lua_pop(L, 1);
 			continue;
 		}
-
+		pszKey = gc_strdup(lua_tostring(L, -2));
 		// colors would be set here but meh I'll do that later.
 
 		switch (lua_type(L, -1)) {

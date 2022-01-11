@@ -8,3 +8,5 @@ typedef Widget(*WidgetFac1)(Widget, String, ArgList, Cardinal);
 typedef Widget(*WidgetFactory)(lua_State*, int, Widget, char*);
 
 Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName, WidgetFac1 WidgetFunc);
+
+int lm_NewRealize(lua_State* L);
