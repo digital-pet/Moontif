@@ -46,7 +46,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	
 	WidgetFactory WidgetFunc;
 	Widget wdgWidget;
-	int iLuaTableID, iUnnamedWidgets;
+	int iLuaTableID, iUnnamedWidgets = 0;
 	char* pszKey;
 	char szKeyGenBuf[50];
 	bool startManaged = true;
