@@ -33,9 +33,9 @@
 #include "include/callbacks.h"
 #include "include/widgetfactory.h"
 
-Widget CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName) {
+Widget CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char* pszWidgetName) {
 	
-	WidgetFactory *WidgetFunc;
+	WidgetFactory WidgetFunc;
 	Widget wdgWidget;
 
 	wdgWidget = NULL;
@@ -72,13 +72,13 @@ static char* gc_strdup(const char* s) {
 	return p;
 }
 
-Widget ConstrucGenericWidget(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName, WidgetFactory WidgetFunc) {
+Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName, WidgetFac1 WidgetFunc) {
 	_lua_stackguard_entry(L);
 
 	Arg aCreationArgs[MAXARGS];
 	Widget wdgWidget = NULL;
 	XmString* axmsValues;
-	int iter, iArgCount = 0, iXmStringCount = 0, iLuaTableID;
+	int iArgCount = 0, iXmStringCount = 0, iLuaTableID;
 	char* pszKey, * pszValue;
 	int* piValue;
 	bool* pbValue;
@@ -152,7 +152,7 @@ Widget ConstrucGenericWidget(lua_State* L, int parentObj, Widget wdgParent, cons
 	}
 	// Create widget using function pointer with creation arguments
 
-	wdgWidget = (*WidgetFunc)(wdgParent, pszWidgetName, aCreationArgs, iArgCount);
+	wdgWidget = (*WidgetFunc)(wdgParent, (String)pszWidgetName, aCreationArgs, iArgCount);
 
 	// Deallocate XmStrings which require deallocation
 	if (iXmStringCount > 0) {

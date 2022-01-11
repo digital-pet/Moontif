@@ -31,19 +31,19 @@
 #include "include/widgetfactory.h"
 
 #define WIDGET_CONSTRUCTOR(W) \
-  Widget Construct##W##(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName) { \
+  Widget Construct##W (lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName) { \
 	_lua_stackguard_entry(L); \
 	Widget wdgWidget; \
-	wdgWidget = ConstructGenericWidget(L, parentObj, wdgParent, pszWidgetName, XmCreate##W##); \
+	wdgWidget = ConstructGenericWidget(L, parentObj, wdgParent, pszWidgetName, XmCreate##W ); \
 	_lua_stackguard_exit(L); \
 	return wdgWidget; \
 }
 
 #define WIDGET_DEFERRED(W) \
-static int lm_Defer##W##(lua_State *L)\
+static int lm_Defer##W (lua_State *L)\
 { \
 	_lua_stackguard_entry(L); \
-	lua_pushlightuserdata(L, Construct##W##); \
+	lua_pushlightuserdata(L, Construct##W ); \
 	lua_setfield(L, -2, "__widgetConstructor"); \
 	lua_pushstring(L, #W); \
 	lua_setfield(L, -2, "__widgetKind");\

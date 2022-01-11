@@ -54,6 +54,7 @@
 #include <lauxlib.h>
 
 #include "include/common.h"
+#include "include/luamotif.h"
 
 extern struct str_constant motif_strings[];
 extern struct int_constant motif_ints[];

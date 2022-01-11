@@ -53,6 +53,7 @@
 #include <lauxlib.h>
 
 #include "include/common.h"
+#include "include/luamotif.h"
 
 int lm_CreateFileSelectionDialog(lua_State* L)
 {

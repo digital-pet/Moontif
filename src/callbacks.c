@@ -54,6 +54,7 @@
 #include <lauxlib.h>
 
 #include "include/common.h"
+#include "include/luamotif.h"
 #include "include/wrapped_funcs.h"
 
 void lm_Callback(Widget widget, XtPointer client_data, XtPointer call_data)
