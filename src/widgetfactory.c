@@ -195,7 +195,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 				luaL_error(L, "memory allocation failed");
 			}
 			*piValue = lua_tointeger(L, -1);
-			XtSetArg(aCreationArgs[iArgCount], pszKey, piValue);
+			XtSetArg(aCreationArgs[iArgCount], pszKey, lua_tointeger(L, -1));
 			iArgCount++;
 			break;
 
@@ -205,7 +205,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 				luaL_error(L, "memory allocation failed");
 			}
 			*pbValue = lua_toboolean(L, -1);
-			XtSetArg(aCreationArgs[iArgCount], pszKey, pbValue);
+			XtSetArg(aCreationArgs[iArgCount], pszKey, lua_toboolean(L, -1));
 			iArgCount++;
 			break;
 		}
