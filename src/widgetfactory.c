@@ -129,7 +129,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 			break;
 
 		case LUA_TNUMBER:
-			piValue = GC_MALLOC(sizeof(lua_tointeger(L, -1)));
+			piValue = GC_MALLOC(sizeof(int));
 			if (piValue == NULL) {
 				luaL_error(L, "memory allocation failed");
 			}
