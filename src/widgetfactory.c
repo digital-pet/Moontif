@@ -262,7 +262,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 
 			cbdCallback->ref = luaL_ref(L, LUA_REGISTRYINDEX);
 			lua_pushvalue(L, iLuaTableID);
-			cd
+			
 			cbdCallback->obj = luaL_ref(L, LUA_REGISTRYINDEX);
 			cbdCallback->callback_name = gc_strdup(pszKey);
 
