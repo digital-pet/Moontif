@@ -195,7 +195,7 @@ GENERIC_WIDGET(SelectionDialog)
 GENERIC_WIDGET(SimpleCheckBox)
 
 COMPLEX_WIDGET(SimpleMenuBar)
- 
+
 GENERIC_WIDGET(SimpleOptionMenu)
  
 GENERIC_WIDGET(SimplePopupMenu)
