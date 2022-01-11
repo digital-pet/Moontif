@@ -13,7 +13,7 @@ resources = { '*title: Hello World!' }
 
 main = motif.MainWindow {
 	motif.RowColumn{
-		motif.Text {
+		motif.ScrolledText {
 			editMode = motif.MULTI_LINE_EDIT,
 			editable = true,
 			rows = 26,
