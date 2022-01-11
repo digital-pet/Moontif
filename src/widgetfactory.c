@@ -141,8 +141,6 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 	XmString* axmsValues;
 	int iArgCount = 0, iXmStringCount = 0, iLuaTableID;
 	char* pszKey, * pszValue;
-	int* piValue;
-	bool* pbValue;
 
 	struct cb_data* cbdCallback;
 
@@ -190,21 +188,13 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 			break;
 
 		case LUA_TNUMBER:
-			piValue = GC_MALLOC(sizeof(int));
-			if (piValue == NULL) {
-				luaL_error(L, "memory allocation failed");
-			}
-			*piValue = lua_tointeger(L, -1);
+			// if this starts failing it's because lua_tointeger doesn't guarantee it won't be garbage collected once it's off the stack.
 			XtSetArg(aCreationArgs[iArgCount], pszKey, lua_tointeger(L, -1));
 			iArgCount++;
 			break;
 
 		case LUA_TBOOLEAN:
-			pbValue = GC_MALLOC(sizeof(bool));
-			if (pbValue == NULL) {
-				luaL_error(L, "memory allocation failed");
-			}
-			*pbValue = lua_toboolean(L, -1);
+			// if this starts failing it's because lua_toboolean doesn't guarantee it won't be garbage collected once it's off the stack.
 			XtSetArg(aCreationArgs[iArgCount], pszKey, lua_toboolean(L, -1));
 			iArgCount++;
 			break;
