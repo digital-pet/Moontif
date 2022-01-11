@@ -37,7 +37,7 @@ static char* gc_strdup(const char* s) {
 	int size = strlen(s) + 1;
 	char* p = GC_MALLOC(size);
 	if (p) {
-		memcpy(p, s, size);
+		memcpy(p, s, size - 1); //since GC_MALLOC always zeroes memory, we can copy size -1 and ensure there's a null terminator
 	}
 	return p;
 }

@@ -35,13 +35,32 @@
 #include "include/widgets.h"
 #include "include/widgetfactory.h"
 
+// This file (ab)uses preprocessor macros to create a pseudoclass of sorts.
+// GENERIC_WIDGET(<WidgetType>) expands out into two functions:
+//		* int lm_Defer<WidgetType>(lua_State *L)
+//			- creates a private field in the table it's passed which is 
+//				a function pointer to the constructor callback which will
+//				be invoked when motif::Realize is called.
+// 
+//		* Widget _Construct<WidgetType>(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName)
+//			- The corresponding callback method, which itself will call ConstructGenericWidget
+//				with a reference to the actual widget's constructor - XmCreate<WidgetType>
+//
+// COMPLEX_WIDGET(<WidgetType>) also expands out into two functions:
+//		* int lm_Defer<WidgetType>(lua_State *L)
+//			- Identical to its counterpart above
+//
+//		* Widget _Construct<WidgetType>(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName)
+//			- This will call out to a function Construct<WidgetType> which must take
+//				the exact same parameters as are passed to _Construct<WidgetType>
+//
+//
+
 /*
  *
  *  CORE GADGETS
  *
  */
-
-
 
 GENERIC_WIDGET(ArrowButtonGadget)
 
@@ -92,7 +111,7 @@ GENERIC_WIDGET(Form)
 GENERIC_WIDGET(Frame)
  
 //GENERIC_WIDGET(Hierarchy)
-// 
+ 
 GENERIC_WIDGET(IconBox)
  
 GENERIC_WIDGET(Label)
