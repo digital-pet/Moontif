@@ -100,7 +100,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 			break;
 
 		default:
-			lua_pop(L, 2);
+			lua_pop(L, 1);
 			continue;
 		}
 
@@ -148,8 +148,9 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 			iArgCount++;
 			break;
 		}
-		lua_pop(L, 2);
+		lua_pop(L, 1);
 	}
+	lua_pop(L, 1);
 	// Create widget using function pointer with creation arguments
 
 	wdgWidget = (*WidgetFunc)(wdgParent, (String)pszWidgetName, aCreationArgs, iArgCount);
@@ -176,7 +177,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 			break;
 
 		default:
-			lua_pop(L, 2);
+			lua_pop(L, 1);
 			continue;
 		}
 
@@ -202,9 +203,10 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 			XtAddCallback(wdgWidget, XmNdestroyCallback, lm_DestroyCallback, cbdCallback);
 			break;
 		}
-		lua_pop(L, 2);
+		lua_pop(L, 1);
 
 	}
+	lua_pop(L, 1);
 
 	// Return widget
 
