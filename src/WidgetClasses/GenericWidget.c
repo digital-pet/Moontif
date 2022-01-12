@@ -31,7 +31,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 	XmString* axmsValues;
 	int iArgCount = 0, iXmStringCount = 0, iLuaTableID;
 	char* pszKey, * pszValue;
-	int *iValue, iTmp, * bValue, bTmp;
+	int *piValue, * pbValue;
 
 	struct cb_data* cbdCallback;
 
@@ -79,20 +79,18 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 			break;
 
 		case LUA_TNUMBER:
-			iValue = (int*)malloc(sizeof(int));
-			iTmp = lua_tointeger(L, -1);
-			memcpy(iValue, &iTmp, sizeof(int));
-			printf("int - %i, %i\n", *iValue, iTmp);
-			XtSetArg(aCreationArgs[iArgCount], pszKey, *iValue);
+			piValue = (int*)GC_MALLOC(sizeof(int));
+			*piValue = lua_tointeger(L, -1);
+
+			XtSetArg(aCreationArgs[iArgCount], pszKey, *piValue);
 			iArgCount++;
 			break;
 
 		case LUA_TBOOLEAN:
-			bValue = (int*)malloc(sizeof(int));
-			bTmp = lua_toboolean(L, -1);
-			printf("bool - %i, %i\n", *bValue, bTmp);
-			memcpy(bValue, &bTmp, sizeof(int));
-			XtSetArg(aCreationArgs[iArgCount], pszKey, *bValue);
+			pbValue = (int*)GC_MALLOC(sizeof(int));
+			*pbValue = lua_toboolean(L, -1);
+
+			XtSetArg(aCreationArgs[iArgCount], pszKey, *pbValue);
 			iArgCount++;
 			break;
 		}
