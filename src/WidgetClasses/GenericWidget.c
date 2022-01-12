@@ -79,7 +79,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 			break;
 
 		case LUA_TNUMBER:
-			iValue = (int*)GC_MALLOC(sizeof(int));
+			iValue = (int*)malloc(sizeof(int));
 			iTmp = lua_tointeger(L, -1);
 			memcpy(iValue, &iTmp, sizeof(int));
 			printf("int - %i, %i\n", *iValue, iTmp);
@@ -88,7 +88,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 			break;
 
 		case LUA_TBOOLEAN:
-			bValue = (int*)GC_MALLOC(sizeof(int));
+			bValue = (int*)malloc(sizeof(int));
 			bTmp = lua_toboolean(L, -1);
 			printf("bool - %i, %i\n", *bValue, bTmp);
 			memcpy(bValue, &bTmp, sizeof(int));
