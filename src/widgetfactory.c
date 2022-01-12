@@ -54,6 +54,9 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 
 	iLuaTableID = lua_gettop(L);
 	lua_pushnil(L);
+	if (iDepth > 0) {
+		iDepth--;
+	}
 	while (lua_next(L, iLuaTableID) != 0) {
 		if ((lua_type(L, -1) == LUA_TTABLE) && (iDepth != 0)) {
 
@@ -67,10 +70,6 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 			}
 			
 			if (strcmp(pszKey, "__parent")) {
-				if (iDepth > 0) {
-					iDepth--;
-				}
-				
 				CreateManagedWidgetTree(L, iLuaTableID, wdgWidget, pszKey, iDepth);
 			}
 
