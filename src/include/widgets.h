@@ -17,6 +17,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>
  */
 
+void NewWidget(lua_State* L, WidgetConstructor Constructor);
+void SetGlobalID(lua_State* L);
+
 #define GENERIC_WIDGET_CONSTRUCTOR(W) \
   static Widget _Construct##W (lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName) { \
 	_lua_stackguard_entry(L); \

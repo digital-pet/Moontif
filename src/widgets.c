@@ -33,9 +33,39 @@
 
 void NewWidget(lua_State* L, WidgetConstructor Constructor)
 {
-	//builditerator(L);
+
+	SetGlobalID(L);
 	lua_pushlightuserdata(L, Constructor);
 	lua_setfield(L, -2, "__widgetConstructor");
+	return;
+}
+
+void SetGlobalID(lua_State* L) {
+	static long long iter = 0;
+
+	// look for global __widgetOrder table
+	lua_getglobal(L, "__widgetOrder");
+
+	// if none, create it
+	if (!(lua_type(L, -1) == LUA_TTABLE)) {
+		lua_pop(L, 1);
+		lua_newtable(L);
+		lua_pushvalue(L, -1);
+		lua_setglobal(L, "__widgetOrder");
+	}
+	// Copy the table to the top to use as the key, and make iter the value
+	lua_pushvalue(L, 1);
+	lua_pushinteger(L, iter);
+	lua_rawset(L, -3);
+
+	// throw away all the stuff we put on the stack
+	lua_settop(L, 1);
+	
+	lua_pushinteger(L, iter);
+	lua_setfield(L, -2, "__id");
+	printf("Widget %llu \n", iter);  // better debugging through printf
+	iter++;
+
 	return;
 }
 

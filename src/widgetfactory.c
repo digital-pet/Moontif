@@ -47,21 +47,6 @@ int createordered(lua_State* L) {
 }
 */
 
-void builditerator(lua_State* L) {
-	static long long iter= 0;
-	// look for global __widgetOrder table
-	// if none, create it
-	// ???
-	// profit
-	lua_pushinteger(L, iter);
-	lua_setfield(L, -2, "__id");
-	printf("Widget %llu \n", iter);
-	iter++;
-	// TODO
-
-	return;
-}
-
 int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char* pszWidgetName, int iDepth) {
 
 	WidgetConstructor Constructor;
