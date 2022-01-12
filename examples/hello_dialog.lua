@@ -58,6 +58,8 @@ rc = motif.RowColumn {
 		activateCallback = function () app:SetExitFlag() end
 	}
 }
+motif.ParseAll(toplevel,rc,"dialog")
 
-motif.Realize(toplevel, rc)
+motif.Realize(toplevel)
+
 app:MainLoop()

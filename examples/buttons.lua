@@ -84,6 +84,8 @@ tf = gui[2].groups.rc.t
 motif.SetLanguageProc(nil, nil, nil)
 app, toplevel = motif.Initialize("LuaMotif")
 
-motif.Realize(toplevel, gui)
+motif.ParseAll(toplevel,gui,"Button Demo")
+
+motif.Realize(toplevel)
 
 app:MainLoop()

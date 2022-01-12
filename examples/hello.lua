@@ -24,7 +24,8 @@ main = motif.MainWindow {
 motif.SetLanguageProc(nil, nil, nil)
 app, toplevel = motif.Initialize("hello_world_application",resources)
 
-motif.Realize(toplevel, main)
+motif.ParseAll(toplevel,main,"main")
 
+motif.Realize(toplevel)
 
 app:MainLoop()
