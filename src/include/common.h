@@ -69,7 +69,7 @@
 
 typedef Widget(*MotifWidget)(Widget, String, ArgList, Cardinal);
 
-typedef Widget(*WidgetCallback)(lua_State*, int, Widget, char*);
+typedef Widget(*WidgetConstructor)(lua_State*, int, Widget, const char*);
 
 typedef enum {
 	NONE = 0,

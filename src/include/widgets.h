@@ -39,9 +39,7 @@
 static int lm_Defer##W (lua_State *L)\
 { \
 	_lua_stackguard_entry(L); \
-	builditerator(L); \
-	lua_pushlightuserdata(L, _Construct##W ); \
-	lua_setfield(L, -2, "__widgetConstructor"); \
+	NewWidget(L, &_Construct##W ); \
 	_lua_stackguard_exit(L); \
 	return 1; \
 }

@@ -24,7 +24,6 @@
 #include "GenericWidget_P.h"
 
 
-
 Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName, MotifWidget WidgetFunction) {
 	Arg aCreationArgs[MAXARGS];
 	Widget wdgWidget = NULL;
@@ -136,7 +135,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 
 		switch (lua_type(L, -1)) {
 		case LUA_TFUNCTION:
-			cbdCallback = GC_malloc(sizeof(struct cb_data));
+			cbdCallback = GC_MALLOC(sizeof(struct cb_data));
 			if (cbdCallback == NULL) {
 				luaL_error(L, "memory allocation failed");
 			}

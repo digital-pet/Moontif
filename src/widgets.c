@@ -31,6 +31,14 @@
 #include "WidgetClasses/GenericWidget.h"
 #include "WidgetClasses/SimpleMenuBar.h"
 
+void NewWidget(lua_State* L, WidgetConstructor Constructor)
+{
+	//builditerator(L);
+	lua_pushlightuserdata(L, Constructor);
+	lua_setfield(L, -2, "__widgetConstructor");
+	return;
+}
+
 //	This file (ab)uses preprocessor macros (see widgets.h) to create a pseudoclass of sorts.
 // 
 //	GENERIC_WIDGET(<WidgetType>) expands out into two functions:

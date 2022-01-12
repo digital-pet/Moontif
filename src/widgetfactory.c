@@ -64,7 +64,7 @@ void builditerator(lua_State* L) {
 
 int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char* pszWidgetName, int iDepth) {
 
-	WidgetCallback CallbackFunction;
+	WidgetConstructor Constructor;
 	Widget wdgWidget;
 	int iLuaTableID, iUnnamedWidgets = 0;
 	char* pszKey;
@@ -74,7 +74,6 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	wdgWidget = NULL;
 
 	// If table already has widget, abort
-	dumpstack(L);
 	lua_pushstring(L, "__widget");
 	lua_rawget(L, -2);
 	if (lua_type(L, -1) == LUA_TLIGHTUSERDATA) {
@@ -90,9 +89,9 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 
 	lua_pushstring(L, "__widgetConstructor");
 	lua_rawget(L, -2);
-	CallbackFunction = lua_topointer(L,-1);
+	Constructor = lua_topointer(L,-1);
 	lua_pop(L,1);
-	wdgWidget = (*CallbackFunction)(L, parentObj, wdgParent, pszWidgetName);
+	wdgWidget = (*Constructor)(L, parentObj, wdgParent, pszWidgetName);
 
 	// If widget == null abort
 	if (wdgWidget == NULL) {
