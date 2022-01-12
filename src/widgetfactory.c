@@ -151,7 +151,7 @@ int lm_Parse(lua_State* L) {
 	iDepth = lua_tointeger(L, 2);
 	lua_remove(L, 2);
 
-	CreateManagedWidgetTree(L, 0, wdgToplevel, szWidgetName, -1);
+	CreateManagedWidgetTree(L, 0, wdgToplevel, szWidgetName, iDepth);
 
 	return 0;
 }
