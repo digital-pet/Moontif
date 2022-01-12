@@ -20,6 +20,48 @@
 #include "include/luamotif.h"
 #include "include/widgetfactory.h"
 
+
+/* Let it be known that ordered tables don't work because __newindex isn't called when the table is initially being parsed
+
+int newindex(lua_State* L) {
+
+	dumpstack(L);
+	printf("\n\n");
+	lua_rawset(L, -3);
+
+	//assert(0);
+	return 0;
+}
+
+int createordered(lua_State* L) {
+	lua_newtable(L); //metatable
+	lua_newtable(L); // __index
+	lua_newtable(L); // korder
+	lua_setfield(L, -2, "_korder");
+	lua_setfield(L, -2, "__index");
+	lua_pushcfunction(L, newindex);
+	lua_setfield(L, -2, "__newindex");
+	lua_setmetatable(L, -2);
+	//lua_setfield(L, -2, "mt");
+	return 0;
+}
+*/
+
+void builditerator(lua_State* L) {
+	static long long iter= 0;
+	// look for global __widgetOrder table
+	// if none, create it
+	// ???
+	// profit
+	lua_pushinteger(L, iter);
+	lua_setfield(L, -2, "__id");
+	printf("Widget %llu \n", iter);
+	iter++;
+	// TODO
+
+	return;
+}
+
 int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char* pszWidgetName, int iDepth) {
 
 	WidgetCallback CallbackFunction;
@@ -39,6 +81,10 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 		lua_pop(L, 1);
 		return 1;
 	}
+	lua_pop(L, 1);
+
+	lua_pushstring(L, "__id");
+	printf("Creating widget %llu", lua_tointeger(L, -1));
 	lua_pop(L, 1);
 
 	lua_pushstring(L, "__widgetConstructor");

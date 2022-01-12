@@ -20,3 +20,4 @@
 int lm_NewRealize(lua_State* L);
 int lm_Parse(lua_State* L);
 int lm_ParseAll(lua_State* L);
+void builditerator(lua_State* L);

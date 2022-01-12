@@ -23,7 +23,10 @@
 #include <Xm/IconBox.h>
 
 #include "include/common.h"
+#include "include/utils.h"
 #include "include/widgets.h"
+#include "include/widgetfactory.h"
+
 
 #include "WidgetClasses/GenericWidget.h"
 #include "WidgetClasses/SimpleMenuBar.h"
