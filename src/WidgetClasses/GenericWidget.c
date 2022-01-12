@@ -42,7 +42,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 	if (axmsValues == NULL) {
 		luaL_error(L, "memory allocation failed");
 	}
-	lua_gc(L, LUA_GCSTOP, 0);
+
 	while (lua_next(L, iLuaTableID) != 0) {
 		switch (lua_type(L, -2)) {
 		case LUA_TSTRING:
@@ -95,7 +95,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 	// Create widget using function pointer with creation arguments
 
 	wdgWidget = (*WidgetFunction)(wdgParent, (String)pszWidgetName, aCreationArgs, iArgCount);
-	lua_gc(L, LUA_GCRESTART, 0);
+
 	// Deallocate XmStrings which require deallocation
 	if (iXmStringCount > 0) {
 		while (--iXmStringCount >= 0) {
