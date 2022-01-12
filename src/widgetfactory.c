@@ -57,7 +57,15 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	if (iDepth > 0) {
 		iDepth--;
 	}
-	while (lua_next(L, iLuaTableID) != 0) {
+
+	for (int i = 1; ; i++) {
+		lua_rawgeti(L, iLuaTableID, i);
+		if (lua_isnil(L, -1)) {
+			lua_pop(L, 1);
+			break;
+		}
+		/* Do something */
+
 		if ((lua_type(L, -1) == LUA_TTABLE) && (iDepth != 0)) {
 
 			if (lua_type(L, -2) == LUA_TSTRING) {
