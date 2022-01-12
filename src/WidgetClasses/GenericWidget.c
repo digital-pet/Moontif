@@ -31,8 +31,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 	XmString* axmsValues;
 	int iArgCount = 0, iXmStringCount = 0, iLuaTableID;
 	char* pszKey, * pszValue;
-	int *iValue, iTmp;
-	bool *bValue, bTmp;
+	int *iValue, iTmp, * bValue, bTmp;
 
 	struct cb_data* cbdCallback;
 
