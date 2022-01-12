@@ -87,9 +87,9 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 			break;
 
 		case LUA_TBOOLEAN:
-			bValue = (bool*)GC_MALLOC(sizeof(bool));
+			bValue = (int*)GC_MALLOC(sizeof(int));
 			bTmp = lua_toboolean(L, -1);
-			memcpy(bValue, bTmp, sizeof(bool));
+			memcpy(bValue, bTmp, sizeof(int));
 			XtSetArg(aCreationArgs[iArgCount], pszKey, *bValue);
 			iArgCount++;
 			break;
