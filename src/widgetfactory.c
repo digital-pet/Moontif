@@ -67,7 +67,10 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 			}
 			
 			if (strcmp(pszKey, "__parent")) {
+				lua_remove(L, -2);
 				CreateManagedWidgetTree(L, iLuaTableID, wdgWidget, pszKey);
+				lua_pushnil(L);
+				lua_insert(L, -2);
 			}
 
 		
