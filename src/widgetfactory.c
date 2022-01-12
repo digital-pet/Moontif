@@ -20,36 +20,7 @@
 #include "include/luamotif.h"
 #include "include/widgetfactory.h"
 
-int CreateManagedWidget(lua_State* L, int parentObj, Widget wdgParent, char* pszWidgetName) {
-	WidgetCallback CallbackFunction;
-	Widget wdgWidget;
-
-	wdgWidget = NULL;
-
-	// If table already has widget, abort
-	dumpstack(L);
-	lua_pushstring(L, "__widget");
-	lua_rawget(L, -2);
-	if (lua_type(L, -1) == LUA_TLIGHTUSERDATA) {
-		lua_pop(L, 1);
-		return 1;
-	}
-	lua_pop(L, 1);
-
-	lua_pushstring(L, "__widgetConstructor");
-	lua_rawget(L, -2);
-	CallbackFunction = lua_topointer(L, -1);
-	lua_pop(L, 1);
-	wdgWidget = (*CallbackFunction)(L, parentObj, wdgParent, pszWidgetName);
-
-	// If widget == null abort
-	if (wdgWidget == NULL) {
-		return 2;
-	}
-	return 0;
-}
-
-int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char* pszWidgetName) {
+int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char* pszWidgetName, int iDepth) {
 
 	WidgetCallback CallbackFunction;
 	Widget wdgWidget;
@@ -84,7 +55,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	iLuaTableID = lua_gettop(L);
 	lua_pushnil(L);
 	while (lua_next(L, iLuaTableID) != 0) {
-		if (lua_type(L, -1) == LUA_TTABLE) {
+		if ((lua_type(L, -1) == LUA_TTABLE) && (iDepth != 0)) {
 
 			if (lua_type(L, -2) == LUA_TSTRING) {
 				pszKey = gc_strdup(lua_tostring(L, -2));
@@ -96,7 +67,11 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 			}
 			
 			if (strcmp(pszKey, "__parent")) {
-				CreateManagedWidgetTree(L, iLuaTableID, wdgWidget, pszKey);
+				if (iDepth > 0) {
+					iDepth--;
+				}
+				
+				CreateManagedWidgetTree(L, iLuaTableID, wdgWidget, pszKey, iDepth);
 			}
 
 		
@@ -143,7 +118,40 @@ int lm_ParseAll(lua_State* L) {
 	strlcpy(szWidgetName, lua_tostring(L,2), sizeof szWidgetName);
 	lua_remove(L, 2);
 
-	CreateManagedWidgetTree(L, 0, wdgToplevel, szWidgetName);
+	CreateManagedWidgetTree(L, 0, wdgToplevel, szWidgetName, -1);
+
+	return 0;
+}
+
+int lm_Parse(lua_State* L) {
+	Widget wdgToplevel;
+	char szWidgetName[64];
+	int iDepth;
+
+	wdgToplevel = lm_GetWidget(L, 1);
+	if (wdgToplevel == NULL) {
+		luaL_argerror(L, 1, "First argument must be the toplevel widget or a widget that already exists");
+	}
+	lua_remove(L, 1);
+
+	if (!lua_istable(L, 1)) {
+		luaL_argerror(L, 1, "Second argument must be the table you want to parse");
+	}
+
+	if (!lua_isstring(L, 2)) {
+		luaL_argerror(L, 2, "Third argument must be the name of the table as a string");
+	}
+
+	strlcpy(szWidgetName, lua_tostring(L, 2), sizeof szWidgetName);
+	lua_remove(L, 2);
+
+	if (!lua_isinteger(L, 2)) {
+		luaL_argerror(L, 2, "Fourth argument must be an int.");
+	}
+	iDepth = lua_tointeger(L, 2);
+	lua_remove(L, 2);
+
+	CreateManagedWidgetTree(L, 0, wdgToplevel, szWidgetName, -1);
 
 	return 0;
 }

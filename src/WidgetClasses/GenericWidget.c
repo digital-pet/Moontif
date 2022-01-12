@@ -92,7 +92,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 
 			XtSetArg(aCreationArgs[iArgCount], pszKey, *pbValue);
 			iArgCount++;
-			break;
+			break; 
 		}
 		lua_pop(L, 1);
 	}

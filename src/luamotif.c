@@ -382,6 +382,7 @@ luaopen_motif(lua_State *L)
 	struct luaL_Reg luamotif[] = {
 		{ "AddInput",			lm_AddInput },
 		{ "ParseAll",			lm_ParseAll },
+		{ "Parse",				lm_Parse },
 		{ "Realize",			lm_NewRealize },
 		{ "Unrealize",			lm_Unrealize },
 		{ "Initialize",			lm_Initialize },
