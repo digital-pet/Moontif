@@ -42,6 +42,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#define GC_DEBUG
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
