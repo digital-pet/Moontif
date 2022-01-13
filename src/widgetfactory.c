@@ -130,9 +130,9 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 				tSort[i].iKey = iKey;
 
 				i++;
-				lua_pop(L, -1);
+				lua_pop(L, 1);
 			}
-			lua_pop(L, -1);
+			lua_pop(L, 1);
 		}
 
 		// sort
@@ -151,7 +151,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	if (lua_type(L, -1) == LUA_TBOOLEAN) {
 		startManaged = lua_toboolean(L, -1);
 	}
-	lua_pop(L, -1);
+	lua_pop(L, 1);
 	dumpstack(L);
 	printf("after startmanaged\n\n");
 
