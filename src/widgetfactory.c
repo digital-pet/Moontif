@@ -256,7 +256,7 @@ int lm_NewRealize(lua_State* L) {
 	return 0;
 }
 
-static int TableSortComparator(const void* left, const void* right) {
+int TableSortComparator(const void* left, const void* right) {
 	tableSortWrapper* tLeft = (tableSortWrapper*)left;
 	tableSortWrapper* tRight = (tableSortWrapper*)right;
 
