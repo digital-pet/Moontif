@@ -128,7 +128,9 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 				dumpstack(L);
 				printf("\nkey: %s, ikey: %lld\n", pszKey, *iKey);
 				tSort[i].pszKey = pszKey;
+				printf("set string\n");
 				tSort[i].iKey = iKey;
+				printf("set int\n");
 
 				i++;
 				lua_pop(L, 1);
