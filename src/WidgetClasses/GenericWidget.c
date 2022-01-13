@@ -25,7 +25,7 @@
 
 
 Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName, MotifWidget WidgetFunction) {
-	Arg aCreationArgs[MAXARGS];
+	Arg* aCreationArgs;
 	Widget wdgWidget = NULL;
 	XmString* axmsValues;
 	lua_Integer iArgCount = 0, iXmStringCount = 0, iLuaTableID;
@@ -38,6 +38,8 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 	iLuaTableID = lua_gettop(L);
 	lua_pushnil(L);
 
+
+	aCreationArgs = (Arg*)GC_MALLOC(MAXARGS * sizeof(Arg));
 	axmsValues = (XmString*)GC_MALLOC(MAXARGS * sizeof(XmString));
 	if (axmsValues == NULL) {
 		luaL_error(L, "memory allocation failed");
