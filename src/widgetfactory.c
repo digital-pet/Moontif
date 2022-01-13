@@ -152,18 +152,22 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 		startManaged = lua_toboolean(L, -1);
 	}
 	lua_pop(L, -1);
-
+	dumpstack(L);
+	printf("after startmanaged\n\n");
 
 	if (parentObj > 0) {
 		lua_pushstring(L, "__parent");
 		lua_pushvalue(L, parentObj);
 		lua_rawset(L, -3);
 	}
+	dumpstack(L);
+	printf("after set parent\n\n");
 
 	if (startManaged == true) {
 		XtManageChild(wdgWidget);
 	}
-	printf("after xtmanagechild\n");
+	dumpstack(L);
+	printf("after xtmanagechild\n\n");
 
 	return 0;
 }
