@@ -92,9 +92,8 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 		iTableSize++;
 		lua_pop(L, 1);
 	}
-	printf("iTableSize %lld\n", iTableSize);
-	lua_pushnil(L);
 
+	lua_pushnil(L);
 	if (iDepth > 0) {
 		iDepth--;
 	}
@@ -129,23 +128,28 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 
 				lua_getglobal(L, "__widgetOrder");
 				lua_pushvalue(L, -2);
-				dumpstack(L);
-				printf("\nkey: %s, ikey: %lld\n", pszKey, *iKey);
+				lua_rawget(L, -2);
+				if (lua_type(L, -1) != LUA_TNUMBER) {
+					lua_pop(L,2);
+					continue;
+				}
+
+				tSort[i].index = lua_tonumber(L, -1);
+
 				tSort[i].pszKey = pszKey;
-				printf("set string\n");
+
 				tSort[i].iKey = iKey;
-				printf("set int\n");
+
 
 				i++;
-				printf("incremented\n");
+
 				lua_pop(L, 2);
-				printf("popped\n");
+
 			}
 			lua_pop(L, 1);
-			dumpstack(L);
+
 		}
-		dumpstack(L);
-		printf("after discovery: %lld\n\n", i);
+
 
 		// sort
 
@@ -157,8 +161,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 			// else use ikey
 		}
 	}
-	dumpstack(L);
-	printf("after for\n\n");
+
 
 	lua_pushstring(L, "startManaged");
 	lua_gettable(L, -2);
@@ -166,22 +169,18 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 		startManaged = lua_toboolean(L, -1);
 	}
 	lua_pop(L, 1);
-	dumpstack(L);
-	printf("after startmanaged\n\n");
+
 
 	if (parentObj > 0) {
 		lua_pushstring(L, "__parent");
 		lua_pushvalue(L, parentObj);
 		lua_rawset(L, -3);
 	}
-	dumpstack(L);
-	printf("after set parent\n\n");
+
 
 	if (startManaged == true) {
 		XtManageChild(wdgWidget);
 	}
-	dumpstack(L);
-	printf("after xtmanagechild\n\n");
 
 	return 0;
 }
