@@ -124,6 +124,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 				}
 
 				lua_getglobal(L, "__widgetOrder");
+				lua_pushvalue(L, -2);
 				dumpstack(L);
 				tSort[i].pszKey = pszKey;
 				tSort[i].iKey = iKey;
@@ -162,6 +163,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	if (startManaged == true) {
 		XtManageChild(wdgWidget);
 	}
+	printf("after xtmanagechild\n");
 
 	return 0;
 }
