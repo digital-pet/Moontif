@@ -101,7 +101,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 	printf("end argument loop\n");
 	// Create widget using function pointer with creation arguments
 
-	printf("Calling %x", &WidgetFunction);
+	printf("Calling %x\n", &WidgetFunction);
 
 	wdgWidget = (*WidgetFunction)(wdgParent, (String)pszWidgetName, aCreationArgs, iArgCount);
 	printf("widget made\n");
