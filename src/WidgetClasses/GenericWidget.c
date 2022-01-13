@@ -28,9 +28,9 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 	Arg aCreationArgs[MAXARGS];
 	Widget wdgWidget = NULL;
 	XmString* axmsValues;
-	int iArgCount = 0, iXmStringCount = 0, iLuaTableID;
+	lua_Integer iArgCount = 0, iXmStringCount = 0, iLuaTableID;
 	char* pszKey, * pszValue;
-	int *piValue, * pbValue;
+	lua_Integer *piValue, * pbValue;
 
 	struct cb_data* cbdCallback;
 	printf("enter generic widget\n");
@@ -79,7 +79,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 			break;
 
 		case LUA_TNUMBER:
-			piValue = (int*)GC_MALLOC(sizeof(int));
+			piValue = (lua_Integer*)GC_MALLOC(sizeof(lua_Integer));
 			*piValue = lua_tointeger(L, -1);
 
 			XtSetArg(aCreationArgs[iArgCount], pszKey, *piValue);
@@ -87,7 +87,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 			break;
 
 		case LUA_TBOOLEAN:
-			pbValue = (int*)GC_MALLOC(sizeof(int));
+			pbValue = (lua_Integer*)GC_MALLOC(sizeof(lua_Integer));
 			*pbValue = lua_toboolean(L, -1);
 
 			XtSetArg(aCreationArgs[iArgCount], pszKey, *pbValue);

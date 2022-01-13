@@ -83,7 +83,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	lua_pushstring(L, "__widgetConstructor");
 	lua_rawget(L, -2);
 	Constructor = lua_topointer(L,-1);
-	printf("pointer get %d\n", &Constructor);
+	printf("pointer get\n");
 	lua_pop(L,1);
 	wdgWidget = (*Constructor)(L, parentObj, wdgParent, pszWidgetName);
 	printf("widget get\n");
