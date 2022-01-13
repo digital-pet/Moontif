@@ -108,6 +108,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 
 					pszKey = gc_strdup(lua_tostring(L, -2));
 					if (!strcmp(pszKey, "__parent")) {
+						lua_pop(L, 1);
 						continue;
 					}
 					iKey = NULL;
