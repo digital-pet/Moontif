@@ -133,9 +133,11 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 				printf("set int\n");
 
 				i++;
+				printf("incremented\n");
 				lua_pop(L, 1);
+				printf("popped"\n);
 			}
-			lua_pop(L, 2);
+			lua_pop(L, 1);
 		}
 		dumpstack(L);
 		printf("after discovery: %lld\n\n", i);
