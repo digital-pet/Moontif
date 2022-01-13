@@ -66,6 +66,7 @@
 #define CONTEXT_METATABLE "Xt application context"
 
 #define MAXARGS 64
+#define MAXKEYSIZE 128
 
 typedef Widget(*MotifWidget)(Widget, String, ArgList, Cardinal);
 
