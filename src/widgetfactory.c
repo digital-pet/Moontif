@@ -51,10 +51,11 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 
 	WidgetConstructor Constructor;
 	Widget wdgWidget;
-	int iLuaTableID, iUnnamedWidgets = 0;
+	lua_Integer iLuaTableID, *iKey, iTableSize;
 	char* pszKey;
 	char szKeyGenBuf[50];
 	bool startManaged = true;
+	tableSortArray* tSort;
 
 	wdgWidget = NULL;
 
@@ -83,36 +84,72 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 		return 2;
 	}
 
+
+
 	iLuaTableID = lua_gettop(L);
+	lua_rawlen(L, -1);
+	iTableSize = lua_tointeger(L, -1);
+	lua_pop(L, 1);
 	lua_pushnil(L);
+
 	if (iDepth > 0) {
 		iDepth--;
 	}
-	while (lua_next(L, iLuaTableID) != 0) {
-		if ((lua_type(L, -1) == LUA_TTABLE) && (iDepth != 0)) {
 
-			if (lua_type(L, -2) == LUA_TSTRING) {
-				pszKey = gc_strdup(lua_tostring(L, -2));
-			}
-			else {
-				snprintf(szKeyGenBuf, 50, "UnnamedWidget_%i_%i",iLuaTableID,iUnnamedWidgets);
-				pszKey = gc_strdup(szKeyGenBuf);
-				iUnnamedWidgets++;
-			}
-			
-			if (strcmp(pszKey, "__parent")) {
-				CreateManagedWidgetTree(L, iLuaTableID, wdgWidget, pszKey, iDepth);
-			}
+	if (iDepth != 0) {
+		lua_Integer i = 0;
 
-		
-		}
-		else if (lua_type(L, -2) == LUA_TSTRING && lua_type(L,-1) == LUA_TBOOLEAN) {
-			if (!strcmp(lua_tostring(L, -2), "startManaged")) {
-				startManaged = lua_toboolean(L, -1);
+		tSort = (tableSortArray*)GC_MALLOC(sizeof(*tSort) * iTableSize);
+
+		while (lua_next(L,iLuaTableID) != 0) {
+			if (lua_type(L, -1) == LUA_TTABLE) {
+				if (lua_type(L, -2) == LUA_TSTRING) {
+
+					pszKey = gc_strdup(lua_tostring(L, -2));
+					if (!strcmp(pszKey, "__parent")) {
+						continue;
+					}
+					iKey = NULL;
+				}
+				else if (lua_type(L, -2) == LUA_TNUMBER) {
+					iKey = (lua_Integer*)GC_MALLOC(sizeof(lua_Integer));
+					*iKey = lua_tointeger(L, -2);
+					snprintf(szKeyGenBuf, sizeof(szKeyGenBuf), "Unnamed_%lld_%lld", iLuaTableID, *iKey);
+					pszKey = gc_strdup(szKeyGenBuf);
+				}
+				else {
+					continue;
+				}
+
+				lua_getglobal(L, "__widgetOrder");
+				dumpstack(L);
+				tSort[i].pszKey = pszKey;
+				tSort[i].iKey = iKey;
+
+				i++;
+				lua_pop(L, -1);
 			}
+			lua_pop(L, -1);
 		}
-		lua_pop(L, 1);
+
+		// sort
+
+		for (int i2 = 0; i2 < i; i2++) {
+			// recurse over the selected tables
+
+			// if ikey == NULL use pszkey
+
+			// else use ikey
+		}
 	}
+
+	lua_pushstring(L, "startManaged");
+	lua_gettable(L, -2);
+	if (lua_type(L, -1) == LUA_TBOOLEAN) {
+		startManaged = lua_toboolean(L, -1);
+	}
+	lua_pop(L, -1);
+
 
 	if (parentObj > 0) {
 		lua_pushstring(L, "__parent");

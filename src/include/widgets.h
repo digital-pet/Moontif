@@ -42,7 +42,7 @@ void SetGlobalID(lua_State* L);
 static int lm_Defer##W (lua_State *L)\
 { \
 	_lua_stackguard_entry(L); \
-	NewWidget(L, &_Construct##W ); \
+	NewWidget(L, _Construct##W ); \
 	_lua_stackguard_exit(L); \
 	return 1; \
 }

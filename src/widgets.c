@@ -33,7 +33,6 @@
 
 void NewWidget(lua_State* L, WidgetConstructor Constructor)
 {
-
 	SetGlobalID(L);
 	lua_pushlightuserdata(L, Constructor);
 	lua_setfield(L, -2, "__widgetConstructor");
@@ -41,7 +40,7 @@ void NewWidget(lua_State* L, WidgetConstructor Constructor)
 }
 
 void SetGlobalID(lua_State* L) {
-	static long long iter = 0;
+	static lua_Integer iter = 0;	// if someone creates over 9 quintillion widgets in one execution of this program behavior is undefined
 
 	// look for global __widgetOrder table
 	lua_getglobal(L, "__widgetOrder");
@@ -63,7 +62,6 @@ void SetGlobalID(lua_State* L) {
 	
 	lua_pushinteger(L, iter);
 	lua_setfield(L, -2, "__id");
-	printf("Widget %llu \n", iter);  // better debugging through printf
 	iter++;
 
 	return;
@@ -73,9 +71,7 @@ void SetGlobalID(lua_State* L) {
 // 
 //	GENERIC_WIDGET(<WidgetType>) expands out into two functions:
 //		* int lm_Defer<WidgetType>(lua_State *L)
-//			- creates a private field in the table it's passed which is 
-//				a function pointer to the constructor callback which will
-//				be invoked when motif::Realize is called.
+//			- calls out to NewWidget with a pointer to the widget's _Construct<WidgetType> constructor
 // 
 //		* Widget _Construct<WidgetType>(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName)
 //			- The corresponding callback method, which itself will call ConstructGenericWidget
