@@ -51,7 +51,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 
 	WidgetConstructor Constructor;
 	Widget wdgWidget;
-	lua_Integer iLuaTableID, *iKey, iTableSize;
+	lua_Integer iLuaTableID, *iKey, iTableSize = 1;
 	char* pszKey;
 	char szKeyGenBuf[50];
 	bool startManaged = true;
@@ -87,7 +87,11 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 
 
 	iLuaTableID = lua_gettop(L);
-	iTableSize = lua_rawlen(L, -1);
+	lua_pushnil(L);
+	while (lua_next(L, iLuaTableID) != 0) {
+		iTableSize++;
+		lua_pop(L, 1);
+	}
 	printf("iTableSize %lld\n", iTableSize);
 	lua_pushnil(L);
 
