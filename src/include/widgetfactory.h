@@ -25,5 +25,5 @@ typedef struct {
 	lua_Integer index;
 	char* pszKey;
 	lua_Integer* iKey;
-} tableSortArray;
+} tableSortWrapper;
 

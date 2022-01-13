@@ -55,7 +55,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	char* pszKey;
 	char szKeyGenBuf[50];
 	bool startManaged = true;
-	tableSortArray* tSort;
+	tableSortWrapper* tSort;
 
 	wdgWidget = NULL;
 
@@ -89,6 +89,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	iLuaTableID = lua_gettop(L);
 	lua_rawlen(L, -1);
 	iTableSize = lua_tointeger(L, -1);
+	printf("iTableSize %lld\n", iTableSize);
 	lua_pop(L, 1);
 	lua_pushnil(L);
 
@@ -99,7 +100,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	if (iDepth != 0) {
 		lua_Integer i = 0;
 
-		tSort = (tableSortArray*)GC_MALLOC(sizeof(*tSort) * iTableSize);
+		tSort = (tableSortWrapper*)GC_MALLOC(sizeof(*tSort) * iTableSize);
 
 		while (lua_next(L,iLuaTableID) != 0) {
 			dumpstack(L);
