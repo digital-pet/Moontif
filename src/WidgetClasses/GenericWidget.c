@@ -100,13 +100,14 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 	// Create widget using function pointer with creation arguments
 
 	wdgWidget = (*WidgetFunction)(wdgParent, (String)pszWidgetName, aCreationArgs, iArgCount);
-
+	printf("widget made\n");
 	// Deallocate XmStrings which require deallocation
 	if (iXmStringCount > 0) {
 		while (--iXmStringCount >= 0) {
 			XmStringFree(axmsValues[iXmStringCount]);
 		}
 	}
+	printf("strings deallocated\n");
 
 	if (wdgWidget == NULL) {
 		luaL_error(L, "failed to create widget");
