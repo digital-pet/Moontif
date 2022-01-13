@@ -166,19 +166,14 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 				lua_pushstring(L, tSort[i2].pszKey);
 				lua_rawget(L, -2);
 				dumpstack(L);
-				assert(0);
 			}
 			else {
 				lua_pushnumber(L, *tSort[i2].iKey);
 				lua_rawget(L, -2);
 				dumpstack(L);
-				assert(0);
 			}
 			CreateManagedWidgetTree(L, iLuaTableID, wdgWidget, tSort[i2].pszKey, iDepth);
-
-			// if ikey == NULL use pszkey
-
-			// else use ikey
+			lua_pop(L, 1);
 		}
 	}
 
