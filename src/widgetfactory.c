@@ -134,6 +134,8 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 			}
 			lua_pop(L, 1);
 		}
+		dumpstack(L);
+		printf("after discovery: %lld\n\n", i);
 
 		// sort
 
@@ -145,6 +147,8 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 			// else use ikey
 		}
 	}
+	dumpstack(L);
+	printf("after for\n\n");
 
 	lua_pushstring(L, "startManaged");
 	lua_gettable(L, -2);
