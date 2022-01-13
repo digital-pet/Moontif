@@ -47,13 +47,6 @@ int createordered(lua_State* L) {
 }
 */
 
-int comparator(const void* left, const void* right) {
-	tableSortWrapper* tLeft = (tableSortWrapper*)left;
-	tableSortWrapper* tRight = (tableSortWrapper*)right;
-
-	return (tLeft->index - tRight->index);
-}
-
 int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char* pszWidgetName, int iDepth) {
 
 	WidgetConstructor Constructor;
@@ -62,7 +55,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	char* pszKey;
 	char szKeyGenBuf[50];
 	bool startManaged = true;
-	tableSortWrapper* tSort;
+	tableSortWrapper* aKeyIndices;
 
 	wdgWidget = NULL;
 
@@ -75,25 +68,21 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	}
 	lua_pop(L, 1);
 
-	lua_pushstring(L, "__id");
-	lua_rawget(L, -2);
-
-	lua_pop(L, 1);
-
 	lua_pushstring(L, "__widgetConstructor");
 	lua_rawget(L, -2);
 	Constructor = lua_topointer(L,-1);
-
 	lua_pop(L,1);
+
+	if (Constructor == NULL) {
+		return 3;
+	}
+
 	wdgWidget = (*Constructor)(L, parentObj, wdgParent, pszWidgetName);
 
 	// If widget == null abort
 	if (wdgWidget == NULL) {
-
 		return 2;
 	}
-
-
 
 	iLuaTableID = lua_gettop(L);
 	lua_pushnil(L);
@@ -104,15 +93,14 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 		lua_pop(L, 1);
 	}
 
-	lua_pushnil(L);
-	if (iDepth > 0) {
-		iDepth--;
-	}
+	if ((iDepth != 0) && (iTableSize > 0)) {
+		if (iDepth > 0) {
+			iDepth--;
+		}
 
-	if (iDepth != 0) {
+		aKeyIndices = (tableSortWrapper*)GC_MALLOC(sizeof(*aKeyIndices) * iTableSize);
 
-		tSort = (tableSortWrapper*)GC_MALLOC(sizeof(*tSort) * iTableSize);
-
+		lua_pushnil(L);
 		while (lua_next(L,iLuaTableID) != 0) {
 
 			if (lua_type(L, -1) == LUA_TTABLE) {
@@ -143,11 +131,11 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 					continue;
 				}
 
-				tSort[iChildCount].index = lua_tonumber(L, -1);
+				aKeyIndices[iChildCount].index = lua_tonumber(L, -1);
 
-				tSort[iChildCount].pszKey = pszKey;
+				aKeyIndices[iChildCount].pszKey = pszKey;
 
-				tSort[iChildCount].iKey = iKey;
+				aKeyIndices[iChildCount].iKey = iKey;
 
 
 				iChildCount++;
@@ -159,21 +147,20 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 
 		}
 
-		// sort
-		qsort(tSort, iChildCount, sizeof(*tSort), comparator);
+		qsort(aKeyIndices, iChildCount, sizeof(*aKeyIndices), TableSortComparator);
 
 		for (int i2 = 0; i2 < iChildCount; i2++) {
 			// recurse over the selected tables
 
-			if (tSort[i2].iKey == NULL) {
-				lua_pushstring(L, tSort[i2].pszKey);
+			if (aKeyIndices[i2].iKey == NULL) {
+				lua_pushstring(L, aKeyIndices[i2].pszKey);
 				lua_rawget(L, -2);
 			}
 			else {
-				lua_pushnumber(L, *tSort[i2].iKey);
+				lua_pushnumber(L, *aKeyIndices[i2].iKey);
 				lua_rawget(L, -2);
 			}
-			CreateManagedWidgetTree(L, iLuaTableID, wdgWidget, tSort[i2].pszKey, iDepth);
+			CreateManagedWidgetTree(L, iLuaTableID, wdgWidget, aKeyIndices[i2].pszKey, iDepth);
 			lua_pop(L, 1);
 		}
 	}
@@ -267,4 +254,11 @@ int lm_NewRealize(lua_State* L) {
 
 	XtRealizeWidget(wdgToplevel);
 	return 0;
+}
+
+static int TableSortComparator(const void* left, const void* right) {
+	tableSortWrapper* tLeft = (tableSortWrapper*)left;
+	tableSortWrapper* tRight = (tableSortWrapper*)right;
+
+	return (tLeft->index - tRight->index);
 }
