@@ -70,7 +70,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 
 	lua_pushstring(L, "__id");
 	lua_rawget(L, -2);
-	printf("Creating widget %llu", lua_tointeger(L, -1));
+	printf("Creating widget %llu\n", lua_tointeger(L, -1));
 	lua_pop(L, 1);
 
 	lua_pushstring(L, "__widgetConstructor");
@@ -102,6 +102,8 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 		tSort = (tableSortArray*)GC_MALLOC(sizeof(*tSort) * iTableSize);
 
 		while (lua_next(L,iLuaTableID) != 0) {
+			dumpstack(L);
+			printf("\n");
 			if (lua_type(L, -1) == LUA_TTABLE) {
 				if (lua_type(L, -2) == LUA_TSTRING) {
 
