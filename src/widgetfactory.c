@@ -102,7 +102,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 		iTableSize++;
 		lua_pop(L, 1);
 	}
-	printf("size get\n");
+	printf("size get: %lld\n", iTableSize);
 	dumpstack(L);
 
 	lua_pushnil(L);
@@ -116,7 +116,6 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 
 		while (lua_next(L,iLuaTableID) != 0) {
 
-			printf("\n");
 			if (lua_type(L, -1) == LUA_TTABLE) {
 				if (lua_type(L, -2) == LUA_TSTRING) {
 
