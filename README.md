@@ -1,13 +1,8 @@
-# A Lua Binding for Motif
+# Moontif
 
-based on luamotif,
-Copyright (C) Micro Systems Marc Balmer \<marc@msys.ch\>
+An obsolete UI toolkit for a modern-ish language. Plays well with [NsCDE](https://github.com/NsCDE/NsCDE) and [CDE](https://sourceforge.net/projects/cdesktopenv/).
 
-Modifications by and (c) [digital-pet](https://github.com/digital-pet/) under GPLv3
-
-Makefile is for BSD systems
-
-GNUmakefile is for Linux systems
+Not all widgets are implemented yet, creating a MenuBar, for example, is still an exercise in frustration. This will be fixed in future releases.
 
 ## Build (Linux, Debian)
 
@@ -17,11 +12,11 @@ Requires Lua 5.3
     make
     make install
 
-## TODO
-
-- Wrap XmMainWindowSetAreas
-
 ## Examples
 
 
-![A hello world application displaying its own source code](https://i.imgur.com/Pt2GRbr.png)<br>Hello.lua
+![A hello world application displaying its own source code](https://i.imgur.com/WXtCknq.png)<br>Hello.lua
+
+## Credits
+
+* based on luamotif, Portions copyright (C) Micro Systems Marc Balmer \<marc@msys.ch\>
