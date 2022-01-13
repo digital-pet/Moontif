@@ -2,7 +2,7 @@
 
 An obsolete UI toolkit for a modern-ish language. Plays well with [NsCDE](https://github.com/NsCDE/NsCDE) and [CDE](https://sourceforge.net/projects/cdesktopenv/).
 
-Not all widgets are implemented yet, creating a MenuBar, for example, is still an exercise in frustration. This will be fixed in future releases.
+Not all widgets are implemented yet. Creating a MenuBar, for example, is still an exercise in frustration. This will be fixed in future releases.
 
 ## Build (Linux, Debian)
 
