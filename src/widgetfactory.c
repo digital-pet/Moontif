@@ -78,7 +78,6 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	lua_pushstring(L, "__id");
 	lua_rawget(L, -2);
 	printf("Creating widget %llu\n", lua_tointeger(L, -1));
-	dumpstack(L);
 	lua_pop(L, 1);
 
 	lua_pushstring(L, "__widgetConstructor");
@@ -105,7 +104,6 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 		lua_pop(L, 1);
 	}
 	printf("size get: %lld\n", iTableSize);
-	dumpstack(L);
 
 	lua_pushnil(L);
 	if (iDepth > 0) {
