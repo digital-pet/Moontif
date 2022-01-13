@@ -33,7 +33,7 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 	lua_Integer *piValue, * pbValue;
 
 	struct cb_data* cbdCallback;
-	printf("enter generic widget\n");
+
 	// Gather arguments by looping over the table
 	iLuaTableID = lua_gettop(L);
 	lua_pushnil(L);
@@ -44,9 +44,9 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 	if (axmsValues == NULL) {
 		luaL_error(L, "memory allocation failed");
 	}
-	printf("start argument loop\n");
+
 	while (lua_next(L, iLuaTableID) != 0) {
-		printf("loop\n");
+
 		switch (lua_type(L, -2)) {
 		case LUA_TSTRING:
 			break;
@@ -98,20 +98,20 @@ Widget ConstructGenericWidget(lua_State* L, int parentObj, Widget wdgParent, con
 		}
 		lua_pop(L, 1);
 	}
-	printf("end argument loop\n");
+
 	// Create widget using function pointer with creation arguments
 
-	printf("Calling %x\n", &WidgetFunction);
+
 
 	wdgWidget = (*WidgetFunction)(wdgParent, (String)pszWidgetName, aCreationArgs, iArgCount);
-	printf("widget made\n");
+
 	// Deallocate XmStrings which require deallocation
 	if (iXmStringCount > 0) {
 		while (--iXmStringCount >= 0) {
 			XmStringFree(axmsValues[iXmStringCount]);
 		}
 	}
-	printf("strings deallocated\n");
+
 
 	if (wdgWidget == NULL) {
 		luaL_error(L, "failed to create widget");

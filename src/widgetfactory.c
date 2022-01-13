@@ -77,19 +77,19 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 
 	lua_pushstring(L, "__id");
 	lua_rawget(L, -2);
-	printf("Creating widget %llu\n", lua_tointeger(L, -1));
+
 	lua_pop(L, 1);
 
 	lua_pushstring(L, "__widgetConstructor");
 	lua_rawget(L, -2);
 	Constructor = lua_topointer(L,-1);
-	printf("pointer get\n");
+
 	lua_pop(L,1);
 	wdgWidget = (*Constructor)(L, parentObj, wdgParent, pszWidgetName);
-	printf("widget get\n");
+
 	// If widget == null abort
 	if (wdgWidget == NULL) {
-		printf("widget null\n");
+
 		return 2;
 	}
 
@@ -103,7 +103,6 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 		}
 		lua_pop(L, 1);
 	}
-	printf("size get: %lld\n", iTableSize);
 
 	lua_pushnil(L);
 	if (iDepth > 0) {
@@ -161,7 +160,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 		}
 
 		// sort
-		qsort(tSort, iChildCount, sizeof(tSort), comparator);
+		qsort(tSort, iChildCount, sizeof(*tSort), comparator);
 
 		for (int i2 = 0; i2 < iChildCount; i2++) {
 			// recurse over the selected tables
