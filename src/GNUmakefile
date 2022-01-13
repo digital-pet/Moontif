@@ -1,4 +1,4 @@
-SRCS=		luamotif.c widgets.c constants.c
+SRCS=		luamotif.c widgets.c constants.c dialog.c wrapped_funcs.c callbacks.c application.c uibuilder.c utils.c widgetfactory.c WidgetClasses/GenericWidget.c WidgetClasses/SimpleMenuBar.c
 LIB=		motif
 
 LUA=		$(shell lua${SUFFIX} -v 2>&1 | cut -d ' ' -f 1)
@@ -16,7 +16,7 @@ endif
 
 CFLAGS+=	-Wall -O3 -fPIC -I/usr/include -I${PKGDIR}/include \
 		-I/usr/include/lua${SUFFIX}${LUAINCVER}
-LDADD+=		-L${XDIR}/lib -L${PKGDIR}/lib -lXm -lXt -lX11 -lbsd
+LDADD+=		-L${XDIR}/lib -L${PKGDIR}/lib -lXm -lXt -lX11 -lbsd -lgc
 
 PKGDIR=		/usr
 LIBDIR=		${PKGDIR}/lib
@@ -26,6 +26,7 @@ ${LIB}.so:	${SRCS:.c=.o}
 
 clean:
 		rm -f *.o *.so
+		rm -f WidgetClasses/*.o
 install:
 	-mkdir -p ${DESTDIR}${LUADIR}
 	install -m 755 ${LIB}.so ${DESTDIR}${LUADIR}/${LIB}.so

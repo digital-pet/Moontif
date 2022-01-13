@@ -10,5 +10,7 @@ button = motif.PushButton {
 motif.SetLanguageProc(nil, nil, nil)
 app, toplevel = motif.Initialize("XLua")
 
-motif.Realize(toplevel, button)
+motif.ParseAll(toplevel,button,"dialog")
+
+motif.Realize(toplevel)
 app:MainLoop()

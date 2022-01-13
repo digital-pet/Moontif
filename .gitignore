@@ -6,3 +6,5 @@ obj
 *.vcxproj
 *.sln
 *.vcxproj.filters
+examples/debug_*.lua
+examples/inspect.lua

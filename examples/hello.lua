@@ -11,24 +11,21 @@ end
 
 resources = { '*title: Hello World!' }
 
-text = readAll("hello.lua")
-
 main = motif.MainWindow {
-	motif.RowColumn{
-		motif.Text {
-			editMode = motif.MULTI_LINE_EDIT,
-			editable = true,
-			rows = 26,
-			columns = 80,
-			value = text
-		}
+	motif.ScrolledText {
+		editMode = motif.MULTI_LINE_EDIT,
+		editable = true,
+		rows = 26,
+		columns = 80,
+		value = readAll("hello.lua")
 	}
 }
 
 motif.SetLanguageProc(nil, nil, nil)
 app, toplevel = motif.Initialize("hello_world_application",resources)
 
-motif.Realize(toplevel, main)
+motif.ParseAll(toplevel,main,"main")
 
+motif.Realize(toplevel)
 
 app:MainLoop()
