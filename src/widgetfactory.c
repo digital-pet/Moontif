@@ -88,6 +88,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 
 	iLuaTableID = lua_gettop(L);
 	lua_rawlen(L, -1);
+	dumpstack(L);
 	iTableSize = lua_tointeger(L, -1);
 	printf("iTableSize %lld\n", iTableSize);
 	lua_pop(L, 1);
