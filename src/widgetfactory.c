@@ -120,6 +120,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 					pszKey = gc_strdup(szKeyGenBuf);
 				}
 				else {
+					lua_pop(L, 1);
 					continue;
 				}
 
@@ -138,6 +139,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 				printf("popped\n");
 			}
 			lua_pop(L, 1);
+			dumpstack(L);
 		}
 		dumpstack(L);
 		printf("after discovery: %lld\n\n", i);
