@@ -40,18 +40,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdlib.h>
-#ifdef __linux__
-#include <bsd/string.h>
-#endif
+#include <iconv.h>	// do we use this anymore?
 
-#include <X11/Xdefs.h>
-#include <Xm/XmAll.h>
-
-#include <gc.h>
-#include <iconv.h>
-#include <lua.h>
-#include <lauxlib.h>
 
 #include "include/common.h"
 
@@ -62,6 +52,8 @@
 #include "include/application.h"
 #include "include/uibuilder.h"
 #include "include/widgetfactory.h"
+
+const int registryKey = 0x69420; // the actual value doesn't matter, as we just want a unique pointer to use as a key
 
 //extern struct luaL_Reg lm_gadgetConstructors[];
 extern struct luaL_Reg lm_widgetConstructors[];

@@ -72,6 +72,8 @@ typedef Widget(*MotifWidget)(Widget, String, ArgList, Cardinal);
 
 typedef Widget(*WidgetConstructor)(lua_State*, int, Widget, const char*);
 
+extern const int registryKey; 
+
 typedef enum {
 	NONE = 0,
 	FUNCTION,
