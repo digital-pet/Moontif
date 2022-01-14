@@ -125,7 +125,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 				}
 				GetRegistry(L);
 				lua_getfield(L, -1, "__widgetOrder");
-				lua_pushvalue(L, -2);
+				lua_pushvalue(L, -3);
 				lua_rawget(L, -2);
 				if (lua_type(L, -1) != LUA_TNUMBER) {
 					lua_pop(L,3);
