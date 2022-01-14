@@ -28,6 +28,18 @@ char* gc_strdup(const char* s) {
 	return p;
 }
 
+void GetRegistry(lua_State* L) {
+    lua_pushlightuserdata(L, (void*)&registryKey);
+    lua_gettable(L, LUA_REGISTRYINDEX);
+    if (!(lua_type(L, -1) == LUA_TTABLE)) {
+        lua_pop(L, 1);
+        lua_newtable(L);
+        lua_pushlightuserdata(L, (void*)&registryKey);
+        lua_pushvalue(L, -2);
+        lua_settable(L, LUA_REGISTRYINDEX);
+    }
+}
+
 void dumpstack(lua_State* L) {
     int top = lua_gettop(L);
     for (int i = 1; i <= top; i++) {

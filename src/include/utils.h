@@ -20,3 +20,5 @@
 char* gc_strdup(const char* s);
 
 void dumpstack(lua_State* L);
+
+void GetRegistry(lua_State* L);

@@ -42,15 +42,17 @@ void NewWidget(lua_State* L, WidgetConstructor Constructor)
 void SetGlobalID(lua_State* L) {
 	static lua_Integer iter = 0;	// if someone creates over 9 quintillion widgets in one execution of this program behavior is undefined
 
-	// look for global __widgetOrder table
-	lua_getglobal(L, "__widgetOrder");
+	// get registry table
+	GetRegistry(L);
 
+	// look for global __widgetOrder table
+	lua_getfield(L, -1, "__widgetOrder");
 	// if none, create it
 	if (!(lua_type(L, -1) == LUA_TTABLE)) {
 		lua_pop(L, 1);
 		lua_newtable(L);
 		lua_pushvalue(L, -1);
-		lua_setglobal(L, "__widgetOrder");
+		lua_setfield(L, -3, "__widgetOrder");
 	}
 	// Copy the table to the top to use as the key, and make iter the value
 	lua_pushvalue(L, 1);
