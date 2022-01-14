@@ -53,7 +53,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	Widget wdgWidget;
 	lua_Integer iLuaTableID, *iKey, iTableSize = 0, iChildCount = 0;
 	char* pszKey;
-	char szKeyGenBuf[50];
+	char szKeyGenBuf[MAXKEYSIZE];
 	bool startManaged = true;
 	tableSortWrapper* aKeyIndices;
 
@@ -123,12 +123,12 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 					lua_pop(L, 1);
 					continue;
 				}
-
-				lua_getglobal(L, "__widgetOrder");
-				lua_pushvalue(L, -2);
+				GetRegistry(L);
+				lua_getfield(L, -1, "__widgetOrder");
+				lua_pushvalue(L, -3);
 				lua_rawget(L, -2);
 				if (lua_type(L, -1) != LUA_TNUMBER) {
-					lua_pop(L,2);
+					lua_pop(L,3);
 					continue;
 				}
 
@@ -141,7 +141,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 
 				iChildCount++;
 
-				lua_pop(L, 2);
+				lua_pop(L, 3);
 
 			}
 			lua_pop(L, 1);
@@ -191,7 +191,7 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 
 int lm_ParseAll(lua_State* L) {
 	Widget wdgToplevel;
-	char szWidgetName[64];
+	char szWidgetName[MAXKEYSIZE];
 
 	wdgToplevel = lm_GetWidget(L, 1);
 	if (wdgToplevel == NULL) {
@@ -217,7 +217,7 @@ int lm_ParseAll(lua_State* L) {
 
 int lm_Parse(lua_State* L) {
 	Widget wdgToplevel;
-	char szWidgetName[64];
+	char szWidgetName[MAXKEYSIZE];
 	int iDepth;
 
 	wdgToplevel = lm_GetWidget(L, 1);

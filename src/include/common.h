@@ -66,10 +66,13 @@
 #define CONTEXT_METATABLE "Xt application context"
 
 #define MAXARGS 64
+#define MAXKEYSIZE 128
 
 typedef Widget(*MotifWidget)(Widget, String, ArgList, Cardinal);
 
 typedef Widget(*WidgetConstructor)(lua_State*, int, Widget, const char*);
+
+extern const int registryKey; 
 
 typedef enum {
 	NONE = 0,
