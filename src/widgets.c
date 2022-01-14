@@ -77,7 +77,7 @@ void SetGlobalID(lua_State* L) {
 // 
 //		* Widget _Construct<WidgetType>(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName)
 //			- The corresponding callback method, which itself will call ConstructGenericWidget
-//				with a pointer to the actual widget's constructor - XmCreate<WidgetType>
+//			  with a pointer to the actual widget's constructor - XmCreate<WidgetType>
 //
 //	COMPLEX_WIDGET(<WidgetType>) also expands out into two functions:
 //		* int lm_Defer<WidgetType>(lua_State *L)
@@ -85,7 +85,7 @@ void SetGlobalID(lua_State* L) {
 //
 //		* Widget _Construct<WidgetType>(lua_State* L, int parentObj, Widget wdgParent, const char* pszWidgetName)
 //			- This will call out to a function Construct<WidgetType> which must take
-//				the exact same parameters as are passed to _Construct<WidgetType>
+//			  the exact same parameters as are passed to _Construct<WidgetType>
 //
 
 /*
