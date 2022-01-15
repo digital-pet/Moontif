@@ -47,7 +47,19 @@ int createordered(lua_State* L) {
 }
 */
 
+// notation:
+// !t = source table
+// *k = key
+// *v = value
+// t* = table
+// s* = string
+// u* = userdata
+// f* = function
+// x* = nil
+
 int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char* pszWidgetName, int iDepth) {
+
+	// initial state = !t
 
 	WidgetConstructor Constructor;
 	Widget wdgWidget;
@@ -60,18 +72,18 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	wdgWidget = NULL;
 
 	// If table already has widget, abort
-	lua_pushstring(L, "__widget");
-	lua_rawget(L, -2);
-	if (lua_type(L, -1) == LUA_TLIGHTUSERDATA) {
-		lua_pop(L, 1);
+	lua_pushstring(L, "__widget");					// !t sk
+	lua_rawget(L, -2);								// !t uv || !t xv
+	if (lua_type(L, -1) == LUA_TLIGHTUSERDATA) {	// !t uv?
+		lua_pop(L, 1);								// !t
 		return 1;
 	}
-	lua_pop(L, 1);
+	lua_pop(L, 1);									// !t
 
-	lua_pushstring(L, "__widgetConstructor");
-	lua_rawget(L, -2);
-	Constructor = lua_topointer(L,-1);
-	lua_pop(L,1);
+	lua_pushstring(L, "__widgetConstructor");		// !t sk
+	lua_rawget(L, -2);								// !t uv || xv
+	Constructor = lua_topointer(L,-1);				
+	lua_pop(L,1);									// !t
 
 	if (Constructor == NULL) {
 		return 3;
@@ -85,13 +97,14 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 	}
 
 	iLuaTableID = lua_gettop(L);
-	lua_pushnil(L);
-	while (lua_next(L, iLuaTableID) != 0) {
-		if (lua_type(L, -1) == LUA_TTABLE) {
+	lua_pushnil(L);								// !t xk
+	while (lua_next(L, iLuaTableID) != 0) {		// !t *k -> !t -> !t *k *v
+		if (lua_type(L, -1) == LUA_TTABLE) {	// !t *k tv?
 			iTableSize++;
 		}
-		lua_pop(L, 1);
-	}
+		lua_pop(L, 1);							// !t *k
+	}											// loop until no addition to stack
+												// !t
 
 	if ((iDepth != 0) && (iTableSize > 0)) {
 		if (iDepth > 0) {
@@ -100,35 +113,35 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 
 		aKeyIndices = (tableSortWrapper*)GC_MALLOC(sizeof(*aKeyIndices) * iTableSize);
 
-		lua_pushnil(L);
-		while (lua_next(L,iLuaTableID) != 0) {
+		lua_pushnil(L);								// !t xk
+		while (lua_next(L,iLuaTableID) != 0) {		// !t *k -> !t -> !t *k *v
 
-			if (lua_type(L, -1) == LUA_TTABLE) {
-				if (lua_type(L, -2) == LUA_TSTRING) {
+			if (lua_type(L, -1) == LUA_TTABLE) {	// !t *k tv?
+				if (lua_type(L, -2) == LUA_TSTRING) {	// !t sk? tv
 
 					pszKey = gc_strdup(lua_tostring(L, -2));
 					if (!strcmp(pszKey, "__parent")) {
-						lua_pop(L, 1);
-						continue;
+						lua_pop(L, 1);				// !t sk
+						continue;					// loop
 					}
 					iKey = NULL;
 				}
-				else if (lua_type(L, -2) == LUA_TNUMBER) {
+				else if (lua_type(L, -2) == LUA_TNUMBER) {	// !t ik? tv
 					iKey = (lua_Integer*)GC_MALLOC(sizeof(lua_Integer));
 					*iKey = lua_tointeger(L, -2);
 					snprintf(szKeyGenBuf, sizeof(szKeyGenBuf), "Unnamed_%lld_%lld", iLuaTableID, *iKey);
 					pszKey = gc_strdup(szKeyGenBuf);
 				}
 				else {
-					lua_pop(L, 1);
-					continue;
+					lua_pop(L, 1);					// !t *k
+					continue;						// loop
 				}
-				GetRegistry(L);
-				lua_getfield(L, -1, "__widgetOrder");
-				lua_pushvalue(L, -3);
-				lua_rawget(L, -2);
-				if (lua_type(L, -1) != LUA_TNUMBER) {
-					lua_pop(L,3);
+				GetRegistry(L);								// !t *k tv !t2
+				lua_getfield(L, -1, "__widgetOrder");		// !t *k tv !t2 !t3
+				lua_pushvalue(L, -3);						// !t *k tv !t2 !t3 tv
+				lua_rawget(L, -2);							// !t *k tv !t2 !t3 *v
+				if (lua_type(L, -1) != LUA_TNUMBER) {		// !t *k tv !t2 !t3 iv~?
+					lua_pop(L,4);							// !t *k
 					continue;
 				}
 
@@ -141,10 +154,10 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 
 				iChildCount++;
 
-				lua_pop(L, 3);
+				lua_pop(L, 4);							// !t *k
 
 			}
-			lua_pop(L, 1);
+			lua_pop(L, 1);								// !t
 
 		}
 
