@@ -141,9 +141,11 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 				dumpstack(L);
 				lua_getfield(L, -1, "__widgetOrder");		// !t *k tv !t2 !t3
 				printf("Expected 5\n");
+				dumpstack(L);
 				lua_pushvalue(L, -3);						// !t *k tv !t2 !t3 tv
 				lua_rawget(L, -2);							// !t *k tv !t2 !t3 *v
 				printf("Expected 6\n");
+				dumpstack(L);
 				if (lua_type(L, -1) != LUA_TNUMBER) {		// !t *k tv !t2 !t3 iv~?
 					lua_pop(L,4);							// !t *k
 					continue;
