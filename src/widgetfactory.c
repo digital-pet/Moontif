@@ -138,9 +138,9 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 				}
 				GetRegistry(L);								// !t *k tv !t2
 				lua_getfield(L, -1, "__widgetOrder");		// !t *k tv !t2 !t3
-				lua_pushvalue(L, -3);						// !t *k tv !t2 !t3 tv
+				lua_pushvalue(L, -3);						// !t *k tv !t2 !t3 tv		<-- if we use rotate here instead we can save a stack slot
 				lua_rawget(L, -2);							// !t *k tv !t2 !t3 *v
-				if (lua_type(L, -1) != LUA_TNUMBER) {		// !t *k tv !t2 !t3 iv~?
+				if (lua_type(L, -1) != LUA_TNUMBER) {		// !t *k tv !t2 !t3 ~iv?
 					lua_pop(L,4);							// !t *k
 					continue;
 				}
@@ -167,31 +167,37 @@ int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char*
 			// recurse over the selected tables
 
 			if (aKeyIndices[i2].iKey == NULL) {
-				lua_pushstring(L, aKeyIndices[i2].pszKey);
-				lua_rawget(L, -2);
+				lua_pushstring(L, aKeyIndices[i2].pszKey);		// !t sk
+				lua_rawget(L, -2);								// !t tv
 			}
 			else {
-				lua_pushnumber(L, *aKeyIndices[i2].iKey);
-				lua_rawget(L, -2);
+				lua_pushnumber(L, *aKeyIndices[i2].iKey);		// !t ik
+				lua_rawget(L, -2);								// !t tv
 			}
+
+			// todo  - if stack has value before !t, stash it
+
 			CreateManagedWidgetTree(L, iLuaTableID, wdgWidget, aKeyIndices[i2].pszKey, iDepth);
-			lua_pop(L, 1);
+
+			// todo - if stack had value before !t, retrieve it
+
+			lua_pop(L, 1);										// !t
 		}
 	}
 
 
-	lua_pushstring(L, "startManaged");
-	lua_gettable(L, -2);
-	if (lua_type(L, -1) == LUA_TBOOLEAN) {
+	lua_pushstring(L, "startManaged");							// !t sk
+	lua_gettable(L, -2);										// !t *v
+	if (lua_type(L, -1) == LUA_TBOOLEAN) {						// !t bv?
 		startManaged = lua_toboolean(L, -1);
 	}
-	lua_pop(L, 1);
+	lua_pop(L, 1);												// !t
 
 
 	if (parentObj > 0) {
-		lua_pushstring(L, "__parent");
-		lua_pushvalue(L, parentObj);
-		lua_rawset(L, -3);
+		lua_pushstring(L, "__parent");							// !t sk
+		lua_pushvalue(L, parentObj);							// !t sk tv
+		lua_rawset(L, -3);										// !t
 	}
 
 
