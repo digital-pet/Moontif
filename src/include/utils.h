@@ -22,3 +22,7 @@ char* gc_strdup(const char* s);
 void dumpstack(lua_State* L);
 
 void GetRegistry(lua_State* L);
+
+void GetWidgetFromRegistry(lua_State* L);
+
+void GetOrCreateTable(lua_State* L, int idx);

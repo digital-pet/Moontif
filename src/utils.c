@@ -34,20 +34,16 @@ char* gc_strdup(const char* s) {
 // t = table
 // x = unacceptable value
 
-void GetRegistry(lua_State* L) {
-    lua_pushlightuserdata(L, (void*)&registryKey);      // k
-    lua_gettable(L, LUA_REGISTRYINDEX);                 // t or x
-    if (!(lua_type(L, -1) == LUA_TTABLE)) {             // if x
-        lua_pop(L, 1);                                  // _
-        lua_newtable(L);                                // t
-        lua_pushlightuserdata(L, (void*)&registryKey);  // t k
-        lua_pushvalue(L, -2);                           // t k t
-        lua_settable(L, LUA_REGISTRYINDEX);             // t
-    }
-}
-
 void GetOrCreateTable(lua_State* L, int idx) {
-    int absolute = lua_absindex(L, idx);        // assuming idx == -2 && absolute == 1
+    int absolute;
+
+    if (idx == LUA_REGISTRYINDEX) {
+        absolute = LUA_REGISTRYINDEX;
+    }
+    else {
+        absolute = lua_absindex(L, idx);
+    }
+
     lua_pushvalue(L, -1);                       // s k -> s k k
     lua_gettable(L, absolute);                  // s k k -> s k t || s k x
     if (!(lua_type(L, -1) == LUA_TTABLE)) {     // if s k x
@@ -60,6 +56,24 @@ void GetOrCreateTable(lua_State* L, int idx) {
     else {
         lua_remove(L, -2);                      // s k t -> s t
     }
+}
+
+void GetRegistry(lua_State* L) {
+    lua_pushlightuserdata(L, (void*)&registryKey);
+    GetOrCreateTable(L, LUA_REGISTRYINDEX);
+}
+
+void GetWidgetFromRegistry(lua_State* L) {
+    // initial state: k
+    GetRegistry(L);                     // k t
+    lua_pushstring(L, "widgets");       // k t k2
+    GetOrCreateTable(L, -2);            // k t t2
+    lua_rotate(L, -3, 1);               // t2 k t
+    lua_pop(L, 1);                      // t2 k
+    GetOrCreateTable(L, -2);            // t2 t3
+    lua_remove(L,-2);                   // t3
+    // result: t3
+
 }
 
 void dumpstack(lua_State* L) {
