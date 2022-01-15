@@ -28,15 +28,37 @@ char* gc_strdup(const char* s) {
 	return p;
 }
 
+// notation:
+// s = source
+// k = key
+// t = table
+// x = unacceptable value
+
 void GetRegistry(lua_State* L) {
-    lua_pushlightuserdata(L, (void*)&registryKey);
-    lua_gettable(L, LUA_REGISTRYINDEX);
-    if (!(lua_type(L, -1) == LUA_TTABLE)) {
-        lua_pop(L, 1);
-        lua_newtable(L);
-        lua_pushlightuserdata(L, (void*)&registryKey);
-        lua_pushvalue(L, -2);
-        lua_settable(L, LUA_REGISTRYINDEX);
+    lua_pushlightuserdata(L, (void*)&registryKey);      // k
+    lua_gettable(L, LUA_REGISTRYINDEX);                 // t or x
+    if (!(lua_type(L, -1) == LUA_TTABLE)) {             // if x
+        lua_pop(L, 1);                                  // _
+        lua_newtable(L);                                // t
+        lua_pushlightuserdata(L, (void*)&registryKey);  // t k
+        lua_pushvalue(L, -2);                           // t k t
+        lua_settable(L, LUA_REGISTRYINDEX);             // t
+    }
+}
+
+void GetOrCreateTable(lua_State* L, int idx) {
+    int absolute = lua_absindex(L, idx);        // assuming idx == -2 && absolute == 1
+    lua_pushvalue(L, -1);                       // s k -> s k k
+    lua_gettable(L, absolute);                  // s k k -> s k t || s k x
+    if (!(lua_type(L, -1) == LUA_TTABLE)) {     // if s k x
+        lua_pop(L, 1);                          // s k
+        lua_newtable(L);                        // s k t
+        lua_pushvalue(L, -1);                   // s k t t
+        lua_rotate(L, -3, 1);                   // s k t t -> s t k t
+        lua_settable(L, absolute);              // s t
+    } 
+    else {
+        lua_remove(L, -2);                      // s k t -> s t
     }
 }
 
