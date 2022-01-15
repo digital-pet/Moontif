@@ -57,6 +57,59 @@ int createordered(lua_State* L) {
 // f* = function
 // x* = nil
 
+int NewCreateManagedWidgetTree(lua_State* L, char* pszWidgetName, int iDepth) {
+
+	// new stack order: (tParent || nil) tSource
+
+	// get registry widget data metatable -> ((tParent || nil) tSource tMeta)
+
+	// get widget's registry meta table -> ((tParent || nil) tSource tMeta tWidgetMeta)
+
+	// write parent to widget meta
+
+	// remove tParent	-> (tSource tMeta tWidgetMeta)
+
+	// rotate tSource to top -> (tMeta tWidgetMeta tSource)
+
+	// get constructor from tWidgetMeta
+
+	// call constructor	(stack: tMeta tWidgetMeta tSource)
+
+	// write back widget to tWidgetMeta
+
+	// remove tWidgetMeta	-> (tMeta tSource)
+
+	// fetch tGlobalID	(tMeta tSource tGlobalID)
+
+	// remove tMeta	-> (tSource tGlobalID)
+
+	// count table elements in source
+
+	// foreach table in source:
+
+	//		fetch id
+
+	//		add table key and id to array
+
+	// pop tGlobalID -> (tSource)
+
+	// sort array
+
+	// foreach element in array
+
+	//		recurse (tSource as tParent, tValue as tSource)
+
+	// fetch tMeta (tSource, tMeta)
+
+	// fetch tWidgetMeta (tSource,tMeta,tWidgetMeta)
+
+	// restore tParent
+
+	// pop tMeta, tWidgetMeta
+
+	return 0;
+}
+
 int CreateManagedWidgetTree(lua_State* L, int parentObj, Widget wdgParent, char* pszWidgetName, int iDepth) {
 
 	// initial state = !t
